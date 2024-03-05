@@ -1,4 +1,4 @@
-<h1 align="center">Pre Entrega Nro.1 - Programación Backend</h1>
+<h1 align="center">Desafío "Websockets + Handlebars" - Programación Backend</h1>
 <h2 align="center">Agustina Ludueña</h2>
 <p align="center">Cursada 2024</p>
 

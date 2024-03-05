@@ -1,1 +1,46 @@
-[{"id":1,"title":"product1","description":"Necesita una description","code":"100","price":500,"status":true,"stock":20,"category":"No tiene aún","thumbnail":"Image not available"},{"id":2,"title":"product2","description":"Necesita una description","code":"102","price":500,"status":true,"stock":20,"category":"No tiene aún","thumbnail":"Image not available"},{"id":3,"title":"product3","description":"Necesita una description","code":"103","price":500,"status":true,"stock":20,"category":"No tiene aún","thumbnail":"Image not available"},{"id":4,"title":"product4","description":"Necesita una description","code":"104","price":500,"status":true,"stock":20,"category":"No tiene aún","thumbnail":"Image not available"}]
+[
+  {
+    "id": 1,
+    "title": "product1",
+    "description": "Necesita una description",
+    "code": "100",
+    "price": 500,
+    "status": true,
+    "stock": 20,
+    "category": "No tiene aún",
+    "thumbnail": "Image not available"
+  },
+  {
+    "id": 2,
+    "title": "product nro 2",
+    "description": "No me gusta la descripción de este producto.",
+    "code": "102",
+    "price": "200",
+    "status": true,
+    "stock": "355",
+    "category": "No tiene aún",
+    "thumbnail": "Image not available"
+  },
+  {
+    "id": 3,
+    "title": "product nro 3",
+    "description": "Ahora tiene descripción",
+    "code": "103",
+    "price": 500,
+    "status": true,
+    "stock": 20,
+    "category": "No tiene aún",
+    "thumbnail": "Image not available"
+  },
+  {
+    "id": 4,
+    "title": "product4",
+    "description": "Necesita una description",
+    "code": "104",
+    "price": 500,
+    "status": true,
+    "stock": 20,
+    "category": "No tiene aún",
+    "thumbnail": "Image not available"
+  }
+]

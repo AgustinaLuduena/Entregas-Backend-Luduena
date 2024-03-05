@@ -1,60 +1,72 @@
 import { Router } from 'express'
-import fs, { writeFileSync } from "fs";
-import __dirname from "../utils.js";
+//import fs, { writeFileSync } from "fs";
+//import __dirname from "../utils.js";
+import validateUpdateFields from '../middlewares/validateUpdateFields.js';
 import validateFields from '../middlewares/validateFields.js';
+import ProductManager from '../ProductManager.js';
 
 const productsRouter = Router()
-const pathProducts = `${__dirname}/data/products.json`
+const productManager = new ProductManager();
+//const pathProducts = `${__dirname}/data/products.json`
 
 
-productsRouter.get("/", (req, res) => {
-    //List of products
-    let readProducts = fs.readFileSync(pathProducts, "utf-8")
-    let parsedProducts = JSON.parse(readProducts)
+productsRouter.get('/', async (req, res) => {
+//List of products & limit
+try {
+    const products = await productManager.getProducts();
 
-    //Limit
     let limit = req.query.limit;
-    let limitedProducts = parsedProducts.slice(0,limit)
+    let limitedProducts = products.slice(0,limit)
 
     res.json({limitedProducts})
-})
 
+} catch (err) {
+    console.error('Error:', err);
+    res.status(500).send('Internal Server Error');
+}
+});
+  
 
-productsRouter.get("/:pid/", (req, res) => {
-
+productsRouter.get("/:pid/", async (req, res) => {
     //Product by ID
-    let pid =  parseInt(req.params.pid)
-    let readProducts = fs.readFileSync(pathProducts, "utf-8")
-    let parsedProduct = JSON.parse(readProducts)
-
-    let filteredProduct = parsedProduct.find((product) => product.id === pid)
-
-    if(!filteredProduct) return res.send(`Error. Product Id number ${pid} not found.`)
-    res.json(filteredProduct)
-})
-
-
-productsRouter.post("/", validateFields, (req, res) => {
-
-    //Add a new product
-    let readProducts = fs.readFileSync(pathProducts, "utf-8")
-    let parsedProducts = JSON.parse(readProducts)
-
-    let generateId = () => {
-        let id = 0;
-
-        if (parsedProducts.length === 0) {
-            id = 1;
+    try {
+        let pid =  parseInt(req.params.pid)
+        const product = await productManager.getProductByID(pid);
+        if(!product){
+            return res.status(400).send({ status: `ID NUMBER ${pid} NOT FOUND.`});
         } else {
-            id = parsedProducts[parsedProducts.length - 1].id + 1;
+            return res.json(product);
         }
-        return id;
-    }
 
-    let product = req.body 
+      } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
+      }
+    });
+    
+
+
+productsRouter.post('/', validateFields, async (req, res) => {
+    //Add a new product
+    try {
+        let { title, description, code, price, status, stock, category, thumbnail } = req.body;
+
+        const addedSuccessfully = await productManager.addProduct(title, description, code, price, status, stock, category, thumbnail);
+        
+        if (addedSuccessfully) {
+            return res.status(200).send({ status: `Product with title: ${title}, was successfully created.` });
+        } else {
+            return res.status(400).send({ error: `The code ${code} already exists.` });
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
     /* Modelo de datos para testear por Postman el "req.body"
-    {
+
+        {
         "title" : "product5",
         "description" : "Necesita una description",
         "code": 105,
@@ -62,84 +74,47 @@ productsRouter.post("/", validateFields, (req, res) => {
         "stock": 20,
         "category": "No tiene aún"
         }
+
     */
+
+
     
-    if (parsedProducts.some((p) => p.code === product.code)) {
-        return res.status(400).send({ status: `The code ${product.code} already exists.`});
-    } else if (!product.title || !product.description || !product.code || !product.price || !product.stock || !product.category){
-        return res.status(400).send({ status: "Error. Please, complete all the information of the new product." });
-        //Se puede mejorar con un Object.values?
-    }else {
-        let loadedProduct = {
-            id: generateId(),
-            title : product.title,
-            description : product.description,
-            code: product.code,
-            price: product.price,
-            status: true,
-            stock: product.stock,
-            category: product.category,
-            thumbnail: "Image not available"
-            }
-        parsedProducts.push(loadedProduct);
-        let data = JSON.stringify(parsedProducts)
-        writeFileSync(pathProducts, data, null)
-        res.status(200).send({ status: "Product succesfully created. Your product information is: " + JSON.stringify(loadedProduct) });
-    }
+productsRouter.put("/:pid/", validateUpdateFields, async (req, res) => {
+    try {
+        let pid = parseInt(req.params.pid);
+        let updatedFields = req.body;
 
+        const updateSuccessfully = await productManager.updateProduct(pid, updatedFields);
 
-})
-
-
-productsRouter.put("/:pid/", validateFields, (req, res) => {
-    
-    //Update products fields by ID
-    let pid = parseInt(req.params.pid);
-    let readProducts = fs.readFileSync(pathProducts, "utf-8");
-    let parsedProducts = JSON.parse(readProducts);
-
-    let foundProductIndex = parsedProducts.findIndex(product => product.id === pid);
-
-    if (foundProductIndex === -1) {
-        return res.status(404).send(`Product with ID ${pid} not found.`);
-    }
-
-    let updatedProduct = parsedProducts[foundProductIndex];
-    let fieldsToUpdate = req.body;
-
-    Object.keys(fieldsToUpdate).forEach(field => {
-        if (fieldsToUpdate[field] !== undefined) {
-            updatedProduct[field] = fieldsToUpdate[field];
+        if (updateSuccessfully) {
+            return res.status(200).send({ status: `Product with ID ${pid} was successfully updated.` });
+        } else {
+            return res.status(404).send({ error: `Product with ID ${pid} was not found.` });
         }
-    });
-
-    parsedProducts[foundProductIndex] = updatedProduct;
-    let updatedData = JSON.stringify(parsedProducts);
-    writeFileSync(pathProducts, updatedData, null);
-
-    res.status(200).send(`Product with ID ${pid} updated successfully.`);
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
+    }
 });
+        
 
 
-productsRouter.delete("/:pid/", (req, res) => {
+productsRouter.delete("/:pid/", async (req, res) => {
 
     //Delete product by ID
-    let pid = parseInt(req.params.pid);
-    let readProducts = fs.readFileSync(pathProducts, "utf-8");
-    let parsedProducts = JSON.parse(readProducts);
-
-    let foundProductIndex = parsedProducts.findIndex(product => product.id === pid);
-
-    if (foundProductIndex === -1) {
-        return res.status(404).send(`Product with ID ${pid} not found.`);
-    }
-
-    parsedProducts.splice(foundProductIndex, 1);
-
-    let updatedData = JSON.stringify(parsedProducts);
-    writeFileSync(pathProducts, updatedData, null);
-
-    res.status(200).send(`Product with ID ${pid} deleted successfully.`);
+    try {
+        let pid =  parseInt(req.params.pid)
+        const selectedProduct = await productManager.deleteProduct(pid);
+        
+        if(!selectedProduct){
+            return res.status(400).send({ status: `Cannot delete product. Product with ID ${pid} not found.`});
+        } else {
+            return res.status(200).send({status: `Product with ID ${pid} deleted successfully.`});
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
+      }
 
 });
 
