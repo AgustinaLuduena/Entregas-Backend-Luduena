@@ -3,7 +3,6 @@ const validateUpdateFields = function validateProductFields(req, res, next) {
     const { title, description, category, price, stock } = req.body;
     const fieldsToUpdate = { title, description, category, price, stock };
 
-    // Verificar cada campo presente en req.body y validar su tipo
     for (const field in fieldsToUpdate) {
         if (fieldsToUpdate[field] !== undefined) {
             if (field === 'title' && typeof fieldsToUpdate[field] !== 'string') {

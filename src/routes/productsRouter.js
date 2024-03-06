@@ -1,13 +1,10 @@
 import { Router } from 'express'
-//import fs, { writeFileSync } from "fs";
-//import __dirname from "../utils.js";
 import validateUpdateFields from '../middlewares/validateUpdateFields.js';
 import validateFields from '../middlewares/validateFields.js';
 import ProductManager from '../ProductManager.js';
 
 const productsRouter = Router()
 const productManager = new ProductManager();
-//const pathProducts = `${__dirname}/data/products.json`
 
 
 productsRouter.get('/', async (req, res) => {
