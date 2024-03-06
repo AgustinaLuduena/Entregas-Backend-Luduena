@@ -20,7 +20,7 @@ function renderProductList(products) {
     products.limitedProducts.forEach(product => {
         const productHtml = `
             <div>
-                <h3>Producto:</h3>
+                <h4>Producto:</h4>
                 <p>ID: ${product.id}</p>
                 <p>Título: ${product.title}</p>
                 <p>Descripción: ${product.description}</p>
@@ -87,7 +87,7 @@ socket.on("newProduct", (productData) => {
 
     const newDataHtml = `
         <div>
-            <h3>Nuevo producto:</h3>
+            <h4>Nuevo producto:</h4>
             <p>Título: ${productData.title}</p>
             <p>Descripción: ${productData.description}</p>
             <p>Código: ${productData.code}</p>
