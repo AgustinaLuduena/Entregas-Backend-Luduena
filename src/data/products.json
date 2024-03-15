@@ -42,5 +42,16 @@
     "stock": 20,
     "category": "No tiene aún",
     "thumbnail": "Image not available"
+  },
+  {
+    "id": 5,
+    "title": "Producto 5",
+    "description": "No tiene",
+    "code": "55",
+    "price": "1000",
+    "status": true,
+    "stock": "5",
+    "category": "Prueba",
+    "thumbnail": "Not available"
   }
 ]

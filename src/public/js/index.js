@@ -12,12 +12,12 @@ function renderProductList(products) {
 
     newList.innerHTML = ""; 
 
-    if (!Array.isArray(products.limitedProducts)) {
+    if (!Array.isArray(products)) {
         console.error('La lista de productos no es un array:', products);
         return;
     }
 
-    products.limitedProducts.forEach(product => {
+    products.forEach(product => {
         const productHtml = `
             <div>
                 <h4>Producto:</h4>
@@ -38,19 +38,20 @@ function renderProductList(products) {
 }
 
 //List of products
+
+socket.on("getProd", (products) => {
+    renderProductList(products);
+});
+ 
 window.onload = async function() {
     try {
-        const response = await fetch('/api/products');
-        const products = await response.json();
+        //const response = await fetch('/api/products');
+        //const products = await response.json();
         renderProductList(products);
     } catch (error) {
         console.error('Error al obtener la lista de productos:', error);
     }
 };
-
-socket.on("newProduct", (products) => {
-    renderProductList(products);
-});
 
 
 //Form
@@ -83,10 +84,10 @@ form.addEventListener('submit', (e) => {
     form.reset();
 });
 
-socket.on("newProduct", (productData) => {
+socket.on("info", (productData) => {
 
     const newDataHtml = `
-        <div>
+        <li>
             <h4>Nuevo producto:</h4>
             <p>Título: ${productData.title}</p>
             <p>Descripción: ${productData.description}</p>
@@ -94,11 +95,8 @@ socket.on("newProduct", (productData) => {
             <p>Precio: ${productData.price}</p>
             <p>Stock: ${productData.stock}</p>
             <p>Categoría: ${productData.category}</p>
-        </div>
+        </li>
     `;
 
     newList.innerHTML += newDataHtml;
 });
-
-
-
