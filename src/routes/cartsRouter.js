@@ -1,106 +1,80 @@
 import { Router } from 'express'
-import fs, { writeFileSync } from "fs";
+//import fs, { writeFileSync } from "fs";
 import __dirname from "../utils.js";
+import CartManager from '../dao/services/DBCartManager.js';
 
 const cartsRouter = Router()
-const pathCart = `${__dirname}/data/cart.json`
-const pathProducts = `${__dirname}/data/products.json`
+const DBcartsManager = new CartManager();
+
+//const pathCart = `${__dirname}/data/cart.json`
+//const pathProducts = `${__dirname}/data/products.json`
 
 
-cartsRouter.post("/", (req, res)=>{
+cartsRouter.post("/", async (req, res)=>{
     
     //Add a new cart (Cart Id + products:[])
-    let readCart = fs.readFileSync(pathCart, "utf-8")
-    let parsedCart = JSON.parse(readCart)
-
-    let generateId = () => {
-        let id = 0;
+    try {
+        const cart = await DBcartsManager.createCart();
+        res.json({cart})
     
-        if (parsedCart.length === 0) {
-            id = 1;
-        } else {
-            id = parsedCart[parsedCart.length - 1].id + 1;
-        }
-        return id;
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
     }
-
-    let cart = {
-        id: generateId(),
-        products: []
-    }
-
-    parsedCart.push(cart)
-    let data = JSON.stringify(parsedCart)
-    writeFileSync(pathCart, data, null)
-
-    res.send("Cart succesfully created. Your cart information is: " + JSON.stringify(cart))
-
 })  
 
 
-cartsRouter.get("/:cid/", (req, res) => {
+cartsRouter.get("/:cid/", async (req, res) => {
 
     //List of products inside the cart chosen by Id
-    let cid =  parseInt(req.params.cid)
-    let readCart = fs.readFileSync(pathCart, "utf-8")
-    let parsedCart = JSON.parse(readCart)
+    try {
+        //quité el parseInt
+        let cid =  req.params.cid
+        const cart = await DBcartsManager.getCartById(cid);
 
-    let filteredCart = parsedCart.find((cart) => cart.id === cid)
+        if(cart.products.length !== 0){
+            return res.json(cart.products)
+        }else{
+            return res.send(`Cart Id number ${cid} does not have any products yet.`)
+        }
 
-    if(!filteredCart) {
-        return res.status(404).send(`Error. Cart Id number ${cid} not found.`);
-    } 
-    
-    if (Array.isArray(filteredCart.products) && filteredCart.products.length === 0) {
-        return res.status(200).send(`Cart Id number ${cid} does not have any products yet.`);
-    }
-        
-    res.json(filteredCart.products)
+      } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
+      }
     
 })  
 
 
-cartsRouter.post("/:cid/product/:pid/", (req, res)=>{
+cartsRouter.post("/:cid/product/:pid/", async (req, res)=>{
 
     //Add the chosen product to chosen the cart (Object [productId:id + quantity])
-    //Get the product chosen by Id
-    let pid =  parseInt(req.params.pid)
-    let readProducts = fs.readFileSync(pathProducts, "utf-8")
-    let parsedProducts = JSON.parse(readProducts)
+    try {
+        let cid =  req.params.cid
+        let pid =  req.params.pid
+        const cart = await DBcartsManager.addProduct(cid, pid);
+        res.status(200).send(`Product Id number ${pid} was succesfully add to cart Id number ${cid}.`);
 
-    let filteredProduct = parsedProducts.find((product) => product.id === pid)
+      } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
+      }
+})  
 
-    //Get the cart chosen by Id
-    let cid =  parseInt(req.params.cid)
-    let readCart = fs.readFileSync(pathCart, "utf-8")
-    let parsedCart = JSON.parse(readCart)
+cartsRouter.delete("/:cid/product/:pid/", async (req, res)=>{
 
-    let filteredCart = parsedCart.findIndex((cart) => cart.id === cid)
+    //Delete the chosen product from the chosen cart (Object [productId:id + quantity])
+    try {
+        let cid =  req.params.cid
+        let pid =  req.params.pid
+        const cart = await DBcartsManager.deleteProduct(cid, pid);
+        res.status(200).send(`Product Id number ${pid} was succesfully deleted from cart Id number ${cid}.`);
 
-    if (filteredCart === -1) {
-        return res.send(`Error. Cart Id number ${cid} not found.`);
+      } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
       }
 
-    if (!filteredProduct) {
-        return res.send(`Error. Product Id number ${pid} not found.`);
-      } else {
-        let checkExistingProduct = parsedCart[filteredCart].products.findIndex((p) => p.productId === filteredProduct.id);
-    
-        if (checkExistingProduct !== -1) {
-          parsedCart[filteredCart].products[checkExistingProduct].quantity += 1;
-        } else {
-            let cartProduct = {
-                productId: filteredProduct.id,
-                quantity: 1,
-            };
-    
-          parsedCart[filteredCart].products.push(cartProduct);
-        }
-    
-        let productAddToCart = JSON.stringify(parsedCart);
-        writeFileSync(pathCart, productAddToCart, null);
-        res.status(200).send(`Product Id number ${filteredProduct.id} was succesfully add to cart Id number ${cid}.`);
-      }
 })  
 
 export default cartsRouter

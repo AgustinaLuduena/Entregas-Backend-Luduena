@@ -4,7 +4,7 @@ import __dirname from "./utils.js";
 
 export default class ProductManager{
     constructor(){
-        this.path = `${__dirname}/data/products.json`;
+        this.path = `${__dirname}/dao/data/products.json`;
     }
     
     getInfo = async () => {

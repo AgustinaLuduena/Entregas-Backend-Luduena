@@ -2,6 +2,7 @@ import express from 'express';
 import __dirname from './utils.js';
 import handlebars from "express-handlebars";
 import { Server } from 'socket.io';
+import mongoose from 'mongoose';
 //Router
 import viewsRouter from './routes/viewsRouter.js';
 import productsRouter from './routes/productsRouter.js';
@@ -31,6 +32,21 @@ app.engine('handlebars', handlebars.engine());
 app.use(viewsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/products", productsRouter);
+
+//MongoDB
+const connectMongoDB = async () => {
+  //127.0.0.1 es localhost
+  const DB_URL = 'mongodb://127.0.0.1:27017/ecommerce?retryWrites=true&w=majority'
+  try{
+      await mongoose.connect(DB_URL)
+      console.log("Conected to MongoDB!")
+  }catch(error){
+      console.error("Error. You are not conected to the DB", error)
+      process.exit()
+  }
+  }
+  
+  connectMongoDB()
 
 
 //.handlebars
@@ -68,7 +84,7 @@ io.on('connection', async socket =>{
         console.log(data, "(server side)")
     });
 
-    //Lis of produducts
+    //List of produducts
     const products = await productManager.getProducts();
     socket.emit("getProd", products);
 
@@ -82,4 +98,20 @@ io.on('connection', async socket =>{
         }
     });
 
+    /* 
+    socket.on("message", (data)=> {
+        
+      msg.push(data)
+      io.emit('messageLogs', msg)
+      
+  })
+  */
+
 })
+
+
+//chat before MongoDB
+//const msg = []
+
+
+//'mongodb+srv://agusluduena4:mongodb2024@cluster0.egyfnzt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
