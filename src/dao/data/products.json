@@ -53,5 +53,16 @@
     "stock": "5",
     "category": "Prueba",
     "thumbnail": "Not available"
+  },
+  {
+    "id": 6,
+    "title": "Producto 6",
+    "description": "6",
+    "code": "6",
+    "price": "6",
+    "status": true,
+    "stock": "6",
+    "category": "No disponible",
+    "thumbnail": "Not available"
   }
 ]

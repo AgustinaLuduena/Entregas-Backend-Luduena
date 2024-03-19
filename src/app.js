@@ -78,9 +78,14 @@ const serverHTTP = app.listen(port, ()=> console.log("Server running on port: ",
 const io = new Server(serverHTTP)
 
 
+//chat before MongoDB
+const msg = []
+
+
+
 io.on('connection', async socket =>{
 
-    socket.on("message", (data)=> {
+    socket.on("conectionMessage", (data)=> {
         console.log(data, "(server side)")
     });
 
@@ -98,20 +103,16 @@ io.on('connection', async socket =>{
         }
     });
 
-    /* 
+    //Chat
     socket.on("message", (data)=> {
         
       msg.push(data)
       io.emit('messageLogs', msg)
       
   })
-  */
 
 })
 
-
-//chat before MongoDB
-//const msg = []
 
 
 //'mongodb+srv://agusluduena4:mongodb2024@cluster0.egyfnzt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'

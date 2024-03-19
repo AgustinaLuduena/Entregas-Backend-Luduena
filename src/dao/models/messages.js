@@ -18,4 +18,4 @@ const schema = new Schema({
 const messagesModel = mongoose.model(collection, schema)
 
 export default messagesModel
-*/
+ */
