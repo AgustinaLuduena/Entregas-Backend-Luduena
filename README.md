@@ -2,14 +2,20 @@
 <h2 align="center">Agustina Ludueña</h2>
 <p align="center">Cursada 2024</p>
 
-<h3 align="left">Rutas trabajadas:</h3>
+<h3 align="left">Languages and Tools:</h3>
+<p align="left"> <a href="https://expressjs.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="express" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> </p>
 
-<h4>CON SOCKET IO</h4>
+<h3 align="left">Routes of the project:</h3>
+
+<h4>SOCKET IO</h4>
 <p>app.use(viewsRouter);</p>
-<p>GET "/realTimeProducts" : Muestra el listado de productos del JSON (no MONGODB) y el formulario para agregar uno nuevo</p>
-<p>GET "/chat" : Muestra un log in simple y un input que permite randerizar mensajes en la pantalla a través de Socket io</p>
+<p>GET "/realTimeProducts" : Shows the list of products from JSON file (no MONGODB) and the form to add a new one to the file</p>
 
-<h4>CON MONGO DB</h4>
+<h4>MONGO DB</h4>
+
+<p>app.use(viewsRouter);</p>
+<p>GET "/api/messages/" : Show the form to send a new message that will be added to the data base with MongoDB.</p>
+
 <p>app.use("/api/carts", cartsRouter);</p>
 <p>POST "/" : Add a new cart (Cart Id + products:[])</p>
 <p>GET "/:cid/" : List of products inside the cart chosen by Id</p>
@@ -26,5 +32,4 @@
 
 
 
-<h3 align="left">Languages and Tools:</h3>
-<p align="left"> <a href="https://expressjs.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="express" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> </p>
+

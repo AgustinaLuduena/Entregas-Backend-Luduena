@@ -15,7 +15,7 @@ viewsRouter.get("/realTimeProducts", async (req,res)=>{
     
 })
 
-// CHAT VIEWS
+// CHAT Routes
 viewsRouter.get("/api/messages/", DBChatManager.getMessages);
 
 viewsRouter.post("/api/messages/addMessage", DBChatManager.addMessage);
