@@ -1,4 +1,4 @@
-<!doctype html>
+{{!-- <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -24,6 +24,41 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   </body>
-</html>
+</html> --}}
 
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chat</title>
+  </head>
+
+  <body>
+    <h1>Chat</h1>
+<form action="messages/addMessage" method="POST" id="messageForm">
+    <input type="text" id="user" name="user" placeholder="Correo del usuario" required>
+    <input type="text" id="message" name="message" placeholder="Mensaje" required>
+    <button type="submit">Enviar mensaje</button>
+</form>
+
+<div class="chat-container">
+    <div class="row" id="chatList">
+        {{#each messages}}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <h2>User: {{../data.user}}</h2>
+                <p>Message: {{../data.text}}</p>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="/js/chat.js"></script>
+
+
+  </body>
+</html>
 

@@ -79,7 +79,7 @@ const io = new Server(serverHTTP)
 
 
 //chat before MongoDB
-const msg = []
+//const msg = []
 
 
 
@@ -104,15 +104,18 @@ io.on('connection', async socket =>{
     });
 
     //Chat
-    socket.on("message", (data)=> {
-        
-      msg.push(data)
+    /* 
+    //chat before MongoDB
+    socket.on("message", (msg)=> {
+      console.log("Mensaje agregado", msg);
+      //msg.push(data)
       io.emit('messageLogs', msg)
       
-  })
+  })*/
 
+  socket.on("addMessage", (addMessage) => {
+    console.log("Mensaje agregado", addMessage);
+    io.emit("addedMessage", addMessage);
 })
 
-
-
-//'mongodb+srv://agusluduena4:mongodb2024@cluster0.egyfnzt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+})

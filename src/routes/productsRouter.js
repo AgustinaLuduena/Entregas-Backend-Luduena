@@ -43,8 +43,6 @@ productsRouter.get("/:pid/", async (req, res) => {
 productsRouter.post('/', validateFields, async (req, res) => {
     //Revisar si funciona el validateFields
 
-
-
     //Add a new product        
     try {
         const newProduct = req.body

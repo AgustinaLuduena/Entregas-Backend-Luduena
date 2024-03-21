@@ -27,6 +27,7 @@ cartsRouter.post("/", async (req, res)=>{
 cartsRouter.get("/:cid/", async (req, res) => {
 
     //List of products inside the cart chosen by Id
+    //Example cart id: 65f608274a88f49f5dfc28df
     try {
         //quité el parseInt
         let cid =  req.params.cid
@@ -49,6 +50,8 @@ cartsRouter.get("/:cid/", async (req, res) => {
 cartsRouter.post("/:cid/product/:pid/", async (req, res)=>{
 
     //Add the chosen product to chosen the cart (Object [productId:id + quantity])
+    //Example cart id: 65f608274a88f49f5dfc28df
+    //Example product id: 65f61baa0fa6cbdc1a5c69ea
     try {
         let cid =  req.params.cid
         let pid =  req.params.pid

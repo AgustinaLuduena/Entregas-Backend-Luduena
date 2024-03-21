@@ -1,21 +1,19 @@
-/* 
 import mongoose from "mongoose";
 const { Schema } = mongoose
 
 const collection = "Messages"
 
-const schema = new Schema({
+const msgSchema = new Schema({
 
-        email: {
+        user: {
             type: String
         },
-        message: {
+        text: {
             type: String
         }
 
 })
 
-const messagesModel = mongoose.model(collection, schema)
+const messagesModel = mongoose.model(collection, msgSchema)
 
 export default messagesModel
- */
