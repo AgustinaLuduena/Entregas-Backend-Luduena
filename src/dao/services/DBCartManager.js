@@ -8,8 +8,10 @@ export default class CartManager {
     }
 
     getCartById = async (cid) => {
-        let result = await cartModel.findById(cid).populate('products.product')
-        console.log(result)
+        let result = await cartModel.findById(cid).populate({
+            path: 'products',
+            model: 'Product'
+          }).lean();
         return result
     }
 

@@ -32,14 +32,15 @@ cartsRouter.get("/:cid/", async (req, res) => {
         //quité el parseInt
         let cid =  req.params.cid
         const cart = await DBcartsManager.getCartById(cid);
-        console.log(cart)
 
-        if(cart.products.length !== 0){
-          //No pude lograr que se muestre correctamente la vista de "cart.handlebars".
-            //return res.render('cart', { cart });
-            return res.json(cart)
-        }else{
-            return res.send(`Cart Id number ${cid} does not have any products yet.`)
+        if(!cart){
+          return res.send(`Cart Id number ${cid} does not have any products yet.`)
+        }
+
+        if (req.accepts("html")) {
+          return res.render("cart", { cart: cart });
+        } else {
+          return res.json(cart);
         }
 
       } catch (err) {

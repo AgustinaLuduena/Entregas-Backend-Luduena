@@ -4,9 +4,7 @@
 <ul>
     {{#each cart.products}}
         <li>
-            <p>Product ID: {{this.product._id}}</p>
-            <p>Name: {{this.product.title}}</p>
-            <p>Price: {{this.product.price}}</p>
+            <p>Product ID: {{this.product}}</p>
             <p>Quantity: {{this.quantity}}</p>
         </li>
     {{/each}}
