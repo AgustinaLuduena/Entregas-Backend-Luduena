@@ -22,14 +22,15 @@ const cartsSchema = new Schema({
 
 //Middleware "populate"
 //No permite utilizar una función flecha en este contexto
-
-//Está comentado porque todavía hay que configurar el código correcto de ENVIRONMENT en app.js
+//Está comentado porque no utilicé un único find() como en el ejemplo de clase.
 /* 
 cartsSchema.pre("find", function(){
     this.populate("products.product")
 })
 */
 
+
 const cartsModel = mongoose.model(collection, cartsSchema);
 
 export default cartsModel
+

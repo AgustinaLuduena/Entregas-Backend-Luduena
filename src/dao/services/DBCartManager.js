@@ -1,4 +1,5 @@
-import cartModel from "../models/carts.js"
+import cartModel from "../models/carts.js";
+import productsModel from "../models/products.js";
 
 export default class CartManager {
 
@@ -7,7 +8,8 @@ export default class CartManager {
     }
 
     getCartById = async (cid) => {
-        let result = await cartModel.findById(cid)
+        let result = await cartModel.findById(cid).populate('products.product')
+        console.log(result)
         return result
     }
 
@@ -39,4 +41,80 @@ export default class CartManager {
         }
         return await cart.save();
     }
+
+
+    updateCart = async (cid, updateData) => {
+        try {
+            const productIds = updateData.map(item => item.product);
+            const existingProducts = await productsModel.find({ _id: { $in: productIds } }, '_id');
+    
+            if (existingProducts.length !== updateData.length) {
+                return false;
+            }
+    
+            let cart = await cartModel.findById(cid);
+    
+            updateData.forEach((item) => {
+                let existingProductIndex = cart.products.findIndex((product) => product.product.toString() === item.product);
+                if (existingProductIndex !== -1) {
+                    cart.products[existingProductIndex].quantity = item.quantity;
+                } else {
+                    cart.products.push({ product: item.product, quantity: item.quantity });
+                }
+            });
+    
+            await cart.save();
+            return true;
+        } catch (error) {
+            console.error('Error al actualizar el carrito:', error);
+            return false;
+        }
+    }
+    
+    updateProductQuantity = async (cid, pid, newQuantity) => {
+        try {
+            let cart = await cartModel.findById(cid);
+    
+            if (!cart) {
+                return false;
+            }
+    
+            let productIndex = cart.products.findIndex(product => product.product.toString() === pid);
+    
+            if (productIndex === -1) {
+                return false; 
+            }
+    
+            cart.products[productIndex].quantity = newQuantity;
+    
+            await cart.save();
+            return true; 
+
+        } catch (error) {
+            console.error('Error al actualizar la cantidad del producto en el carrito:', error);
+            return false;
+        }
+    
+    }
+
+    deleteAllProducts = async (cid) => {
+        try {
+            const cart = await cartModel.findById(cid);
+
+            if (!cart) {
+                return false;
+            }
+
+            cart.products = [];
+
+            await cart.save();
+    
+            return true; 
+        } catch (error) {
+            console.error('Error al eliminar todos los productos del carrito:', error);
+            return false; 
+        }
+    }
+    
+
 }
