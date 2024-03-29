@@ -34,24 +34,36 @@ app.use("/api/carts", cartsRouter);
 app.use("/api/products", productsRouter);
 
 //MongoDB
-const connectMongoDB = async () => {
-  //127.0.0.1 es localhost
-  const DB_URL = 'mongodb://127.0.0.1:27017/ecommerce?retryWrites=true&w=majority'
-  try{
-      await mongoose.connect(DB_URL)
-      console.log("Conected to MongoDB!")
-  }catch(error){
-      console.error("Error. You are not conected to the DB", error)
-      process.exit()
-  }
-  }
+// const connectMongoDB = async () => {
+//   //'mongodb://127.0.0.1:27017/ecommerce?retryWrites=true&w=majority' es localhost
+//   const DB_URL = 'mongodb+srv://agusluduena4:mongodb2024@cluster0.egyfnzt.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0'
+//   try{
+//       await mongoose.connect(DB_URL)
+//       console.log("Conected to MongoDB!")
+//   }catch(error){
+//       console.error("Error. You are not conected to the DB", error)
+//       process.exit()
+//   }
+//   }
   
-  connectMongoDB()
+//   connectMongoDB()
+
+const environment = async () => {
+  const DB_URL = 'mongodb+srv://agusluduena4:mongodb2024@cluster0.egyfnzt.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0';
+  await mongoose.connect(DB_URL);
+  console.log("Conected to MongoDB.")
+}
+
+environment();
 
 
 //.handlebars
 const productManager = new ProductManager();
 
+
+
+/* 
+Desafío anterior. En index randerizaba el listado de productos.
 app.get('/', async (req, res) => {
     try {
       const productos = await productManager.getProducts();
@@ -61,7 +73,8 @@ app.get('/', async (req, res) => {
       res.status(500).send('Error interno del servidor');
     }
   });
-  
+*/
+
   app.get('/realTimeProducts', async (req, res) => {
     try {
       const products = await productManager.getProducts();

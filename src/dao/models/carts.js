@@ -5,6 +5,7 @@ const collection = "Carts";
 
 const cartsSchema = new Schema({
 
+    //Sería una buena práctica agregar el "type" a "products"? (Ver código de clase 17 min 38 de clase aprox)
     products: [
         {
             product: {
@@ -18,6 +19,16 @@ const cartsSchema = new Schema({
         },
     ],
 });
+
+//Middleware "populate"
+//No permite utilizar una función flecha en este contexto
+
+//Está comentado porque todavía hay que configurar el código correcto de ENVIRONMENT en app.js
+/* 
+cartsSchema.pre("find", function(){
+    this.populate("products.product")
+})
+*/
 
 const cartsModel = mongoose.model(collection, cartsSchema);
 

@@ -6,14 +6,39 @@ export default class DBProductManager {
         console.log("Trabajando con ProductManager")
     }
 
-    getProducts = async (limit) => {
-        let result = await productsModel.find().limit(limit)
-        return result
+    getProducts = async (page, limit, sort) => {
+        //let result = await productsModel.find().limit(limit)
+        let options = {page, limit, lean: true}
+        if(sort) {
+            options.sort = sort
+        }
+        let result = await productsModel.paginate({}, options);
+        return result;
+
     }
+    
     getProductByID = async (pid) => {
         let result = await productsModel.findById(pid)
         return result
     }
+
+    getProductsByCategory = async (category) => {
+        try {
+            let result = await productsModel.aggregate([
+                {
+                    $match: { category: category }
+                },
+                {
+                    $group: { _id: "$category", totalStock: { $sum: "$stock" } }
+                }
+            ]);
+            return result;
+        } catch (error) {
+            console.error('Error al obtener los productos según ctaegoría:', error);
+            throw error;
+        }
+    };
+
     addProduct = async (product) => {
         let result = await productsModel.create(product)
         return result

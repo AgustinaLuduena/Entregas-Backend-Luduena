@@ -1,0 +1,39 @@
+<div>
+    <h1>Listado de Productos desde MongoDB Atlas</h1>
+    <hr>
+    {{#if isValid}}
+    <div>
+        <ul>
+            {{!-- {{#each productos}} --}}
+            {{#each docs}}
+                <li>
+                    <p> <strong> Producto ID:</strong> {{this.id}}</p>
+                    <p> <strong> Título:</strong> {{this.title}}</p>
+                    <p> <strong> Descripción:</strong> {{this.description}}</p>
+                    <p> <strong> Código:</strong> {{this.code}}</p>
+                    <p> <strong> Precio:</strong> ${{this.price}}</p>
+                    <p> <strong> Status:</strong> {{this.status}}</p>
+                    <p> <strong> Stock:</strong> {{this.stock}}</p>
+                    <p> <strong> Categoría:</strong> {{this.category}}</p>
+                    <p>Imagen:</strong> {{this.thumbnail}}</p>
+                </li>
+            {{/each}}
+        </ul>  
+    </div> 
+    <br/>
+    <hr>
+    <div>
+        {{#if hasPrevPage}}
+            <a href={{this.prevLink}}>  << Anterior</a>
+        {{/if}}
+        &nbsp;
+        {{this.page}}
+        &nbsp;
+        {{#if hasNextPage}}
+            <a href={{this.nextLink}}>Siguiente >></a>
+        {{/if}}
+    </div>
+    {{else}}
+    <p>No hay productos en listado todavía.</p>
+    {{/if}}
+</div>
