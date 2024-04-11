@@ -37,12 +37,13 @@ productsRouter.get('/', async (req, res) => {
                 result = await DBproductManager.getProducts(page, limit);
             }
 
-            // View
+            // Info of pages for the response
             result.isValid = page >= 1 && page <= result.totalPages;
             result.nextLink = result.hasNextPage ? `/api/products?page=${result.nextPage}&limit=${limit}&sort=${sort}` : "";
             result.prevLink = result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
-            res.render('products', result);
+            res.json(result);
+            //res.render('products', result);
 
             //Console response
             const status = result.isValid ? "success" : "error";
@@ -71,9 +72,11 @@ productsRouter.get('/', async (req, res) => {
 
     } catch (err) {
         console.error('Error:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json('Internal Server Error');
     }
 });
+
+
 
 
 
@@ -100,14 +103,14 @@ productsRouter.get("/:pid/", async (req, res) => {
         const product = await DBproductManager.getProductByID(pid);
 
         if(!product){
-            return res.status(400).send({ status: `ID NUMBER ${pid} NOT FOUND.`});
+            return res.status(400).json({ status: `ID NUMBER ${pid} NOT FOUND.`});
         } else {
             return res.json(product);
         }
 
       } catch (err) {
         console.error('Error:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json('Internal Server Error');
       }
     });
     
@@ -122,13 +125,13 @@ productsRouter.post('/', validateFields, async (req, res) => {
         let addedSuccessfully = await DBproductManager.addProduct(newProduct);
         
         if (addedSuccessfully) {
-            return res.status(200).send({ status: `Product with title: ${newProduct.title}, was successfully created.` });
+            return res.status(200).json({ status: `Product with title: ${newProduct.title}, was successfully created.` });
         } else {
-            return res.status(400).send({ error: `The code ${newProduct.code} already exists.` });
+            return res.status(400).json({ error: `The code ${newProduct.code} already exists.` });
         }
     } catch (err) {
         console.error('Error:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json('Internal Server Error');
     }
 });
 
@@ -159,13 +162,13 @@ productsRouter.put("/:pid/", validateUpdateFields, async (req, res) => {
         const updateSuccessfully = await DBproductManager.updateProduct(pid, productData)
 
         if (updateSuccessfully) {
-            return res.status(200).send({ status: `Product with ID ${pid} was successfully updated.` });
+            return res.status(200).json({ status: `Product with ID ${pid} was successfully updated.` });
         } else {
-            return res.status(404).send({ error: `Product with ID ${pid} was not found.` });
+            return res.status(404).json({ error: `Product with ID ${pid} was not found.` });
         }
     } catch (err) {
         console.error('Error:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json('Internal Server Error');
     }
 });
         
@@ -180,13 +183,13 @@ productsRouter.delete("/:pid/", async (req, res) => {
         const selectedProduct = await DBproductManager.deleteProduct(pid);
         if(!selectedProduct){
             //No logra dar respuesta en caso de no encontrarlo.
-            return res.status(400).send({ status: `Cannot delete product. Product with ID ${pid} not found.`});
+            return res.status(400).json({ status: `Cannot delete product. Product with ID ${pid} not found.`});
         } else {
-            return res.status(200).send({status: `Product with ID ${pid} deleted successfully.`});
+            return res.status(200).json({status: `Product with ID ${pid} deleted successfully.`});
         }
       } catch (err) {
         console.error('Error:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json('Internal Server Error');
       }
 
 });

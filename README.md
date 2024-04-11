@@ -14,6 +14,8 @@
 <h4>MONGO DB</h4>
 
 <p>app.use(viewsRouter);</p>
+<p>GET "/" : Show the index page.</p>
+<p>GET "/products" : Show the products´ view page.</p>
 <p>GET "/api/messages/" : Show the form to send a new message that will be added to the data base with MongoDB.</p>
 
 <p>app.use("/api/carts", cartsRouter);</p>
@@ -21,13 +23,14 @@
 <p>GET "/:cid/" : List of products inside the cart chosen by Id</p>
 <p>POST "/:cid/product/:pid/" : Add the chosen product to chosen the cart (Object [productId:id + quantity])</p>
 <p>DELETE "/:cid/product/:pid/" : Delete the chosen product from the chosen cart (Object [productId:id + quantity])</p>
-<p>DELETE "/:cid" : Delet all products from the cart</p>
-<p>PUT "/:cid" : Actualiza el carrito con un arreglo de productos con el formato especificado arriba.</p>
+<p>DELETE "/:cid" : Delete all products from the cart</p>
+<p>PUT "/:cid" : Update the cart using the specific array of products format with req.body </p>
 <p>PUT "/:cid/products/:pid" : Update just the quantity of the chosen product with req.body </p>
 
 
 <p>app.use("/api/products", productsRouter);</p>
 <p>GET "/" : List of products, page, limit, query, and sort</p>
+<p>View of the list of products: GET "/view/" : List of products, page, limit, query, and sort</p>
 <p>GET "/:pid/" : Product by ID</p>
 <p>POST "/" : Add a new product</p>
 <p>PUT "/:pid/" : Update a product by ID</p>

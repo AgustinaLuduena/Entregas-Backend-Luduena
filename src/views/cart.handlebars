@@ -1,11 +1,14 @@
+
 <h1>My Cart Details</h1>
 <hr>
 <p>Cart ID: {{cart._id}}</p>
 <ul>
     {{#each cart.products}}
         <li>
-            <p>Product ID: {{this.product}}</p>
+            <p>Product: {{this.product}}</p>
             <p>Quantity: {{this.quantity}}</p>
         </li>
     {{/each}}
 </ul>
+
+

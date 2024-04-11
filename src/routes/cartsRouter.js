@@ -19,7 +19,7 @@ cartsRouter.post("/", async (req, res)=>{
     
     } catch (err) {
         console.error('Error:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json('Internal Server Error');
     }
 })  
 
@@ -33,19 +33,25 @@ cartsRouter.get("/:cid/", async (req, res) => {
         let cid =  req.params.cid
         const cart = await DBcartsManager.getCartById(cid);
 
+
         if(!cart){
-          return res.send(`Cart Id number ${cid} does not have any products yet.`)
+          return res.json(`Cart Id number ${cid} does not been found.`)
+        } else {
+          console.log(cart)
+          res.json({cart})
         }
 
+        /* Corrección 2da pre entrega
         if (req.accepts("html")) {
           return res.render("cart", { cart: cart });
         } else {
           return res.json(cart);
         }
+        */
 
       } catch (err) {
         console.error('Error:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json('Internal Server Error');
       }
 })  
 
@@ -59,11 +65,12 @@ cartsRouter.post("/:cid/product/:pid/", async (req, res)=>{
         let cid =  req.params.cid
         let pid =  req.params.pid
         const cart = await DBcartsManager.addProduct(cid, pid);
-        res.status(200).send(`Product Id number ${pid} was succesfully add to cart Id number ${cid}.`);
+        res.status(200).json(`Product Id number ${pid} was succesfully add to cart Id number ${cid}.`);
+        //Podría implementar un SweetAlert
 
       } catch (err) {
         console.error('Error:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json('Internal Server Error');
       }
 })  
 
@@ -74,11 +81,11 @@ cartsRouter.delete("/:cid/product/:pid/", async (req, res)=>{
         let cid =  req.params.cid
         let pid =  req.params.pid
         const cart = await DBcartsManager.deleteProduct(cid, pid);
-        res.status(200).send(`Product Id number ${pid} was succesfully deleted from cart Id number ${cid}.`);
+        res.status(200).json(`Product Id number ${pid} was succesfully deleted from cart Id number ${cid}.`);
 
       } catch (err) {
         console.error('Error:', err);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).json({ error: 'Error interno del servidor.' });
       }
 
 })  
@@ -110,26 +117,28 @@ cartsRouter.put("/:cid/", async (req, res) =>{
     let updateData = req.body;
 
   /* Modelo para req.body
+
     [
       {
         "product": "6605d54a8a122c3e421c38f4",
         "quantity": 10
       }
     ]
+
   */
 
     const updateSuccessfully = await DBcartsManager.updateCart(cid, updateData)
 
     if (updateSuccessfully) {
-      return res.status(200).send({ status: `Cart with ID ${cid} was successfully updated.` });
+      return res.status(200).json({ status: `Cart with ID ${cid} was successfully updated.` });
     } else {
-      return res.status(404).send({ error: `Product with ID ${cid} was not found.` });
-  }
+      return res.status(404).json({ error: `Error trying to update the chosen product.` });
+    }
 
   } catch (err) {
       console.error('Error:', err);
-      res.status(500).send('Internal Server Error');
-    }
+      res.status(500).json('Internal Server Error');
+  }
 })
 
 cartsRouter.put("/:cid/product/:pid/", async (req, res) =>{
@@ -152,7 +161,7 @@ cartsRouter.put("/:cid/product/:pid/", async (req, res) =>{
     const updated = await DBcartsManager.updateProductQuantity(cid, pid, quantity);
 
     if (updated) {
-        return res.status(200).json({ message: `Cantidad del producto ${pid} en el carrito ${cid} actualizada correctamente.` });
+        return res.status(200).json({ message: `Cantidad del producto ID: ${pid} en el carrito ID: ${cid}, actualizada correctamente.` });
     } else {
         return res.status(404).json({ error: `No se pudo actualizar la cantidad del producto ${pid} en el carrito ${cid}.` });
     }
