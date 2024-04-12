@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { auth } from "../middlewares/auth.js";
+import { active } from "../middlewares/activeSession.js";
 import DBChatManager from "../dao/services/DBChatManager.js";
 import DBProductManager from "../dao/services/DBProductManager.js";
 import CartManager from '../dao/services/DBCartManager.js';
@@ -7,7 +9,7 @@ import CartManager from '../dao/services/DBCartManager.js';
 const viewsRouter = Router();
 
 //INDEX
-viewsRouter.get('/', (req, res) => {
+viewsRouter.get('/', active, (req, res) => {
     try {
       res.render('index', {title: "Home"});
     } catch (error) {
@@ -15,6 +17,22 @@ viewsRouter.get('/', (req, res) => {
       res.status(500).send('Error interno del servidor');
     }
   });
+
+//SESSION and PROFILE
+viewsRouter.get("/register", active, (req, res) => {
+  res.render("register");
+});
+
+viewsRouter.get("/login", active, (req, res) => {
+  res.render("login");
+});
+
+viewsRouter.get("/profile", auth ,(req, res) => {
+  res.render("profile", {
+    user: req.session.user,
+  });
+});
+
 
 // REAL TIME PRODUCTS (FS)
 viewsRouter.get("/api/products/realTimeProducts", async (req,res)=>{
@@ -42,6 +60,8 @@ viewsRouter.get('/products', async (req, res) => {
   let limit = parseInt(req.query.limit);
   let category = req.query.category;
   let sort = req.query.sort;
+  
+  let user = req.session.user;
 
   try {
       if (isNaN(page) || page < 1) { page = 1 };
@@ -68,7 +88,11 @@ viewsRouter.get('/products', async (req, res) => {
           result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort}` : "";
           result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
-          res.render('products', result);
+          console.log(result);
+          res.render('products', {
+            user: user,
+            products: result.docs
+          });
 
           //Console response
           const status = result.isValid ? "success" : "error";
@@ -92,7 +116,7 @@ viewsRouter.get('/products', async (req, res) => {
               prevLink,
               nextLink
           };
-          console.log(responseObject);
+          console.log(responseObject); 
       }  
 
   } catch (err) {
@@ -104,12 +128,11 @@ viewsRouter.get('/products', async (req, res) => {
 // CART VIEW Route
 const DBcartsManager = new CartManager();
 
-viewsRouter.get("/carts/:cid/", async (req, res) => {
+viewsRouter.get("/carts/:cid/", auth, async (req, res) => {
 
     //List of products inside the cart chosen by Id
-    //Example cart id: 66062c39e26a5ce67ecbb891
+    //Example cart id: 661404ba661a8432389a150f
     try {
-        //quité el parseInt
         let cid =  req.params.cid
         const cart = await DBcartsManager.getCartById(cid);
 
@@ -129,6 +152,8 @@ viewsRouter.get("/carts/:cid/", async (req, res) => {
         res.status(500).json('Internal Server Error');
       }
 })  
+
+
 
 export default viewsRouter;
 

@@ -1,10 +1,29 @@
 <div>
-    <h1>Listado de Productos desde MongoDB Atlas</h1>
+    {{#if user}}
+        <h1>Bienvenido/a {{user.name}}</h1>
+        {{#if admin}}
+            <p>Tu email: {{user.email}}</p>
+            <p>Tu rol: {{user.role}}</p>
+        {{/if}}
+        {{#if user}}
+            <p>Tu nombre: {{user.name}}</p>
+            <p>Tu email: {{user.email}}</p>
+            <p>Tu edad: {{user.age}}</p>
+            <p>Tu rol: {{user.role}}</p>
+        {{/if}}
+        <div>
+            <button id="profile-btn">Ver perfil</button>
+        </div>
+    {{else}}
+        <h1>Hola invitado</h1>
+    {{/if}}
+
+    <h3>Listado de Productos</h3>
     <hr>
-    {{#if isValid}}
+    {{#if products.length}}
     <div>
         <ul>
-            {{#each docs}}
+            {{#each products}}
                 <li>
                     <p> <strong> Producto ID:</strong> {{this.id}}</p>
                     <p> <strong> Título:</strong> {{this.title}}</p>
@@ -36,4 +55,8 @@
     {{else}}
     <p>No hay productos en listado todavía.</p>
     {{/if}}
+
+
 </div>
+
+<script src="/js/products.js"></script>

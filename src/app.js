@@ -2,11 +2,15 @@ import express from 'express';
 import __dirname from './utils.js';
 import handlebars from "express-handlebars";
 import { Server } from 'socket.io';
-import mongoose from 'mongoose';
+import connectDb from './config/database.js';
+import MongoStore from 'connect-mongo';
+//import cookieParser from 'cookie-parser';
+import session from 'express-session';
 //Router
 import viewsRouter from './routes/viewsRouter.js';
 import productsRouter from './routes/productsRouter.js';
 import cartsRouter from './routes/cartsRouter.js';
+import sessionsRouter from './routes/sessionsRouter.js';
 //Manager
 import ProductManager from "./ProductManager.js"
 
@@ -14,10 +18,29 @@ import ProductManager from "./ProductManager.js"
 const app = express()
 const port = 8080
 
+
+//MongoDB
+connectDb()
+
+//Este código duplicado en "config" va a ser reemplazado por Varialbles de Entorno luego
+const PASS_MONGO = "mongodb2024"
+const DB_URL = `mongodb+srv://agusluduena4:${PASS_MONGO}@cluster0.egyfnzt.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0`
+
+
 //Middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(__dirname+'/public'));
+//app.use(cookieParser("signed"))
+app.use(session({
+  store: new MongoStore({
+    mongoUrl: DB_URL,
+    ttl: 5
+  }),
+  secret:"secret",
+  resave: false,
+  saveUninitialized: false
+}))
 
 
 //Carpeta de vistas
@@ -30,50 +53,13 @@ app.engine('handlebars', handlebars.engine());
 
 //Routes
 app.use(viewsRouter);
+app.use("/api/sessions", sessionsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/products", productsRouter);
-
-//MongoDB
-// const connectMongoDB = async () => {
-//   //'mongodb://127.0.0.1:27017/ecommerce?retryWrites=true&w=majority' es localhost
-//   const DB_URL = 'mongodb+srv://agusluduena4:mongodb2024@cluster0.egyfnzt.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0'
-//   try{
-//       await mongoose.connect(DB_URL)
-//       console.log("Conected to MongoDB!")
-//   }catch(error){
-//       console.error("Error. You are not conected to the DB", error)
-//       process.exit()
-//   }
-//   }
-  
-//   connectMongoDB()
-
-const environment = async () => {
-  const DB_URL = 'mongodb+srv://agusluduena4:mongodb2024@cluster0.egyfnzt.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0';
-  await mongoose.connect(DB_URL);
-  console.log("Conected to MongoDB.")
-}
-
-environment();
 
 
 //.handlebars
 const productManager = new ProductManager();
-
-
-
-/* 
-Desafío anterior. En index randerizaba el listado de productos.
-app.get('/', async (req, res) => {
-    try {
-      const productos = await productManager.getProducts();
-      res.render('index', { productos: productos });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Error interno del servidor');
-    }
-  });
-*/
 
   app.get('/realTimeProducts', async (req, res) => {
     try {
@@ -85,14 +71,33 @@ app.get('/', async (req, res) => {
     }
   });
 
+  /* 
+  //PRIMERAS COOKIES - EJERCICIO DE CLASE
+
+  app.get('/setCookie', (req, res) => {
+    res.cookie("Primer cookie", "Esta es mi primera cookie",{maxAge: 1000000, signed: true}).send("Nueva cookie")
+  });
+  app.get('/getCookie', (req, res) => {
+    res.send(req.signedCookies)
+  });
+  */
+
+  //Session Counter - EJERCICIO DE CLASE
+  /* 
+  app.get("/session", (req, res) => {
+    if (req.session.counter) {
+      req.session.counter++;
+      res.send(`Se visitó el sitio ${req.session.counter} veces`);
+    } else {
+      req.session.counter = 1;
+      res.send("Bienvenido/a");
+    }
+  });
+  */
 
 //Instanciando socket.io
 const serverHTTP = app.listen(port, ()=> console.log("Server running on port: ", port));
 const io = new Server(serverHTTP)
-
-
-//chat before MongoDB
-//const msg = []
 
 
 
@@ -115,16 +120,6 @@ io.on('connection', async socket =>{
             console.log("Producto correctamente agregado.")
         }
     });
-
-    //Chat
-    /* 
-    //chat before MongoDB
-    socket.on("message", (msg)=> {
-      console.log("Mensaje agregado", msg);
-      //msg.push(data)
-      io.emit('messageLogs', msg)
-      
-  })*/
 
   socket.on("addMessage", (addMessage) => {
     console.log("Mensaje agregado", addMessage);
