@@ -88,7 +88,7 @@ viewsRouter.get('/products', async (req, res) => {
           result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort}` : "";
           result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
-          console.log(result);
+          //console.log(result);
           res.render('products', {
             user: user,
             products: result.docs
@@ -116,7 +116,7 @@ viewsRouter.get('/products', async (req, res) => {
               prevLink,
               nextLink
           };
-          console.log(responseObject); 
+          //console.log(responseObject); 
       }  
 
   } catch (err) {
@@ -153,6 +153,9 @@ viewsRouter.get("/carts/:cid/", auth, async (req, res) => {
       }
 })  
 
+viewsRouter.get("/restore", (req, res) => {
+  res.render("restore");
+});
 
 
 export default viewsRouter;

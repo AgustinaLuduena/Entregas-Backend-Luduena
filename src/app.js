@@ -1,3 +1,4 @@
+
 import express from 'express';
 import __dirname from './utils.js';
 import handlebars from "express-handlebars";
@@ -6,6 +7,9 @@ import connectDb from './config/database.js';
 import MongoStore from 'connect-mongo';
 //import cookieParser from 'cookie-parser';
 import session from 'express-session';
+//Passport
+import passport from 'passport';
+import initializePassport from './config/passport.config.js';
 //Router
 import viewsRouter from './routes/viewsRouter.js';
 import productsRouter from './routes/productsRouter.js';
@@ -15,8 +19,12 @@ import sessionsRouter from './routes/sessionsRouter.js';
 import ProductManager from "./ProductManager.js"
 
 
+
+
 const app = express()
 const port = 8080
+
+
 
 
 //MongoDB
@@ -42,6 +50,10 @@ app.use(session({
   saveUninitialized: false
 }))
 
+//Passport
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 //Carpeta de vistas
 app.set('views', `${__dirname}/views`);
@@ -96,6 +108,7 @@ const productManager = new ProductManager();
   */
 
 //Instanciando socket.io
+
 const serverHTTP = app.listen(port, ()=> console.log("Server running on port: ", port));
 const io = new Server(serverHTTP)
 
@@ -127,3 +140,4 @@ io.on('connection', async socket =>{
 })
 
 })
+

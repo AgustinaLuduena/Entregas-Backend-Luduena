@@ -1,0 +1,13 @@
+<div>
+    <h1>Restaura la contraseña del usuario</h1>
+    <form id="restoreForm">
+        <label>Correo electrónico</label>
+        <input name="email">
+        <label>Nueva contraseña</label>
+        <input type="password" name="password">
+        {{!-- Revisar que no muestre la contraseña en la vista. --}}
+        <input type="submit">
+    </form>
+    <div id="restoreSuccess"></div>
+</div>
+<script src="./js/restore.js"></script>
