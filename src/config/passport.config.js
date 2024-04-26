@@ -49,23 +49,8 @@ const initializePassport = () => {
         try {
             const user = await userModel.findOne({ email: username });
             if (!user) return done(null, false);
-            //VALIDACION PARA ADMINISTRADOR DE CODERHOUSE. Ingresa y no se guarda en MongoDB
+            //CoderHouse Admin´s validation. Gets in and it is not save in the DB.
             //¿Cómo hago para poder visualizar la info como administrador en la vista de "products"?
-            /* 
-            Esta era la lógica del sessionRouter antes de utilizar passport:
-
-            if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-              req.session.user = {
-                  name: "Admin",
-                  email: email,
-                  role: "admin"
-              };
-              return res.status(200).send({
-                  status: "success",
-                  payload: req.session.user,
-                  message: "Inicio exitoso como administrador",
-              });
-              */
             if (username === "adminCoder@coder.com" && password === "adminCod3r123") return done(null, user);
             
             const valid = isValidPassword(user, password);
@@ -90,11 +75,7 @@ const initializePassport = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          //et the object of the Github profile
-          //console.log(profile);
-
-          //Check for the email in the database.
-          //PROBLEMA. Entiendo que Github no me permite acceder al email del profile ("null") entonces no puede hacer esta comparación y cada vez que inicio sesión con Github, me guarda un nuevo usuario (igual) en la data base de Mongo. ¿Puede solucionarse en esta instancia del código?
+          //get the object of the Github profile
           const user = await userModel.findOne({
             email: profile._json.email,
           });
@@ -102,9 +83,9 @@ const initializePassport = () => {
           if (!user) {
             //Build a new object following the model (those which do not match the model, are set by default)
             const newUser = {
-              first_name: profile._json.login, //Includes both name and lastname
+              first_name: profile._json.login,
               last_name: "",
-              age: "", //Must be a number or empty string. It gives me an error if I write a msg.
+              age: "",
               email: "Data no disponible",
               password: "",
             };

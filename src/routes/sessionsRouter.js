@@ -6,37 +6,6 @@ import { createHash, isValidPassword } from '../utils.js';
 
 const sessionsRouter = Router()
 
-/* 
-sessionsRouter.post("/register", async (req, res) => {
-    const { first_name, last_name, email, age, password } = req.body;
-
-    //Validation
-    const exist = await userModel.findOne({ email: email });
-    if (exist) {
-      return res
-        .status(400)
-        .send({ status: "error", error: "The email already existe in the DataBase."});
-    }
-
-    if (!first_name || !last_name || !email || !age) {
-        return res
-          .status(400)
-          .send({ status: "error", error: "Please, complete all the information require."});
-      }
-
-    const user = {
-      first_name,
-      last_name,
-      email,
-      age,
-      password : createHash(password),
-    };
-
-    const result = await userModel.create(user);
-    console.log(result);
-    res.status(201).send({ staus: "success", payload: result, message: "Registro exitoso", });
-  });
-*/
 sessionsRouter.post(
     "/register", 
     passport.authenticate("register", {failureRedirect:"/api/sessions/failregister"}), 
@@ -52,54 +21,6 @@ sessionsRouter.get("/failregister", async (req, res) =>{
 
 })
 
-
-
-/* 
-sessionsRouter.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-
-    //CODER Admin Validation
-    if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-        req.session.user = {
-            name: "Admin",
-            email: email,
-            role: "admin"
-        };
-        return res.status(200).send({
-            status: "success",
-            payload: req.session.user,
-            message: "Inicio exitoso como administrador",
-        });
-    } else {
-        const user = await userModel.findOne({email});
-        if (!user) return res.status(401).send({ status: "error", error: "Credenciales incorrectas" });
-
-        if (!email || !password) {
-            return res
-                .status(400)
-                .send({ status: "error", error: "Please, complete all the information require."});
-        }
-
-        const validatePassword = isValidPassword(user, password)
-        if(!validatePassword) return res.status(401).send({ status: "error", error: "Credenciales incorrectas" })
-        delete user.password
-        
-
-        req.session.user = {
-            name: `${user.first_name} ${user.last_name}`,
-            email: user.email,
-            age: user.age,
-            role: "user"
-        };
-
-        return res.status(200).send({
-            status: "success",
-            payload: req.session.user,
-            message: "Inicio exitoso",
-        });
-    }
-});
-*/
 
 sessionsRouter.post(
     '/login', 
@@ -124,7 +45,6 @@ sessionsRouter.get("/faillogin", async (req, res) => {
   console.log("error");
   res.send({ error: "Failed to process login!" });
 });
-
 
 
 
@@ -192,7 +112,7 @@ sessionsRouter.get(
         role: "User",
     };
    
-    res.redirect("/products"); //MODIF - ruta a la que redirigimos luego de iniciar sesión
+    res.redirect("/products");
   }
 );
 

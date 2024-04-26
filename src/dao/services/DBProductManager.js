@@ -7,7 +7,6 @@ export default class DBProductManager {
     }
 
     getProducts = async (page, limit, sort) => {
-        //let result = await productsModel.find().limit(limit)
         let options = {page, limit, lean: true}
         if(sort) {
             options.sort = sort

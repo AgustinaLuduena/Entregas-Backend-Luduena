@@ -1,4 +1,3 @@
-//import { response } from "express";
 import fs from "fs";
 import __dirname from "./utils.js";
 
@@ -118,46 +117,3 @@ export default class ProductManager{
     
 }
 
-
-//const eventManager = new ProductManager()
-
-//Empty array
-    //eventManager.getProducts()
-
-//Add products ok
-  /*
-  eventManager.addProduct("Pencil", "Red color pencil", 200, 100, 20)
-  eventManager.addProduct("Pencil", "Blue color pencil", 200, 101, 20)
-  eventManager.addProduct("Pencil", "Yellow color pencil", 200, 102, 20)
-  eventManager.addProduct("Pencil", "Green color pencil", 200, 103, 15)
-  eventManager.addProduct("Pencil", "Orange color pencil", 200, 104, 15)
-  eventManager.addProduct("Pencil", "Purple color pencil", 200, 105, 15)
-  eventManager.addProduct("Pen", "Red color pen", 200, 106, 15)
-  eventManager.addProduct("Pen", "Blue color pen", 200, 107, 30)
-  eventManager.addProduct("Pen", "Green color pen", 200, 108, 15)
-  eventManager.addProduct("Pen", "Purple color pen", 200, 109, 15)
-  eventManager.addProduct("Pen", "Black color pen", 200, 110, 30)
-  */
-
-//Add products wrong
-    //eventManager.addProduct("Pen", "Black color pen", 106,50)
-
-//Add products repeated code
-    //eventManager.addProduct("Pen", "Pink color pen", 300, 105,20)
-
- 
-//Search product by ID
-    // eventManager.getProductByID(2)
-    // eventManager.getProductByID(7)
-
-/*
-//Update product
-    eventManager.updateProduct({
-        id: 2,
-        title: 'Higlighter',
-        description: 'Orange color',
-    })
-*/
-//Delete product by ID
-    //eventManager.deleteProduct(9)
-    //eventManager.deleteProduct(5)

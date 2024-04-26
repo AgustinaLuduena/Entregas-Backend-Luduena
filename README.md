@@ -7,10 +7,6 @@
 
 <h3 align="left">Routes of the project:</h3>
 
-<h3>SOCKET IO</h3>
-<p>app.use(viewsRouter);</p>
-<p>GET "/realTimeProducts" : Shows the list of products from JSON file (no MONGODB) and the form to add a new one to the file</p>
-
 <h3>MONGO DB</h3>
 
 <h4>app.use(viewsRouter);</h4>
@@ -19,7 +15,6 @@
 <p>GET "/register" : Show the register view.</p>
 <p>GET "/products" : Show the products´ view page - as "guest" or after the log in.</p>
 <p>GET "/profile" : Show the profile view only after you log in.</p>
-<p>GET "/api/messages/" : Show the form to send a new message that will be added to the data base with MongoDB.</p>
 
 <h4>app.use("/api/carts", cartsRouter);</h4>
 <p>POST "/" : Add a new cart (Cart Id + products:[])</p>
@@ -45,5 +40,9 @@
 <p>GET "/logout" : Destroy the current session and show the login view by Postman.</p>
 
 
+<h3>SOCKET IO</h3>
+<p>app.use(viewsRouter);</p>
+<p>GET "/api/products/realTimeProducts" : Shows the list of products from JSON file (no MONGODB) and the form to add a new one to the file - The view is not working correctrly because of some problems with Socket.io</p>
+<p>GET "/api/messages/" : Show the form to send a new message that will be added to the data base with MongoDB - The view is not working correctrly because of some problems with Socket.io, but you can use the form correctly to use the MongoDB.</p>
 
 

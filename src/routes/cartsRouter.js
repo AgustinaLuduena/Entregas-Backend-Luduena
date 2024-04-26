@@ -1,14 +1,9 @@
 import { Router } from 'express'
-//import fs, { writeFileSync } from "fs";
 import __dirname from "../utils.js";
 import CartManager from '../dao/services/DBCartManager.js';
 
 const cartsRouter = Router()
 const DBcartsManager = new CartManager();
-
-//const pathCart = `${__dirname}/data/cart.json`
-//const pathProducts = `${__dirname}/data/products.json`
-
 
 cartsRouter.post("/", async (req, res)=>{
     
@@ -29,10 +24,8 @@ cartsRouter.get("/:cid/", async (req, res) => {
     //List of products inside the cart chosen by Id
     //Example cart id: 66062c39e26a5ce67ecbb891
     try {
-        //quité el parseInt
         let cid =  req.params.cid
         const cart = await DBcartsManager.getCartById(cid);
-
 
         if(!cart){
           return res.json(`Cart Id number ${cid} does not been found.`)
@@ -40,14 +33,6 @@ cartsRouter.get("/:cid/", async (req, res) => {
           console.log(cart)
           res.json({cart})
         }
-
-        /* Corrección 2da pre entrega
-        if (req.accepts("html")) {
-          return res.render("cart", { cart: cart });
-        } else {
-          return res.json(cart);
-        }
-        */
 
       } catch (err) {
         console.error('Error:', err);
@@ -66,7 +51,7 @@ cartsRouter.post("/:cid/product/:pid/", async (req, res)=>{
         let pid =  req.params.pid
         const cart = await DBcartsManager.addProduct(cid, pid);
         res.status(200).json(`Product Id number ${pid} was succesfully add to cart Id number ${cid}.`);
-        //Podría implementar un SweetAlert
+        //Try SweetAlert
 
       } catch (err) {
         console.error('Error:', err);

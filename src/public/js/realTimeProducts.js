@@ -1,9 +1,5 @@
 const socket = io();
 
-//Conection client-server
-// socket.emit("conectionMessage", "Cliente conectado!")
-// console.log("Cliente conectdo! (client side)")
-
 //View
 const form = document.getElementById("products");
 const newList = document.getElementById('newList');
@@ -11,7 +7,6 @@ const newList = document.getElementById('newList');
 async function renderProductList(products) {
 
     newList.innerHTML = ""; 
-
     if (!Array.isArray(products)) {
         console.error('La lista de productos no es un array:', products);
         return;
@@ -38,8 +33,8 @@ async function renderProductList(products) {
 }
 
 //List of products
-
 socket.on("getProd", (products) => {
+    console.log(products)
     renderProductList(products);
 });
  

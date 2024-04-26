@@ -6,9 +6,6 @@ import DBProductManager from '../dao/services/DBProductManager.js';
 const productsRouter = Router()
 const DBproductManager = new DBProductManager();
 
-// const PORT = 8080
-// const pagination = `http://localhost:${PORT}/api/products?page=`
-
 
 productsRouter.get('/', async (req, res) => {
     // List of products, page, limit, query, and sort
@@ -43,7 +40,6 @@ productsRouter.get('/', async (req, res) => {
             result.prevLink = result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
             res.json(result);
-            //res.render('products', result);
 
             //Console response
             const status = result.isValid ? "success" : "error";
@@ -76,25 +72,6 @@ productsRouter.get('/', async (req, res) => {
     }
 });
 
-
-
-
-
-    
-
-/* 
-productsRouter.get('/', async (req, res) => {
-//List of products & limit
-try {
-    const products = await DBproductManager.getProducts();
-    res.json({products})
-
-} catch (err) {
-    console.error('Error:', err);
-    res.status(500).send('Internal Server Error');
-}
-});
-*/  
 
 productsRouter.get("/:pid/", async (req, res) => {
     //Product by ID
@@ -155,7 +132,6 @@ productsRouter.put("/:pid/", validateUpdateFields, async (req, res) => {
 
     //Update a product
     try {
-        //quité el parseInt
         let pid = req.params.pid;
         let productData = req.body;
 
@@ -178,7 +154,6 @@ productsRouter.delete("/:pid/", async (req, res) => {
 
     //Delete product by ID
     try {
-        //quité el parseInt
         let pid =  req.params.pid
         const selectedProduct = await DBproductManager.deleteProduct(pid);
         if(!selectedProduct){

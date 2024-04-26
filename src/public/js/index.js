@@ -43,8 +43,6 @@ socket.on("getProd", (products) => {
  
 window.onload = async function() {
     try {
-        //const response = await fetch('/api/products');
-        //const products = await response.json();
         renderProductList(products);
     } catch (error) {
         console.error('Error al obtener la lista de productos:', error);

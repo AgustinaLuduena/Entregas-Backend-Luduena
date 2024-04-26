@@ -6,8 +6,6 @@ const collection = "Products"
 
 const schema = new Schema({
 
-    //El ID lo genera Mongoose
-
     title: {
         type: String,
         require: true

@@ -36,7 +36,7 @@ viewsRouter.get("/profile", auth ,(req, res) => {
 
 // REAL TIME PRODUCTS (FS)
 viewsRouter.get("/api/products/realTimeProducts", async (req,res)=>{
-    //Muestra el listado de productos del JSON y el formulario para agregar uno nuevo (NO MONGO DB)
+    //Muestra el listado de productos del JSON y el formulario para agregar uno nuevo (NO MONGO DB). Ya no funciona porque no funciona socket.io
     try{
         res.render('realTimeProducts')
 
