@@ -14,9 +14,24 @@ form.addEventListener("submit", (e) => {
     headers: {
       "Content-Type": "application/json",
     },
-  }).then((response) => {
-    if (response.status === 200) {
-      window.location.replace("/products"); 
-    }
-  });
-});
+  })
+  
+//   .then((response) => {
+//     if (response.status === 200) {
+//       window.location.replace("/products"); 
+//     }
+//   });
+// });
+
+.then(response => {
+  if (!response.ok) {
+    document.getElementById('loginMsg').innerText = 'Error en las credenciales. Intente nuevamente.';
+    throw new Error('Failed to login');
+  } 
+  
+  window.location.replace("/products"); 
+})
+.catch(error => {
+  console.error(error);
+})
+})

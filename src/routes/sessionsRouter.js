@@ -7,26 +7,29 @@ import { createHash, isValidPassword } from '../utils.js';
 const sessionsRouter = Router()
 
 sessionsRouter.post(
-    "/register", 
-    passport.authenticate("register", {failureRedirect:"/api/sessions/failregister"}), 
-    async (req, res) => {
-        console.log("Getting user information.");
-        res.status(201).send({ status: "success", message: "User successfully registered!" });
-      }
-)
+  "/register", 
+  passport.authenticate("register", {session: false}),
+  async (req, res) => {
+    if (req.user) {
+      res.status(201).render("register", { message: "User successfully registered!" });
+    } else {
+      res.status(400).render("register", { error: "Failed to register user!" });
+    }
+  }
+);
 
-sessionsRouter.get("/failregister", async (req, res) =>{
-    console.log("error");
-    res.status(401).send({ error: "Failed to process register!" });
 
-})
+sessionsRouter.get("/failregister", async (req, res) => {
+  console.log("error");
+  res.status(401).json({ error: "Failed to process register!" });
+});
 
 
 sessionsRouter.post(
     '/login', 
-    passport.authenticate('login',{failureRedirect:"/api/sessions/faillogin"}),
+    passport.authenticate('login',{session: false}),
     async(req,res)=>{
-        if(!req.user)return res.status(400).send('error')
+        if(!req.user)return res.status(401).send('error')
 
         const user = req.user;
 
@@ -36,7 +39,7 @@ sessionsRouter.post(
             age: user.age,
             role: "User"
         };
-        res.status(200).send({ status: "success", payload: req.user });
+        res.status(201).send({ status: "success", payload: req.user });
         }
 )
 
