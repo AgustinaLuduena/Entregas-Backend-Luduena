@@ -47,22 +47,31 @@ const initializePassport = () => {
       { usernameField: "email" },
       async (username, password, done) => {
         try {
-            const user = await userModel.findOne({ email: username });
-            if (!user) return done(null, false);
+          if (username === "adminCoder@coder.com" && password === "adminCod3r123") {
             //CoderHouse Admin´s validation. Gets in and it is not save in the DB.
-            //¿Cómo hago para poder visualizar la info como administrador en la vista de "products"?
-            if (username === "adminCoder@coder.com" && password === "adminCod3r123") return done(null, user);
-            
-            const valid = isValidPassword(user, password);
-            if (!valid) return done(null, false);
-            return done (null, user);
+            const user = {
+              email: "adminCoder@coder.com",
+              name: "Administrador",
+              role: "admin"
+            };
+            console.log(user)
+            return done(null, user);
+          }
           
+          const user = await userModel.findOne({ email: username });
+          if (!user) return done(null, false);
+  
+          const valid = isValidPassword(user, password);
+          if (!valid) return done(null, false);
+          
+          return done(null, user);
         } catch (error) {
-          return done (error);
+          return done(error);
         }
       }
-    
-  ));
+    )
+  );
+  
 
   //Github strategy to log in
   passport.use(
@@ -86,7 +95,7 @@ const initializePassport = () => {
               first_name: profile._json.login,
               last_name: "",
               age: "",
-              email: "Data no disponible",
+              email: profile._json.email,
               password: "",
             };
             

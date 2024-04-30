@@ -1,12 +1,12 @@
 <div>
     {{#if user}}
         <h1>Bienvenido/a {{user.name}}</h1>
-        {{#if admin}}
+        {{#if admin}} 
+        {{!-- No ingresa nunca a esta validación. ¿Por qué? --}}
             <p>Tu email: {{user.email}}</p>
             <p>Tu rol: {{user.role}}</p>
         {{/if}}
         {{#if user}}
-            <p>Tu nombre: {{user.name}}</p>
             <p>Tu email: {{user.email}}</p>
             <p>Tu edad: {{user.age}}</p>
             <p>Tu rol: {{user.role}}</p>

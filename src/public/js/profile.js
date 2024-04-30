@@ -1,6 +1,7 @@
 //LOG OUT BUTTON
 
 const logoutBtn = document.getElementById("logout-btn");
+const homeBtn = document.getElementById("home-btn");
 
 logoutBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -11,5 +12,10 @@ logoutBtn.addEventListener('click', (e) => {
           window.location.replace("/"); 
         }
       });
+});
+
+homeBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.location.replace("/products"); 
 });
 

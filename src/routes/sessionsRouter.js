@@ -37,6 +37,7 @@ sessionsRouter.post(
             name: `${user.first_name} ${user.last_name}`,
             email: user.email,
             age: user.age,
+            User: true,
             role: "User"
         };
         res.status(201).send({ status: "success", payload: req.user });
@@ -110,7 +111,8 @@ sessionsRouter.get(
     //req.session.user = req.user;
     req.session.user = {
         name: `${githubUser.first_name}`,
-        email: `${githubUser.email}`,
+        //email: `${githubUser.email}`,
+        email: "Data no disponible",
         age: "Data no disponible",
         role: "User",
     };
