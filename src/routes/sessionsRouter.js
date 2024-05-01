@@ -13,23 +13,17 @@ sessionsRouter.post(
     if (req.user) {
       res.status(201).render("register", { message: "User successfully registered!" });
     } else {
-      res.status(400).render("register", { error: "Failed to register user!" });
+      res.status(401).render("register", { error: "Failed to register user!" });
     }
   }
 );
-
-
-sessionsRouter.get("/failregister", async (req, res) => {
-  console.log("error");
-  res.status(401).json({ error: "Failed to process register!" });
-});
 
 
 sessionsRouter.post(
     '/login', 
     passport.authenticate('login',{session: false}),
     async(req,res)=>{
-        if(!req.user)return res.status(401).send('error')
+        if(!req.user)return res.status(401).send({ error: "Failed to process login!" })
 
         const user = req.user;
 
@@ -37,20 +31,11 @@ sessionsRouter.post(
             name: `${user.first_name} ${user.last_name}`,
             email: user.email,
             age: user.age,
-            User: true,
             role: "User"
         };
         res.status(201).send({ status: "success", payload: req.user });
         }
 )
-
-
-sessionsRouter.get("/faillogin", async (req, res) => {
-  console.log("error");
-  res.send({ error: "Failed to process login!" });
-});
-
-
 
 //Destroy the session = LOG OUT route
 sessionsRouter.post('/logout', (req, res) => {
@@ -108,7 +93,6 @@ sessionsRouter.get(
     if(!req.user)return res.status(400).send('error')
 
     const githubUser = req.user
-    //req.session.user = req.user;
     req.session.user = {
         name: `${githubUser.first_name}`,
         //email: `${githubUser.email}`,

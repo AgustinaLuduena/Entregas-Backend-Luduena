@@ -18,6 +18,7 @@
 
 <h4>app.use("/api/carts", cartsRouter);</h4>
 <p>POST "/" : Add a new cart (Cart Id + products:[])</p>
+<p>GET "/list" : List of carts ((!)this must be a private route. It is just to see the ID in order to use Postman this one time)</p>
 <p>GET "/:cid/" : List of products inside the cart chosen by Id</p>
 <p>POST "/:cid/product/:pid/" : Add the chosen product to chosen the cart (Object [productId:id + quantity])</p>
 <p>DELETE "/:cid/product/:pid/" : Delete the chosen product from the chosen cart (Object [productId:id + quantity])</p>
@@ -28,16 +29,32 @@
 
 <h4>app.use("/api/products", productsRouter);</h4>
 <p>GET "/" : List of products, page, limit, query, and sort</p>
-<p>View of the list of products: GET "/view/" : List of products, page, limit, query, and sort</p>
+<p>GET "/categories" : List of products and the detail of the category (from category.model - without paginate)</p>
 <p>GET "/:pid/" : Product by ID</p>
 <p>POST "/" : Add a new product</p>
 <p>PUT "/:pid/" : Update a product by ID</p>
 <p>DELETE "/:pid/" : Delete product by ID</p>
 
+<h4>app.use("/api", userRouter);</h4>
+<p>GET "/users" : List of user in the db and the detail of the cart asociated</p>
+<p>GET "/user/:id" : Data of the chosen user in the db</p>
+<p>POST "/user" : Create a new user to the db with a cart from the cart.model (manually asociated in Postman - ID of the cart is previously needed)</p>
+<p>PUT "/user/:id" : Update data of the chosen user in the db</p>
+<p>DELETE "/user/:id" : Delete the chosen user from the db</p>
+
+
 <h4>app.use("/api/sessions", sessionsRouter);</h4>
 <p>POST "/register" : Add a new user using "req.body" by Postman.</p>
 <p>POST "/login" : Log in as "user" or "admin" using "req.body" by Postman.</p>
 <p>GET "/logout" : Destroy the current session and show the login view by Postman.</p>
+
+<h4>app.use("/api", categoryRouter);</h4>
+<p>GET "/categories" : List of categories existing in the db</p>
+<p>GET "/category/:id" : Category by ID</p>
+<p>POST "/category" : Create category</p>
+<p>PUT "/category/:id" : Update Category by ID</p>
+<p>DELETE "/category/:id" : Delete Category by ID</p>
+
 
 
 <h3>SOCKET IO</h3>

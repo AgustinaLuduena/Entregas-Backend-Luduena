@@ -30,12 +30,19 @@ const schema = new Schema({
         require: true
     },
     category: {
-        type: String,
-        require: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "category",
+        required: true,
+    },
+    colors: {
+        type: [String],
+      },
+    sizes: {
+      type: [String], 
     },
     thumbnails: {
-        type: [String]
-    }
+      type: [String],
+    },
 
 })
 

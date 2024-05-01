@@ -5,12 +5,12 @@ import bcrypt from "bcrypt";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+//hash password
 export const createHash=(password)=>bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 
+//validate password
 export const isValidPassword = (user, password) => {
-  console.log(
-    `Datos a validar: user-password: ${user.password}, password: ${password}`
-  );
+  console.log(`Datos a validar: user-password: ${user.password}, password: ${password}`);
   return bcrypt.compareSync(password, user.password);
 };
 

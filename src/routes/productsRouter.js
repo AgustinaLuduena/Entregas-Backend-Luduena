@@ -73,6 +73,16 @@ productsRouter.get('/', async (req, res) => {
 });
 
 
+//get products with categories details
+productsRouter.get("/categories", async (req, res) => {
+  try {
+    const products = await DBproductManager.getAllProductsWithCategories();
+    res.status(200).json({ products });
+  } catch (error) {
+    res.status(500).json({ error: `Error al recibir los productos` });
+  }
+});
+
 productsRouter.get("/:pid/", async (req, res) => {
     //Product by ID
     try {
@@ -93,9 +103,7 @@ productsRouter.get("/:pid/", async (req, res) => {
     
 
 
-productsRouter.post('/', validateFields, async (req, res) => {
-    //Revisar si funciona el validateFields
-
+productsRouter.post('/', async (req, res) => {
     //Add a new product        
     try {
         const newProduct = req.body
@@ -112,15 +120,18 @@ productsRouter.post('/', validateFields, async (req, res) => {
     }
 });
 
-    /* Modelo de datos para testear por Postman el "req.body"
+    /* Modelo de datos para testear por Postman el "req.body" 
 
         {
-        "title" : "product5",
+        "title" : "Remera deportiva",
         "description" : "Necesita una description",
-        "code": 105,
-        "price": 500,
-        "stock": 20,
-        "category": "No tiene aún"
+        "code": 120,
+        "price": 4500,
+        "status": "true",
+        "stock": 10,
+        "category": "66314a18b4275625c52199ee",
+        "colors": ["negro", "azul"],
+        "sizes": ["M", "L"],
         }
 
     */

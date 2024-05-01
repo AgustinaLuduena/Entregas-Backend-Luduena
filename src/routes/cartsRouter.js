@@ -5,6 +5,16 @@ import CartManager from '../dao/services/DBCartManager.js';
 const cartsRouter = Router()
 const DBcartsManager = new CartManager();
 
+//get list of carts
+cartsRouter.get("/list", async (req, res) => {
+  try {
+    const carts = await DBcartsManager.getAllCarts();
+    res.status(200).json({ carts });
+  } catch (error) {
+    res.status(500).json({ error: `Error al recibir los carritos` });
+  }
+});
+
 cartsRouter.post("/", async (req, res)=>{
     
     //Add a new cart (Cart Id + products:[])
@@ -22,7 +32,6 @@ cartsRouter.post("/", async (req, res)=>{
 cartsRouter.get("/:cid/", async (req, res) => {
 
     //List of products inside the cart chosen by Id
-    //Example cart id: 66062c39e26a5ce67ecbb891
     try {
         let cid =  req.params.cid
         const cart = await DBcartsManager.getCartById(cid);
@@ -44,8 +53,6 @@ cartsRouter.get("/:cid/", async (req, res) => {
 cartsRouter.post("/:cid/product/:pid/", async (req, res)=>{
 
     //Add the chosen product to chosen the cart (Object [productId:id + quantity])
-    //Example cart id: 66062c39e26a5ce67ecbb891
-    //Example product id: 6605d3d38a122c3e421c38df
     try {
         let cid =  req.params.cid
         let pid =  req.params.pid
@@ -105,8 +112,8 @@ cartsRouter.put("/:cid/", async (req, res) =>{
 
     [
       {
-        "product": "6605d54a8a122c3e421c38f4",
-        "quantity": 10
+        "product": "", //cargar el id de un producto
+        "quantity": 10 //cargar catidad deseada
       }
     ]
 
@@ -135,7 +142,7 @@ cartsRouter.put("/:cid/product/:pid/", async (req, res) =>{
 
   /* Modelo para req.body
       {
-        "quantity": 10
+        "quantity": 10 //cargar catidad deseada
       }
   */
 

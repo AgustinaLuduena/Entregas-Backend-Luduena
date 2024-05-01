@@ -3,7 +3,7 @@ import productsModel from "../models/products.js"
 export default class DBProductManager {
 
     constructor(){
-        console.log("Trabajando con ProductManager")
+        console.log("ProductManager Constructor")
     }
 
     getProducts = async (page, limit, sort) => {
@@ -12,10 +12,11 @@ export default class DBProductManager {
             options.sort = sort
         }
         let result = await productsModel.paginate({}, options);
+
         return result;
 
     }
-    
+
     getProductByID = async (pid) => {
         let result = await productsModel.findById(pid)
         return result
@@ -50,5 +51,15 @@ export default class DBProductManager {
         let result = await productsModel.deleteOne({_id:pid})
         return result
     }
+
+    //Products with category details 
+    getAllProductsWithCategories = async () => {
+        try {
+        const products = await productsModel.find().populate("category");
+        return products;
+        } catch (error) {
+        console.log("Error  al obtener todos lo productos");
+        }
+    };
 
 }

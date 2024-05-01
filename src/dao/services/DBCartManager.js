@@ -7,6 +7,20 @@ export default class CartManager {
         console.log("Trabajando con CartManager")
     }
 
+    getAllCarts = async () => {
+        let result = await cartModel
+        .find()
+        .populate({
+            path: 'products',
+            populate: {
+                path: 'product', 
+                model: 'Products' 
+            }
+        })
+        .lean();
+        return result
+    }
+
     getCartById = async (cid) => {
         let result = await cartModel.findById(cid)
             .populate({
