@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import __dirname from "../utils.js";
-import CartManager from '../dao/services/DBCartManager.js';
+import CartManager from '../dao/controllers/DBCartManager.js';
 
 const cartsRouter = Router()
 const DBcartsManager = new CartManager();
@@ -39,7 +39,6 @@ cartsRouter.get("/:cid/", async (req, res) => {
         if(!cart){
           return res.json(`Cart Id number ${cid} does not been found.`)
         } else {
-          console.log(cart)
           res.json({cart})
         }
 

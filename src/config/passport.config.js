@@ -49,12 +49,15 @@ const initializePassport = () => {
         try {
           if (username === "adminCoder@coder.com" && password === "adminCod3r123") {
             //CoderHouse Admin´s validation. Gets in and it is not save in the DB.
-            const user = {
+            const admin = {
               email: "adminCoder@coder.com",
-              name: "Administrador",
-              role: "admin"
+              first_name: "Administrador",
+              last_name: "Coderhouse",
+              role: "admin",
+              age: "No disponible",
+              cart: "El admin no tiene un carrito asignado"
             };
-            console.log(user)
+            let user = admin;
             return done(null, user);
           }
           
@@ -99,7 +102,6 @@ const initializePassport = () => {
               password: "",
             };
             
-            //console.log("this is the new user:" newUser);
             let createdUser = await userModel.create(newUser);
             done(null, createdUser);
           } else {

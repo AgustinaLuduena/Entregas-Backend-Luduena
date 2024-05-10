@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import validateUpdateFields from '../middlewares/validateUpdateFields.js';
 import validateFields from '../middlewares/validateFields.js';
-import DBProductManager from '../dao/services/DBProductManager.js';
+import DBProductManager from '../dao/controllers/DBProductManager.js';
 
 const productsRouter = Router()
 const DBproductManager = new DBProductManager();

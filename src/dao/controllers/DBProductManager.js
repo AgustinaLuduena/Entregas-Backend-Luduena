@@ -11,7 +11,16 @@ export default class DBProductManager {
         if(sort) {
             options.sort = sort
         }
-        let result = await productsModel.paginate({}, options);
+        let result = await productsModel.paginate({}, options)
+
+        await productsModel.populate(result.docs, { path: "category" });
+        
+        result.docs = result.docs.map(product => {
+            return {
+                ...product,
+                category: product.category ? product.category.name : null
+            };
+        });
 
         return result;
 

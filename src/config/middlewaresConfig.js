@@ -9,13 +9,11 @@ import cookieParser from "cookie-parser";
 import __dirname from "../utils.js";
 //DB
 import MongoStore from 'connect-mongo';
+import config from './config.js';
 //Passport
 import passport from 'passport';
 import initializePassport from '../config/passport.config.js';
 
-// //Este código duplicado en "config" va a ser reemplazado por Varialbles de Entorno luego
-const PASS_MONGO = "mongodb2024"
-const DB_URL = `mongodb+srv://agusluduena4:${PASS_MONGO}@cluster0.egyfnzt.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0`
 
 const middlewares = async (app) => {
     app.use(express.json());
@@ -26,7 +24,7 @@ const middlewares = async (app) => {
     //DB
     app.use(session({
         store: new MongoStore({
-            mongoUrl: DB_URL,
+            mongoUrl: config.mongo_url,
             ttl: 5
         }),
         secret:"secret",

@@ -1,9 +1,12 @@
 import { Router } from "express";
-import UserManager from "../dao/services/usersManager.js";
+import UserManager from "../dao/controllers/usersManager.js";
+import CartManager from "../dao/controllers/DBCartManager.js";
 
 //instanciación
 const userRouter = Router();
 const userManager = new UserManager()
+const cartManager = new CartManager()
+
 
 //Get all user with populate
 userRouter.get("/users", async (req, res) => {
@@ -36,8 +39,16 @@ userRouter.get("/user/:id", async (req, res) => {
 userRouter.post("/user", async (req, res) => {
   try {
     const newUser = req.body;
-    const result = await userManager.createUser(newUser); //debería unificarse la creación del user con un cart.
-    res.status(201).json({ result });
+
+    const newCart = await cartManager.createCart();
+    newUser.cart = newCart._id;
+    newUser.role = "User"
+
+    const createdUser = await userManager.createUser(newUser);
+
+    const populatedUser = await userManager.getUserWithCart(createdUser._id);
+
+    res.status(201).json({ user: populatedUser });
   } catch (error) {
     console.error(`Error al crear el usuario: ${error}`);
     res.status(500).json({ error: `Error al crear el usuario` });
@@ -50,9 +61,7 @@ userRouter.post("/user", async (req, res) => {
     "last_name": "Ejemplo",
     "email": "ejemplo@mail.com",
     "password" : "123",
-    "age": "20",
-    "role": "user",
-    "cart" : "6631943af819ba10c3925f26" //cart existente en la db. Lo dejo sin asociar a ningún user de principio
+    "age": "20"
 }
 */
 

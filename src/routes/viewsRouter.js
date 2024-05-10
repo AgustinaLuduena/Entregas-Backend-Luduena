@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { auth } from "../middlewares/auth.js";
 import { active } from "../middlewares/activeSession.js";
-import DBChatManager from "../dao/services/DBChatManager.js";
-import DBProductManager from "../dao/services/DBProductManager.js";
-import CartManager from '../dao/services/DBCartManager.js';
+import DBChatManager from "../dao/controllers/DBChatManager.js";
+import DBProductManager from "../dao/controllers/DBProductManager.js";
+import CartManager from '../dao/controllers/DBCartManager.js';
 
 
 const viewsRouter = Router();
@@ -88,7 +88,6 @@ viewsRouter.get('/products', async (req, res) => {
           result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort}` : "";
           result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
-          //console.log(result);
           res.render('products', {
             user: user,
             products: result.docs

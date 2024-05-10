@@ -1,5 +1,5 @@
 import express from "express";
-import CategoryManager from "../dao/services/categoryManager.js"
+import CategoryManager from "../dao/controllers/categoryManager.js"
 
 const categoryRouter = express.Router();
 const categoryManager = new CategoryManager();

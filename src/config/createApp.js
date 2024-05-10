@@ -1,10 +1,11 @@
 import express from 'express';
 import { Server as SocketServer } from 'socket.io';
 import http from 'http';
+import config from './config.js';
 
 export default function createExpressApp() {
     const app = express();
-    const port = 8080;
+    const port = config.port;
     const server = http.createServer(app);
     const io = new SocketServer(server);
 

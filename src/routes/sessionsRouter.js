@@ -31,7 +31,8 @@ sessionsRouter.post(
             name: `${user.first_name} ${user.last_name}`,
             email: user.email,
             age: user.age,
-            role: "User"
+            cart: user.cart,
+            role: user.role,
         };
         res.status(201).send({ status: "success", payload: req.user });
         }

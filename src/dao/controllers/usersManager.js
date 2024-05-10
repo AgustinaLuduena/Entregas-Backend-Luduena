@@ -1,5 +1,8 @@
 import { createHash } from "../../utils.js";
 import userModel from "../models/users.js";
+import CartManager from "./DBCartManager.js";
+
+const cartManager = new CartManager()
 
 export default class UserManager {
   constructor() {
@@ -51,5 +54,17 @@ export default class UserManager {
       console.log("Error al obtener los usuarios ", error.message);
     }
   };
+
+  //Get user details for profile
+  getUserWithCart = async (userId) => {
+    try {
+      const user = await userModel.findById(userId).populate('cart');
+      return user;
+    } catch (error) {
+      console.error(`Error al obtener el usuario con el carrito: ${error}`);
+      throw error;
+    }
+  }
+  
 
 }
