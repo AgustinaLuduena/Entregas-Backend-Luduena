@@ -6,7 +6,8 @@ import { active } from "../middlewares/activeSession.js";
 import DBChatManager from "../dao/classes/DBChatManager.js";
 //Views controller
 import {index, register, login, profile, realTimeProducts, getProducts, getCartById, restore} from "../controllers/views.controller.js"
-
+//Middlewares
+import { isUser } from "../middlewares/auth.js";
 
 //instanciación
 const viewsRouter = Router();
@@ -23,8 +24,8 @@ viewsRouter.get("/profile", auth, profile);
 viewsRouter.get("/api/products/realTimeProducts", realTimeProducts);
 
 // CHAT Routes
-viewsRouter.get("/api/messages/", DBChatManager.getMessages);
-viewsRouter.post("/api/messages/addMessage", DBChatManager.addMessage);
+viewsRouter.get("/api/messages/", isUser, DBChatManager.getMessages);
+viewsRouter.post("/api/messages/addMessage", isUser, DBChatManager.addMessage);
 
 // PRODUCTS VIEW Route
 viewsRouter.get('/products', getProducts);
