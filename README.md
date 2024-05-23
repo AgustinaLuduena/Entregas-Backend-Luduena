@@ -25,6 +25,7 @@
 <p>DELETE "/:cid" : Delete all products from the cart</p>
 <p>PUT "/:cid" : Update the cart using the specific array of products format with req.body </p>
 <p>PUT "/:cid/products/:pid" : Update just the quantity of the chosen product with req.body </p>
+<p>GET "/:cid/purchase" : Generate de purchase and the ticket. Use it by Postman</p>
 
 
 <h4>app.use("/api/products", productsRouter);</h4>
@@ -47,6 +48,10 @@
 <p>POST "/register" : Add a new user using "req.body" by Postman.</p>
 <p>POST "/login" : Log in as "user" or "admin" using "req.body" by Postman.</p>
 <p>GET "/logout" : Destroy the current session and show the login view by Postman.</p>
+<h2>New!</h2>
+<p>POST "/registerJWT" : Not working yet.</p>
+<p>POST "/loginJWT" : Log in as "user" or "admin" using "req.body" by Postman.</p>
+<p>GET "/current" : Show the current session with JWT Token.</p>
 
 <h4>app.use("/api", categoryRouter);</h4>
 <p>GET "/categories" : List of categories existing in the db</p>

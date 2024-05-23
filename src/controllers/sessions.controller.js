@@ -1,6 +1,11 @@
 import userModel from "../dao/models/users.js";
-//import passport from "passport";
 import {createHash, isValidPassword} from "../utils.js";
+//JWT
+import AuthManager from "../dao/classes/authManager.js";
+import config from "../config/config.js";
+
+//instanciación
+const authManager = new AuthManager();
 
 //Register
 export const register = async (req, res) => {
@@ -25,6 +30,82 @@ export const login = async (req, res) => {
         role: user.role,
     };
     res.status(201).send({ status: "success", payload: req.user });
+}
+
+//Register JWT - NOT WORKING
+export const registerJWT = async (req, res) => {
+    try{
+        const { first_name, last_name, email, age } = req.body;
+        let user = await authManager.register({ email, password });
+           //console.log(user.token);
+          if (user.token) {
+              res
+              .cookie(config.token, user.token, {
+                  httpOnly: true,
+              })
+              .send({ status: "success", message: user.message });
+          }
+    }catch{
+
+    }
+}
+//Login JWT
+export const loginJWT = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+  
+        if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
+          //CoderHouse Admin´s validation. Gets in and it is not save in the DB.
+          const admin = {
+            email: "adminCoder@coder.com",
+            password: "adminCod3r123",
+            first_name: "Administrador",
+            last_name: "Coderhouse",
+            role: "admin",
+            age: "No disponible",
+            cart: "El admin no tiene un carrito asignado"
+          };
+          let user = admin;
+          if(user) {
+              let user = await authManager.adminLogin({ email, password });
+              if (user.token) {
+                res
+                  .cookie(config.token, user.token, {
+                    httpOnly: true,
+                  })
+                  .send({ status: "success", message: user.message });
+              }
+          }
+        } else {
+          let user = await authManager.login({ email, password });
+           //console.log(user.token);
+          if (user.token) {
+              res
+              .cookie(config.token, user.token, {
+                  httpOnly: true,
+              })
+              .send({ status: "success", message: user.message });
+          }
+        }
+        
+      } catch (error) {
+        res.send({ status: "error", message: error });
+      }
+
+}
+
+//Estrategia current for JWT
+export const current = async (req, res) => {
+    try{
+        const fullUser = await userModel.findById(req.user._id)
+        if (fullUser) {
+            res.json({user: fullUser}) //no trae la data de la db
+        } else {
+            return res.json({user:req.user})
+        }
+    } catch {
+        res.status(500).json({ message: "Error del servidor." });
+    }
 }
 
 //Destroy the session = LOG OUT route

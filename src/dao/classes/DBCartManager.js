@@ -138,5 +138,30 @@ export default class CartManager {
         }
     }
     
+    updatePurchasedCart = async (cid, products, total) => {
+        try {
+            const cart = await cartModel.findByIdAndUpdate(
+                cid,
+                { products: products, total: total },
+                { new: true }
+            );
+            return cart;
+        } catch (error) {
+            throw new Error("Error al actualizar el carrito: " + error.message);
+        }
+    }
+
+    clearCart = async (cid) => {
+        try {
+            const cart = await cartModel.findByIdAndUpdate(
+                cid,
+                { products: [], total: 0 },
+                { new: true }
+            );
+            return cart;
+        } catch (error) {
+            throw new Error("Error al vaciar el carrito: " + error.message);
+        }
+    }
 
 }

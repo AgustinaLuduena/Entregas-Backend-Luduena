@@ -7,7 +7,7 @@ import DBChatManager from "../dao/classes/DBChatManager.js";
 //Views controller
 import {index, register, login, profile, realTimeProducts, getProducts, getCartById, restore} from "../controllers/views.controller.js"
 //Middlewares
-import { isUser } from "../middlewares/auth.js";
+import { isUser } from "../middlewares/auth.js"; //no funciona
 
 //instanciación
 const viewsRouter = Router();

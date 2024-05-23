@@ -1,7 +1,18 @@
 import __dirname from "../utils.js";
 import CartManager from '../dao/classes/DBCartManager.js';
 
+//import UserManager from "../dao/classes/usersManager.js";
+
+import productsModel from "../dao/models/products.js";
+// import usersModel from "../dao/models/users.js";
+// import cartsModel from "../dao/models/carts.js";
+import Ticket from "../dao/models/ticket.js";
+import { generateRandomCode } from "../utils.js";
+import Purchase from "../dao/models/purchase.js";
+
 const DBcartsManager = new CartManager();
+// const usersManager = new UserManager();
+
 
 //get list of carts
 export const getAllCarts = async (req, res) => {
@@ -147,4 +158,86 @@ export const updateProductQuantity = async (req, res) => {
         console.error('Error al actualizar la cantidad del producto en el carrito:', error);
         return res.status(500).json({ error: 'Error interno del servidor.' });
     }
+}
+
+//Add a new cart (Cart Id + products:[])
+export const purchase = async (req, res) => {
+  try {
+      //res.send("Finalizar compra")
+      let cid =  req.params.cid
+      const cart = await DBcartsManager.getCartById(cid);
+
+      if(!cart){return res.json(`Cart Id number ${cid} does not been found.`)} 
+
+      // return res.json({cart})
+
+      let totalPurchaseAmount = 0;
+      const productsToPurchase = [];
+      const productsToKeepInCart = [];
+
+      for (const item of cart.products){
+        const product = await productsModel.findById(item.product);
+        if (!product) {
+          throw new Error(`Producto con ID ${item.product} no encontrado`);
+        }
+        if (product.stock >= item.quantity) {
+            // Suficiente stock, reducir stock y agregar a la compra
+            product.stock -= item.quantity;
+            await product.save();
+
+            totalPurchaseAmount += product.price*item.quantity;
+            productsToPurchase.push(item);
+        } else {
+            // No suficiente stock, mantener en el carrito
+            productsToKeepInCart.push(item);
+        }
+      }
+
+      if (productsToPurchase.length === 0) {
+          //throw new Error("No hay productos suficientes en stock para realizar la compra");
+          return res.send("No hay stock sufiente de los productos seleccionados.")
+      }
+
+      //User harcodeado
+      const userId = "664d246a1e43939605b2d191";
+
+      //Generar la compra
+      const purchase = new Purchase({
+          user: userId,
+          products: productsToPurchase.map(item => ({
+              product: item.product,
+              productQuantity: item.quantity,
+          })),
+      })
+
+      //Crear el ticket de compra con los productos que se pueden comprar
+      const ticket = new Ticket({
+          code: generateRandomCode(10),
+          purchaseDatetime: new Date(),
+          amount: totalPurchaseAmount,
+          purchaser: userId,
+          products: productsToPurchase.map(item => ({
+              id: item.product,
+              product: item.product.title,
+              productQuantity: item.quantity,
+              productTotal: item.product.price*item.quantity,
+          })),
+      });
+
+      await ticket.save();
+
+      await purchase.save();
+
+      // Limpiar el carrito y mantener los productos que no se pudieron comprar
+      await DBcartsManager.clearCart(cid);
+      await DBcartsManager.updatePurchasedCart(cid, productsToKeepInCart, totalPurchaseAmount);
+
+      return res.json({ticket});
+
+      
+
+  } catch (err) {
+      console.error('Error:', err);
+      res.status(500).json('Internal Server Error');
+  }
 }

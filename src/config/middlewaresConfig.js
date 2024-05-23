@@ -13,6 +13,7 @@ import config from './config.js';
 //Passport
 import passport from 'passport';
 import initializePassport from '../config/passport.config.js';
+import initializePassportJWT from '../config/jwt.config.js';
 
 
 const middlewares = async (app) => {
@@ -40,6 +41,7 @@ const middlewares = async (app) => {
 
     //Passport
     initializePassport()
+    initializePassportJWT()
     app.use(passport.initialize())
     app.use(passport.session())
 };
