@@ -28,10 +28,10 @@ export function generateRandomCode(length) {
 }
 
 //JWT
-const JWT_SECRET = config.token
 // Generar un token JWT
-export const generateToken = (email, name) => {
-  return jwt.sign({ email }, JWT_SECRET, { expiresIn: "1h" });
+export const generateToken = (user) => {
+  const JWT_SECRET = config.token;
+  return jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
 };
 
 

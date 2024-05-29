@@ -1,8 +1,5 @@
-import UserManager from "../dao/classes/usersManager.js";
-import CartManager from "../dao/classes/DBCartManager.js";
-
-const userManager = new UserManager()
-const cartManager = new CartManager()
+//Factory
+import { userManager, cartManager } from "../dao/factory.js";
 
 //Get all user with populate
 export const getUsers = async (req, res) => {
@@ -26,25 +23,27 @@ export const getUserById = async (req, res) => {
         }
 }
 
-//New user to the db with role and cart
+//Create a new user with role and cart
 export const createUser = async (req, res) => {
-    try {
-        const newUser = req.body;
-    
-        const newCart = await cartManager.createCart();
-        newUser.cart = newCart._id;
-        newUser.role = "User"
-    
-        const createdUser = await userManager.createUser(newUser);
-    
-        const populatedUser = await userManager.getUserWithCart(createdUser._id);
-    
-        res.status(201).json({ user: populatedUser });
-      } catch (error) {
-        console.error(`Error al crear el usuario: ${error}`);
-        res.status(500).json({ error: `Error al crear el usuario` });
-      }
-}
+  try {
+      const newUser = req.body;
+
+      const newCart = await cartManager.createCart();
+      newUser.cart = newCart._id;
+      newUser.role = "User";
+
+      const createdUser = await userManager.createUser(newUser);
+      console.log(createdUser);
+
+      const populatedUser = await userManager.getUserWithCart(createdUser._id);
+
+      res.status(201).json({ user: populatedUser });
+  } catch (error) {
+      console.error(`Error al crear el usuario: ${error}`);
+      res.status(500).json({ error: 'Error al crear el usuario' });
+  }
+};
+
 
 /* Modelo para Postman
 {

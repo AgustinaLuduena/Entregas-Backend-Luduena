@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const purchaseSchema = new mongoose.Schema({
     user: {
-        // type: mongoose.Schema.Types.ObjectId,
-        // ref: 'User'
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users',
+        required: true
     },
     products: [
         {

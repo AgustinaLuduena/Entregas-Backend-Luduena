@@ -15,21 +15,17 @@ form.addEventListener("submit", (e) => {
       "Content-Type": "application/json",
     },
   })
-  
-//   .then((response) => {
-//     if (response.status === 200) {
-//       window.location.replace("/products"); 
-//     }
-//   });
-// });
 
 .then(response => {
   if (!response.ok) {
     document.getElementById('loginMsg').innerText = 'Error en las credenciales. Intente nuevamente.';
     throw new Error('Failed to login');
   } 
-  
-  window.location.replace("/products"); 
+  return response.json(); // Obtener el cuerpo de la respuesta en formato JSON
+})
+.then(data => {
+  localStorage.setItem("proyecto_backend", data.token); // Guardar el token en localStorage
+  window.location.replace("/products");
 })
 .catch(error => {
   console.error(error);

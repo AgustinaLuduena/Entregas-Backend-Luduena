@@ -1,23 +1,16 @@
 import __dirname from "../utils.js";
-import CartManager from '../dao/classes/DBCartManager.js';
-
-//import UserManager from "../dao/classes/usersManager.js";
-
+//Factory
+import {cartManager} from "../dao/factory.js"
 import productsModel from "../dao/models/products.js";
-// import usersModel from "../dao/models/users.js";
-// import cartsModel from "../dao/models/carts.js";
 import Ticket from "../dao/models/ticket.js";
 import { generateRandomCode } from "../utils.js";
 import Purchase from "../dao/models/purchase.js";
-
-const DBcartsManager = new CartManager();
-// const usersManager = new UserManager();
-
+import userModel from "../dao/models/users.js";
 
 //get list of carts
 export const getAllCarts = async (req, res) => {
     try {
-        const carts = await DBcartsManager.getAllCarts();
+        const carts = await cartManager.getAllCarts();
         res.status(200).json({ carts });
       } catch (error) {
         res.status(500).json({ error: `Error al recibir los carritos` });
@@ -27,7 +20,7 @@ export const getAllCarts = async (req, res) => {
 //Add a new cart (Cart Id + products:[])
 export const createCart = async (req, res) => {
     try {
-        const cart = await DBcartsManager.createCart();
+        const cart = await cartManager.createCart();
         res.json({cart})
     } catch (err) {
         console.error('Error:', err);
@@ -39,7 +32,7 @@ export const createCart = async (req, res) => {
 export const getCartById = async (req, res) => {
     try {
         let cid =  req.params.cid
-        const cart = await DBcartsManager.getCartById(cid);
+        const cart = await cartManager.getCartById(cid);
 
         if(!cart){
           return res.json(`Cart Id number ${cid} does not been found.`)
@@ -58,7 +51,7 @@ export const addProduct = async (req, res) => {
     try {
         let cid =  req.params.cid
         let pid =  req.params.pid
-        const cart = await DBcartsManager.addProduct(cid, pid);
+        const cart = await cartManager.addProduct(cid, pid);
         res.status(200).json(`Product Id number ${pid} was succesfully add to cart Id number ${cid}.`);
         //Try SweetAlert
 
@@ -73,7 +66,7 @@ export const deleteProduct = async (req, res) => {
     try {
         let cid =  req.params.cid
         let pid =  req.params.pid
-        const cart = await DBcartsManager.deleteProduct(cid, pid);
+        const cart = await cartManager.deleteProduct(cid, pid);
         res.status(200).json(`Product Id number ${pid} was succesfully deleted from cart Id number ${cid}.`);
 
       } catch (err) {
@@ -86,7 +79,7 @@ export const deleteProduct = async (req, res) => {
 export const deleteAllProducts = async (req, res) => {
     try {
         let cid =  req.params.cid
-        const deleted = await DBcartsManager.deleteAllProducts(cid);
+        const deleted = await cartManager.deleteAllProducts(cid);
   
         if (deleted) {
           return res.status(200).json({ message: `Todos los productos del carrito ${cid} han sido eliminados correctamente.` });
@@ -116,7 +109,7 @@ export const updateCart = async (req, res) => {
     
       */
     
-        const updateSuccessfully = await DBcartsManager.updateCart(cid, updateData)
+        const updateSuccessfully = await cartManager.updateCart(cid, updateData)
     
         if (updateSuccessfully) {
           return res.status(200).json({ status: `Cart with ID ${cid} was successfully updated.` });
@@ -147,7 +140,7 @@ export const updateProductQuantity = async (req, res) => {
             return res.status(400).json({ error: 'La cantidad debe ser un número válido mayor que cero.' });
         }
     
-        const updated = await DBcartsManager.updateProductQuantity(cid, pid, quantity);
+        const updated = await cartManager.updateProductQuantity(cid, pid, quantity);
     
         if (updated) {
             return res.status(200).json({ message: `Cantidad del producto ID: ${pid} en el carrito ID: ${cid}, actualizada correctamente.` });
@@ -164,8 +157,8 @@ export const updateProductQuantity = async (req, res) => {
 export const purchase = async (req, res) => {
   try {
       //res.send("Finalizar compra")
-      let cid =  req.params.cid
-      const cart = await DBcartsManager.getCartById(cid);
+      let cid =  req.params.cid;
+      const cart = await cartManager.getCartById(cid);
 
       if(!cart){return res.json(`Cart Id number ${cid} does not been found.`)} 
 
@@ -200,10 +193,11 @@ export const purchase = async (req, res) => {
 
       //User harcodeado
       const userId = "664d246a1e43939605b2d191";
+      //const userId = req.user._id
 
       //Generar la compra
       const purchase = new Purchase({
-          user: userId,
+          user: userId || "Error",
           products: productsToPurchase.map(item => ({
               product: item.product,
               productQuantity: item.quantity,
@@ -229,8 +223,8 @@ export const purchase = async (req, res) => {
       await purchase.save();
 
       // Limpiar el carrito y mantener los productos que no se pudieron comprar
-      await DBcartsManager.clearCart(cid);
-      await DBcartsManager.updatePurchasedCart(cid, productsToKeepInCart, totalPurchaseAmount);
+      await cartManager.clearCart(cid);
+      await cartManager.updatePurchasedCart(cid, productsToKeepInCart, totalPurchaseAmount);
 
       return res.json({ticket});
 

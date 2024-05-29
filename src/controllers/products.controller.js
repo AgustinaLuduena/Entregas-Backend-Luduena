@@ -1,6 +1,6 @@
-import DBProductManager from '../dao/classes/DBProductManager.js';
+//Factory
+import { productManager } from '../dao/factory.js';
 
-const DBproductManager = new DBProductManager();
 
 export const getProducts = async (req, res) => {
     // List of products, page, limit, query, and sort
@@ -15,7 +15,7 @@ export const getProducts = async (req, res) => {
 
         let result;
         if (category) {
-            result = await DBproductManager.getProductsByCategory(category);
+            result = await productManager.getProductsByCategory(category);
 
             if (!result) {
                 return res.status(400).send({ status: `Para la categoría: ${category}, no hay stock disponible.` });
@@ -24,9 +24,9 @@ export const getProducts = async (req, res) => {
             }
         } else {
             if (sort === 'asc' || sort === 'desc') {
-                result = await DBproductManager.getProducts(page, limit, { price: sort === 'asc' ? 1 : -1 });
+                result = await productManager.getProducts(page, limit, { price: sort === 'asc' ? 1 : -1 });
             } else {
-                result = await DBproductManager.getProducts(page, limit);
+                result = await productManager.getProducts(page, limit);
             }
 
             // Info of pages for the response
@@ -70,7 +70,7 @@ export const getProducts = async (req, res) => {
 //get products with categories details
 export const getAllProductsWithCategories = async (req, res) => {
     try {
-        const products = await DBproductManager.getAllProductsWithCategories();
+        const products = await productManager.getAllProductsWithCategories();
         res.status(200).json({ products });
       } catch (error) {
         res.status(500).json({ error: `Error al recibir los productos` });
@@ -81,7 +81,7 @@ export const getAllProductsWithCategories = async (req, res) => {
 export const getProductByID = async (req, res) => {
     try {
         let pid =  req.params.pid
-        const product = await DBproductManager.getProductByID(pid);
+        const product = await productManager.getProductByID(pid);
 
         if(!product){
             return res.status(400).json({ status: `ID NUMBER ${pid} NOT FOUND.`});
@@ -99,7 +99,7 @@ export const getProductByID = async (req, res) => {
 export const addProduct = async (req, res) => {
     try {
         const newProduct = req.body
-        let addedSuccessfully = await DBproductManager.addProduct(newProduct);
+        let addedSuccessfully = await productManager.addProduct(newProduct);
         
         if (addedSuccessfully) {
             return res.status(200).json({ status: `Product with title: ${newProduct.title}, was successfully created.` });
@@ -135,7 +135,7 @@ export const updateProduct = async (req, res) => {
         let pid = req.params.pid;
         let productData = req.body;
 
-        const updateSuccessfully = await DBproductManager.updateProduct(pid, productData)
+        const updateSuccessfully = await productManager.updateProduct(pid, productData)
 
         if (updateSuccessfully) {
             return res.status(200).json({ status: `Product with ID ${pid} was successfully updated.` });
@@ -153,7 +153,7 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
     try {
         let pid =  req.params.pid
-        const selectedProduct = await DBproductManager.deleteProduct(pid);
+        const selectedProduct = await productManager.deleteProduct(pid);
         if(!selectedProduct){
             //No logra dar respuesta en caso de no encontrarlo.
             return res.status(400).json({ status: `Cannot delete product. Product with ID ${pid} not found.`});

@@ -14,6 +14,8 @@ import config from './config.js';
 import passport from 'passport';
 import initializePassport from '../config/passport.config.js';
 import initializePassportJWT from '../config/jwt.config.js';
+//Cors
+import cors from "cors";
 
 
 const middlewares = async (app) => {
@@ -22,6 +24,8 @@ const middlewares = async (app) => {
     app.use(express.static(__dirname+'/public'));
     //Cookie parser
     app.use(cookieParser())
+    //Cors
+    app.use(cors());
     //DB
     app.use(session({
         store: new MongoStore({

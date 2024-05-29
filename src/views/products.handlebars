@@ -1,6 +1,6 @@
-<div>
+
     {{#if user}}
-        <h1>Bienvenido/a {{user.name}}</h1>
+        <h1>Bienvenido/a {{user.first_name}}</h1>
         {{#if admin}} 
         {{!-- No ingresa nunca a esta validación. ¿Por qué? --}}
             <p>Tu email: {{user.email}}</p>
@@ -16,6 +16,9 @@
         </div>
     {{else}}
         <h1>Hola invitado</h1>
+         <div>
+            <button id="profile-btn">Ver perfil</button>
+        </div>
     {{/if}}
 
     <h3>Listado de Productos</h3>

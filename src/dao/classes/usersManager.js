@@ -1,8 +1,5 @@
 import { createHash } from "../../utils.js";
 import userModel from "../models/users.js";
-import CartManager from "./DBCartManager.js";
-
-const cartManager = new CartManager()
 
 export default class UserManager {
   constructor() {

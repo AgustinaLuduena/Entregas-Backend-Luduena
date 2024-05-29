@@ -1,6 +1,5 @@
-import CategoryManager from "../dao/classes/categoryManager.js";
-
-const categoryManager = new CategoryManager();
+//Factory
+import { categoryManager } from "../dao/factory.js";
 
 export const getAll = async (req, res) => {
     try {

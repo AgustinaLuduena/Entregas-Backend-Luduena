@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {getAllCarts, createCart, getCartById, addProduct, deleteProduct, deleteAllProducts, updateCart, updateProductQuantity, purchase,} from "../controllers/carts.controller.js"
 //import { isUser } from "../middlewares/auth.js";
+import {verifyToken} from "../middlewares/auth.js"
 import passport from 'passport';
 
 //instanciación
@@ -15,6 +16,6 @@ cartsRouter.delete("/:cid/product/:pid/", deleteProduct);
 cartsRouter.delete("/:cid/", deleteAllProducts);
 cartsRouter.put("/:cid/", updateCart);
 cartsRouter.put("/:cid/product/:pid/", updateProductQuantity);
-cartsRouter.get("/:cid/purchase", purchase);
+cartsRouter.get("/:cid/purchase", passport.authenticate('jwt',{session: false}), verifyToken, purchase);
 
 export default cartsRouter

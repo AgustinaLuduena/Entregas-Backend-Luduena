@@ -20,7 +20,7 @@ document.getElementById('messageForm').addEventListener('submit', async (event) 
 
     if (user && message) {
         try {
-            const response = await fetch('http://localhost:8080/api/messages/addMessage', {
+            const response = await fetch('http://localhost:8081/api/messages/addMessage', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

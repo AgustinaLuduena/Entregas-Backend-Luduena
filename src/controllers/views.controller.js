@@ -1,8 +1,4 @@
-import DBProductManager from "../dao/classes/DBProductManager.js";
-import CartManager from '../dao/classes/DBCartManager.js';
-
-const DBcartsManager = new CartManager();
-const DBproductManager = new DBProductManager();
+import { productManager, cartManager, userManager } from "../dao/factory.js";
 
 export const index = async (req, res) => {
     try {
@@ -22,9 +18,10 @@ export const login = async (req, res) => {
 }
 
 export const profile = async (req, res) => {
-    res.render("profile", {
-        user: req.session.user,
-      });
+    //Tengo problemas con esta vista
+    let id = req.user
+    let user = await userManager.getById(id)
+    res.render("profile", { user: user });
 }
 
 export const realTimeProducts = async (req, res) => {
@@ -46,7 +43,10 @@ export const getProducts = async (req, res) => {
     let category = req.query.category;
     let sort = req.query.sort;
     
-    let user = req.session.user;
+    //Tengo problemas con esta vista
+    let id = req.user
+    console.log(id)
+    let userLog = await userManager.getById(id)
 
     try {
         if (isNaN(page) || page < 1) { page = 1 };
@@ -54,7 +54,7 @@ export const getProducts = async (req, res) => {
 
         let result;
         if (category) {
-            result = await DBproductManager.getProductsByCategory(category);
+            result = await productManager.getProductsByCategory(category);
 
             if (!result) {
                 return res.status(400).send({ status: `Para la categoría: ${category}, no hay stock disponible.` });
@@ -63,9 +63,9 @@ export const getProducts = async (req, res) => {
             }
         } else {
             if (sort === 'asc' || sort === 'desc') {
-                result = await DBproductManager.getProducts(page, limit, { price: sort === 'asc' ? 1 : -1 });
+                result = await productManager.getProducts(page, limit, { price: sort === 'asc' ? 1 : -1 });
             } else {
-                result = await DBproductManager.getProducts(page, limit);
+                result = await productManager.getProducts(page, limit);
             }
 
             // View
@@ -73,8 +73,9 @@ export const getProducts = async (req, res) => {
             result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort}` : "";
             result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
+            console.log(userLog) //lo trae bien en consola. No entiendo porque handlebars no.
             res.render('products', {
-                user: user,
+                user: userLog,
                 products: result.docs
             });
 
@@ -113,7 +114,7 @@ export const getCartById = async (req, res) => {
     //Example cart id: 661404ba661a8432389a150f
     try {
         let cid =  req.params.cid
-        const cart = await DBcartsManager.getCartById(cid);
+        const cart = await cartManager.getCartById(cid);
 
         if(!cart){
           return res.json(`Cart Id number ${cid} does not been found.`)

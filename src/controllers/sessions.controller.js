@@ -1,11 +1,11 @@
 import userModel from "../dao/models/users.js";
 import {createHash, isValidPassword} from "../utils.js";
-//JWT
-import AuthManager from "../dao/classes/authManager.js";
+//Factory
+import { authManager, userManager } from "../dao/factory.js";
+//ENV
 import config from "../config/config.js";
-
-//instanciación
-const authManager = new AuthManager();
+//DTO
+import CurrentUserDTO from "../dao/dto/dto.js"
 
 //Register
 export const register = async (req, res) => {
@@ -16,97 +16,72 @@ export const register = async (req, res) => {
       }
 }
 
-//Login
-export const login = async (req, res) => {
-    if(!req.user)return res.status(401).send({ error: "Failed to process login!" })
+//Login con session
+// export const login = async (req, res) => {
+//     if(!req.user)return res.status(401).send({ error: "Failed to process login!" })
 
-    const user = req.user;
+//     const user = req.user;
 
-    req.session.user = {
-        name: `${user.first_name} ${user.last_name}`,
-        email: user.email,
-        age: user.age,
-        cart: user.cart,
-        role: user.role,
-    };
-    res.status(201).send({ status: "success", payload: req.user });
-}
+//     req.session.user = {
+//         name: `${user.first_name} ${user.last_name}`,
+//         email: user.email,
+//         age: user.age,
+//         cart: user.cart,
+//         role: user.role,
+//     };
+//     res.status(201).send({ status: "success", payload: req.user });
+// }
 
-//Register JWT - NOT WORKING
-export const registerJWT = async (req, res) => {
-    try{
-        const { first_name, last_name, email, age } = req.body;
-        let user = await authManager.register({ email, password });
-           //console.log(user.token);
-          if (user.token) {
-              res
-              .cookie(config.token, user.token, {
-                  httpOnly: true,
-              })
-              .send({ status: "success", message: user.message });
-          }
-    }catch{
 
-    }
-}
-//Login JWT
+
 export const loginJWT = async (req, res) => {
-    try {
-        const {email, password} = req.body;
-  
-        if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-          //CoderHouse Admin´s validation. Gets in and it is not save in the DB.
-          const admin = {
-            email: "adminCoder@coder.com",
-            password: "adminCod3r123",
-            first_name: "Administrador",
-            last_name: "Coderhouse",
-            role: "admin",
-            age: "No disponible",
-            cart: "El admin no tiene un carrito asignado"
-          };
-          let user = admin;
-          if(user) {
-              let user = await authManager.adminLogin({ email, password });
-              if (user.token) {
-                res
-                  .cookie(config.token, user.token, {
-                    httpOnly: true,
-                  })
-                  .send({ status: "success", message: user.message });
-              }
-          }
-        } else {
-          let user = await authManager.login({ email, password });
-           //console.log(user.token);
-          if (user.token) {
-              res
-              .cookie(config.token, user.token, {
-                  httpOnly: true,
-              })
-              .send({ status: "success", message: user.message });
-          }
-        }
-        
-      } catch (error) {
-        res.send({ status: "error", message: error });
-      }
+  try {
+    const { email, password } = req.body;
 
-}
+    if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
+      const admin = {
+        email: "adminCoder@coder.com",
+        password: "adminCod3r123",
+        first_name: "Administrador",
+        last_name: "Coderhouse",
+        role: "admin",
+        age: "No disponible",
+        cart: "El admin no tiene un carrito asignado"
+      };
+      let user = admin;
+      if (user) {
+        let result = await authManager.adminLogin({ email, password });
+        if (result.token) {
+          res.cookie(config.token, result.token, { httpOnly: true });
+          return res.send({ status: "success", message: result.message });
+        }
+      }
+    } else {
+      let result = await authManager.login({ email, password });
+      if (result.token) {
+        res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none", });
+        return res.send({ status: "success", message: result.message });
+      }
+    }
+    res.status(401).send({ error: "Error en las credenciales" });
+  } catch (error) {
+    res.status(500).send({ status: "error", message: error.message });
+  }
+};
+
 
 //Estrategia current for JWT
 export const current = async (req, res) => {
     try{
-        const fullUser = await userModel.findById(req.user._id)
-        if (fullUser) {
-            res.json({user: fullUser}) //no trae la data de la db
-        } else {
-            return res.json({user:req.user})
-        }
+      let user = await userManager.getById(req.user._id) //Esto funcionaba. Mismo problema: cómo acceder al id desde el token?
+      let userDTO = new CurrentUserDTO(user)
+      let result = userDTO.currentUser
+      res.json({ result });
     } catch {
         res.status(500).json({ message: "Error del servidor." });
     }
 }
+
 
 //Destroy the session = LOG OUT route
 export const logout = async (req, res) => {
@@ -115,7 +90,7 @@ export const logout = async (req, res) => {
             console.error('Error al destruir la sesión:', err);
             res.status(500).send('Error interno del servidor');
         } else {
-            res.redirect('http://localhost:8080/');
+            res.redirect('http://localhost:8081/');
         }
     });
 }

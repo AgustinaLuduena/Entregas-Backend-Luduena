@@ -6,6 +6,7 @@
 <p align="left"> <a href="https://expressjs.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="express" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> </p>
 
 <h3 align="left">Routes of the project:</h3>
+<h2 align="left">Puerto: 8081</h2>
 
 <h3>MONGO DB</h3>
 
@@ -39,7 +40,7 @@
 <h4>app.use("/api", userRouter);</h4>
 <p>GET "/users" : List of user in the db and the detail of the cart asociated</p>
 <p>GET "/user/:id" : Data of the chosen user in the db</p>
-<p>POST "/user" : Create a new user to the db with a cart from the cart.model (manually asociated in Postman - ID of the cart is previously needed)</p>
+<p>POST "/user" : Create a new user to the db with a cart from the cart.model.</p>
 <p>PUT "/user/:id" : Update data of the chosen user in the db</p>
 <p>DELETE "/user/:id" : Delete the chosen user from the db</p>
 
@@ -48,10 +49,8 @@
 <p>POST "/register" : Add a new user using "req.body" by Postman.</p>
 <p>POST "/login" : Log in as "user" or "admin" using "req.body" by Postman.</p>
 <p>GET "/logout" : Destroy the current session and show the login view by Postman.</p>
-<h2>New!</h2>
-<p>POST "/registerJWT" : Not working yet.</p>
-<p>POST "/loginJWT" : Log in as "user" or "admin" using "req.body" by Postman.</p>
-<p>GET "/current" : Show the current session with JWT Token.</p>
+<h2>Check</h2>
+<p>GET "/current" : Show the current session with DTO. It was working before, but now i cannot get the user id from the token correctly.</p>
 
 <h4>app.use("/api", categoryRouter);</h4>
 <p>GET "/categories" : List of categories existing in the db</p>
