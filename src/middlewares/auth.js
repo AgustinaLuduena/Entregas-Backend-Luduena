@@ -10,39 +10,11 @@ export function auth (req, res, next) {
     next();
   }
 
-// Middleware de autenticación USER / ADMIN
 
-// export const authenticate = async (req, res, next) => {
-//   let token = null;
-//   if (req && req.cookies) {
-//     token = req.cookies[config.token];
-//     console.log(token)
-//   }
-//   console.log(token)
-
-//   if (!token) return res.status(401).send('Acceso denegado: No se proporcionó el token');
-
-//   try {
-//     const verified = jwt.verify(token, config.token);
-//     const user = await userModel.findById(verified.id);
-//     if (user) {
-//       req.user = user;
-//       next();
-//     } else if (user.role === "admin") {
-//       return res.json(req.user)
-//     } else {
-//       return res.status(404).send('Usuario no encontrado')
-//     }
-
-    
-//   } catch (error) {
-//     res.status(400).send('Token no válido');
-//   }
-// };
-
+//Middleware para verificar que el usuario haya iniciado sesión correctamente.
 export const verifyToken = (req, res, next) => {
-    const token = req.cookies.proyecto_backend;
-    if (!token) return res.status(403).send('Access denied');
+    const token = req.cookies[config.token];
+    if (!token) return res.status(403).json('Por favor, inicie sesión para acceder.');
 
     try {
         const decoded = jwt.verify(token, config.token);
@@ -53,45 +25,74 @@ export const verifyToken = (req, res, next) => {
     }
 };
 
+//Middleware para verificar si es un usuario.
+export const verifyUser = (req, res, next) => {
+    const token = req.cookies[config.token]; // Asegúrate de que el nombre de la cookie coincide
 
-// export const checkUserRole = async(req, res, next) => {
-//     let token = null;
-//     if (req && req.cookies) {
-//       token = req.cookies[config.token];
-//     }
-//     if (!token) return res.status(401).send('Acceso denegado: No se proporcionó el token (Role)');
+    if (!token) {
+        req.user = null; // Si no hay token, asigna null a req.user
+        return next();
+    }
 
-//     try {
-//       const decodedToken = jwt.verify(token, config.token);
-//       const userRole = decodedToken.role;
-
-//       if (userRole) {
-//         req.user = decodedToken._id;
-//         return next();
-//       } else {
-//         return res.status(401).send('Acceso denegado: Role error');
-//       }
-
-//     } catch (err) {
-//       return res.status(401).json({ error: { message: "Unauthorized" } });
-//     }
-// }
-
-// Middleware de autenticación para admin
-export const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
-      return next();
-  } else {
-      return res.status(403).json({ message: 'Acceso no autorizado' });
-  }
+    jwt.verify(token, config.token, (err, decoded) => {
+        if (err) {
+            req.user = null;
+        } else {
+            req.user = decoded; 
+        }
+        next();
+    });
 };
 
-// Middleware de autenticación para user
-export const isUser = (req, res, next) => {
-  if(req.user && req.user.role === 'user') {
-      next();
-  } 
-  else {
-      return res.status(403).json({ error: 'Acceso no autorizado' });
-  }
-}
+
+ 
+
+// Middleware de autenticación ADMIN
+export const checkAdminRole = (req, res, next) => {
+    const token = req.cookies[config.token];
+    if (!token) return res.status(403).send('Access denied');
+
+    try {
+        const decoded = jwt.verify(token, config.token);
+        req.user = decoded;
+        const userRole = req.user.user.role;
+
+        let requiredRoles = ["admin"]
+
+        if(requiredRoles.includes(userRole)){
+          console.log(userRole)
+          return next();
+        }
+
+        return res.status(403).json({ message: 'Acceso no autorizado a este usuario' });
+
+    } catch (error) {
+        res.status(401).json({ error: { message: 'Invalid token'}});
+    }
+  };
+
+// Middleware de autenticación USER
+  export const checkUserRole = (req, res, next) => {
+    const token = req.cookies[config.token];
+    if (!token) return res.status(403).send('Access denied');
+
+    try {
+        const decoded = jwt.verify(token, config.token);
+        req.user = decoded;
+        const userRole = req.user.user.role;
+
+        let requiredRoles = ["User"]
+
+        if(requiredRoles.includes(userRole)){
+          console.log(userRole)
+          return next();
+        }
+
+        return res.status(403).json({ message: 'Acceso no autorizado a este usuario' });
+
+    } catch (error) {
+        res.status(401).json({ error: { message: 'Invalid token'}});
+    }
+  };
+
+

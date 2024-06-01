@@ -39,24 +39,12 @@ export const loginJWT = async (req, res) => {
     const { email, password } = req.body;
 
     if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-      const admin = {
-        email: "adminCoder@coder.com",
-        password: "adminCod3r123",
-        first_name: "Administrador",
-        last_name: "Coderhouse",
-        role: "admin",
-        age: "No disponible",
-        cart: "El admin no tiene un carrito asignado"
-      };
-      let user = admin;
-      if (user) {
         let result = await authManager.adminLogin({ email, password });
         if (result.token) {
-          res.cookie(config.token, result.token, { httpOnly: true });
+          res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none", });
           return res.send({ status: "success", message: result.message });
         }
-      }
-    } else {
+      } else {
       let result = await authManager.login({ email, password });
       if (result.token) {
         res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none", });
@@ -73,26 +61,38 @@ export const loginJWT = async (req, res) => {
 //Estrategia current for JWT
 export const current = async (req, res) => {
     try{
-      let user = await userManager.getById(req.user._id) //Esto funcionaba. Mismo problema: cómo acceder al id desde el token?
-      let userDTO = new CurrentUserDTO(user)
+      let user = req.user
+      let userDTO = new CurrentUserDTO(user.user)
       let result = userDTO.currentUser
-      res.json({ result });
+      res.json( result );
     } catch {
         res.status(500).json({ message: "Error del servidor." });
     }
 }
 
 
-//Destroy the session = LOG OUT route
-export const logout = async (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Error al destruir la sesión:', err);
-            res.status(500).send('Error interno del servidor');
-        } else {
-            res.redirect('http://localhost:8081/');
-        }
-    });
+//Destroy the session = LOG OUT route con session
+// export const logout = async (req, res) => {
+//     req.session.destroy((err) => {
+//         if (err) {
+//             console.error('Error al destruir la sesión:', err);
+//             res.status(500).send('Error interno del servidor');
+//         } else {
+//             res.redirect('http://localhost:8081/');
+//         }
+//     });
+// }
+
+//Destroy the session with cookie = LOG OUT route
+export const logoutJWT = async (req, res) => {
+  try {
+    authManager.borrarCookie(res, config.token);
+    res.redirect('http://localhost:8081/');
+    console.log("Ha cerrado su sesión correctamente.");
+  } catch (error) {
+    console.error('Error al destruir la sesión.', error);
+    res.status(500).send('Error interno del servidor');
+  }
 }
 
 //Restore password

@@ -18,6 +18,10 @@ const ticketSchema = new mongoose.Schema({
         ref: 'Users',
         required: true
     },
+    purchaserDetails: {
+        name: String,
+        email: String,
+    },
     products: [
         {
             product: { type: String, required: true },

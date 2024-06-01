@@ -46,7 +46,7 @@ export const updateCategory = async (req, res) => {
           categoryId,
           req.body
         );
-        res.json(updatedCategory);
+        res.status(200).json({ message: "Category updated successfully" });
       } catch (error) {
         res.status(400).json({ message: error.message });
       }

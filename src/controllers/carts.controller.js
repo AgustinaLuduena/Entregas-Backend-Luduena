@@ -1,11 +1,14 @@
 import __dirname from "../utils.js";
 //Factory
 import {cartManager} from "../dao/factory.js"
+//Models
 import productsModel from "../dao/models/products.js";
 import Ticket from "../dao/models/ticket.js";
-import { generateRandomCode } from "../utils.js";
 import Purchase from "../dao/models/purchase.js";
-import userModel from "../dao/models/users.js";
+//Utils
+import { generateRandomCode } from "../utils.js";
+//DTO
+import CurrentUserDTO from "../dao/dto/dto.js"
 
 //get list of carts
 export const getAllCarts = async (req, res) => {
@@ -187,13 +190,12 @@ export const purchase = async (req, res) => {
       }
 
       if (productsToPurchase.length === 0) {
-          //throw new Error("No hay productos suficientes en stock para realizar la compra");
           return res.send("No hay stock sufiente de los productos seleccionados.")
       }
 
-      //User harcodeado
-      const userId = "664d246a1e43939605b2d191";
-      //const userId = req.user._id
+      const user = req.user.user;
+      let userDTO = new CurrentUserDTO(user);
+      let userId = user._id;
 
       //Generar la compra
       const purchase = new Purchase({
@@ -210,6 +212,7 @@ export const purchase = async (req, res) => {
           purchaseDatetime: new Date(),
           amount: totalPurchaseAmount,
           purchaser: userId,
+          purchaserDetails: userDTO.currentUser,
           products: productsToPurchase.map(item => ({
               id: item.product,
               product: item.product.title,
@@ -227,6 +230,7 @@ export const purchase = async (req, res) => {
       await cartManager.updatePurchasedCart(cid, productsToKeepInCart, totalPurchaseAmount);
 
       return res.json({ticket});
+      console.log("Compra generada con éxito!")
 
       
 

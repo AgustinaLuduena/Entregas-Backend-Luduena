@@ -10,35 +10,35 @@
 
 <h3>MONGO DB</h3>
 
-<h4>app.use(viewsRouter);</h4>
+<h4>app.use(viewsRouter) - Desestimar por ahora. No funcionan bien.</h4>
 <p>GET "/" : Show the index page. Choose "log in" o "register".</p>
 <p>GET "/login" : Show the login view.</p>
 <p>GET "/register" : Show the register view.</p>
-<p>GET "/products" : Show the products´ view page - as "guest" or after the log in.</p>
-<p>GET "/profile" : Show the profile view only after you log in.</p>
+<p>GET "/products" : Show the products´ view page - as "guest" or after the log in. Funciona por Postman, luego de logrearse.</p>
+<p>GET "/profile" : Show the profile view only after you log in. Funciona por Postman, luego de logrearse.</p>
 
 <h4>app.use("/api/carts", cartsRouter);</h4>
 <p>POST "/" : Add a new cart (Cart Id + products:[])</p>
-<p>GET "/list" : List of carts ((!)this must be a private route. It is just to see the ID in order to use Postman this one time)</p>
+<p>GET "/list" : List of carts (ADMIN ONLY)</p>
 <p>GET "/:cid/" : List of products inside the cart chosen by Id</p>
-<p>POST "/:cid/product/:pid/" : Add the chosen product to chosen the cart (Object [productId:id + quantity])</p>
-<p>DELETE "/:cid/product/:pid/" : Delete the chosen product from the chosen cart (Object [productId:id + quantity])</p>
-<p>DELETE "/:cid" : Delete all products from the cart</p>
-<p>PUT "/:cid" : Update the cart using the specific array of products format with req.body </p>
-<p>PUT "/:cid/products/:pid" : Update just the quantity of the chosen product with req.body </p>
-<p>GET "/:cid/purchase" : Generate de purchase and the ticket. Use it by Postman</p>
+<p>POST "/:cid/product/:pid/" : Add the chosen product to chosen the cart (Object [productId:id + quantity]) (USER ONLY)</p>
+<p>DELETE "/:cid/product/:pid/" : Delete the chosen product from the chosen cart (Object [productId:id + quantity]) (USER ONLY)</p>
+<p>DELETE "/:cid" : Delete all products from the cart (USER ONLY)</p>
+<p>PUT "/:cid" : Update the cart using the specific array of products format with req.body (USER ONLY) </p>
+<p>PUT "/:cid/products/:pid" : Update just the quantity of the chosen product with req.body (USER ONLY)</p>
+<p>GET "/:cid/purchase" : Generate de purchase and the ticket. Use it by Postman (USER ONLY)</p>
 
 
 <h4>app.use("/api/products", productsRouter);</h4>
 <p>GET "/" : List of products, page, limit, query, and sort</p>
 <p>GET "/categories" : List of products and the detail of the category (from category.model - without paginate)</p>
 <p>GET "/:pid/" : Product by ID</p>
-<p>POST "/" : Add a new product</p>
-<p>PUT "/:pid/" : Update a product by ID</p>
-<p>DELETE "/:pid/" : Delete product by ID</p>
+<p>POST "/" : Add a new product (ADMIN ONLY)</p>
+<p>PUT "/:pid/" : Update a product by ID (ADMIN ONLY)</p>
+<p>DELETE "/:pid/" : Delete product by ID (ADMIN ONLY)</p>
 
 <h4>app.use("/api", userRouter);</h4>
-<p>GET "/users" : List of user in the db and the detail of the cart asociated</p>
+<p>GET "/users" : List of user in the db and the detail of the cart asociated (ADMIN ONLY)</p>
 <p>GET "/user/:id" : Data of the chosen user in the db</p>
 <p>POST "/user" : Create a new user to the db with a cart from the cart.model.</p>
 <p>PUT "/user/:id" : Update data of the chosen user in the db</p>
@@ -46,18 +46,16 @@
 
 
 <h4>app.use("/api/sessions", sessionsRouter);</h4>
-<p>POST "/register" : Add a new user using "req.body" by Postman.</p>
 <p>POST "/login" : Log in as "user" or "admin" using "req.body" by Postman.</p>
-<p>GET "/logout" : Destroy the current session and show the login view by Postman.</p>
-<h2>Check</h2>
-<p>GET "/current" : Show the current session with DTO. It was working before, but now i cannot get the user id from the token correctly.</p>
+<p>POST "/logout" : Destroy the current session and show the login view by Postman.</p>
+<p>GET "/current" : Show the current session data with DTO.</p>
 
 <h4>app.use("/api", categoryRouter);</h4>
 <p>GET "/categories" : List of categories existing in the db</p>
 <p>GET "/category/:id" : Category by ID</p>
-<p>POST "/category" : Create category</p>
-<p>PUT "/category/:id" : Update Category by ID</p>
-<p>DELETE "/category/:id" : Delete Category by ID</p>
+<p>POST "/category" : Create category (ADMIN ONLY)</p>
+<p>PUT "/category/:id" : Update Category by ID (ADMIN ONLY)</p>
+<p>DELETE "/category/:id" : Delete Category by ID (ADMIN ONLY)</p>
 
 
 

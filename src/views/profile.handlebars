@@ -1,14 +1,23 @@
 <div>
-    <h1>Tu perfil (sin datos sensibles)</h1>
-    <p>Nombre: {{user.name}}</p>
-    <p>Email: {{user.email}}</p>
-    <p>Edad: {{user.age}}</p>
-    <p>Carrito: {{user.cart}}</p>
+    {{#if user}}
+        <h1>Tu perfil (sin datos sensibles)</h1>
+        <p>Nombre: {{user.user.first_name}} {{user.user.last_name}}</p>
+        <p>Email: {{user.user.email}}</p>
+        <p>Edad: {{user.user.age}}</p>
+        <p>Carrito ID: {{user.user.cart}}</p>
+        <div>
+            <button id="logout-btn">Log Out</button>
+        </div>
+        <p></p>        
+    {{else}}
+        <h1>Hola invitado</h1>
+         <div>
+            <p>
+               <a href="http://localhost:8081/login">Iniciar sesión</a>
+            </p>
+        </div>
+    {{/if}}
 
-    <div>
-        <button id="logout-btn">Log Out</button>
-    </div>
-    <p></p>
     <div>
         <button id="home-btn">Volver</button>
     </div>

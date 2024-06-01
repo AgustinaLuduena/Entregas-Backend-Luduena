@@ -1,14 +1,14 @@
 import { Router } from "express";
 import {getAll, getById, createCategory, updateCategory, deleteCategory,} from "../controllers/category.controller.js"
-import { isAdmin } from "../middlewares/auth.js"; //Es una prueba. No funciona.
+import { verifyToken, checkAdminRole } from "../middlewares/auth.js"
 
 //instanciación
 const categoryRouter = Router();
 
-categoryRouter.get("/categories", isAdmin, getAll);
+categoryRouter.get("/categories", getAll);
 categoryRouter.get("/category/:id",getById);
-categoryRouter.post("/category", createCategory);
-categoryRouter.put("/category:id", updateCategory);
-categoryRouter.delete("/category/:id", deleteCategory);
+categoryRouter.post("/category",  verifyToken, checkAdminRole, createCategory);
+categoryRouter.put("/category/:id",  verifyToken, checkAdminRole, updateCategory);
+categoryRouter.delete("/category/:id",  verifyToken, checkAdminRole, deleteCategory);
 
 export default categoryRouter;

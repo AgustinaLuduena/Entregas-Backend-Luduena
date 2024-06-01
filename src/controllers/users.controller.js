@@ -28,8 +28,12 @@ export const createUser = async (req, res) => {
   try {
       const newUser = req.body;
 
-      const newCart = await cartManager.createCart();
-      newUser.cart = newCart._id;
+      if (!newUser.cart) {
+        const newCart = await cartManager.createCart();
+        newUser.cart = newCart._id;
+      }
+      // const newCart = await cartManager.createCart();
+      // newUser.cart = newCart._id;
       newUser.role = "User";
 
       const createdUser = await userManager.createUser(newUser);

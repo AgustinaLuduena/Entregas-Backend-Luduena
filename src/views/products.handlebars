@@ -1,15 +1,15 @@
 
     {{#if user}}
-        <h1>Bienvenido/a {{user.first_name}}</h1>
+        <h1>Bienvenido/a {{user.user.first_name}}</h1>
         {{#if admin}} 
         {{!-- No ingresa nunca a esta validación. ¿Por qué? --}}
-            <p>Tu email: {{user.email}}</p>
-            <p>Tu rol: {{user.role}}</p>
+            <p>Tu email: {{user.user.email}}</p>
+            <p>Tu rol: {{user.user.role}}</p>
         {{/if}}
         {{#if user}}
-            <p>Tu email: {{user.email}}</p>
-            <p>Tu edad: {{user.age}}</p>
-            <p>Tu rol: {{user.role}}</p>
+            <p>Tu email: {{user.user.email}}</p>
+            <p>Tu edad: {{user.user.age}}</p>
+            <p>Tu rol: {{user.user.role}}</p>
         {{/if}}
         <div>
             <button id="profile-btn">Ver perfil</button>

@@ -19,8 +19,7 @@ export const login = async (req, res) => {
 
 export const profile = async (req, res) => {
     //Tengo problemas con esta vista
-    let id = req.user
-    let user = await userManager.getById(id)
+    let user = req.user ? req.user : null;
     res.render("profile", { user: user });
 }
 
@@ -44,9 +43,11 @@ export const getProducts = async (req, res) => {
     let sort = req.query.sort;
     
     //Tengo problemas con esta vista
-    let id = req.user
-    console.log(id)
-    let userLog = await userManager.getById(id)
+    // let id = req.user
+    // console.log(id)
+    // let userLog = await userManager.getById(id)
+    
+    let user = req.user ? req.user : null;
 
     try {
         if (isNaN(page) || page < 1) { page = 1 };
@@ -73,10 +74,20 @@ export const getProducts = async (req, res) => {
             result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort}` : "";
             result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
-            console.log(userLog) //lo trae bien en consola. No entiendo porque handlebars no.
+            console.log(user)
+            // res.render('products', {
+            //     user: user,
+            //     products: result.docs
+            // });
+
             res.render('products', {
-                user: userLog,
-                products: result.docs
+                user: user,
+                products: result.docs,
+                hasPrevPage: result.hasPrevPage,
+                prevLink: result.prevLink,
+                page: result.page,
+                hasNextPage: result.hasNextPage,
+                nextLink: result.nextLink
             });
 
             //Console response

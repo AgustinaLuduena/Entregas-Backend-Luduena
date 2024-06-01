@@ -31,7 +31,7 @@ export function generateRandomCode(length) {
 // Generar un token JWT
 export const generateToken = (user) => {
   const JWT_SECRET = config.token;
-  return jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
+  return jwt.sign({ user: user }, JWT_SECRET, { expiresIn: "1h" });
 };
 
 
