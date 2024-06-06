@@ -17,11 +17,12 @@ viewsRouter.get('/', active, index);
 viewsRouter.get("/register", register);
 viewsRouter.get("/login", login);
 viewsRouter.get('/profile', verifyUser, profile);
+viewsRouter.get("/restore", restore);
 
-// REAL TIME PRODUCTS (FS)
+// REAL TIME PRODUCTS (FS) - Not working
 viewsRouter.get("/api/products/realTimeProducts", realTimeProducts);
 
-// CHAT Routes
+// CHAT Routes - Not working
 viewsRouter.get("/api/messages/", DBChatManager.getMessages);
 viewsRouter.post("/api/messages/addMessage", DBChatManager.addMessage);
 
@@ -31,7 +32,7 @@ viewsRouter.get('/products', verifyUser, getProducts);
 // CART VIEW Route
 viewsRouter.get("/carts/:cid/", auth, getCartById);
 
-viewsRouter.get("/restore", restore);
+
 
 
 export default viewsRouter;

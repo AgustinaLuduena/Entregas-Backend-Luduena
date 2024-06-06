@@ -1,7 +1,7 @@
 import userModel from "../dao/models/users.js";
-import {createHash, isValidPassword} from "../utils.js";
+import { createHash } from "../utils.js";
 //Factory
-import { authManager, userManager } from "../dao/factory.js";
+import { authManager } from "../dao/factory.js";
 //ENV
 import config from "../config/config.js";
 //DTO
@@ -42,18 +42,17 @@ export const loginJWT = async (req, res) => {
         let result = await authManager.adminLogin({ email, password });
         if (result.token) {
           res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none", });
-          return res.send({ status: "success", message: result.message });
+          return res.json({ status: "success", message: result.message });
         }
       } else {
       let result = await authManager.login({ email, password });
       if (result.token) {
         res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none", });
-        return res.send({ status: "success", message: result.message });
+        return res.json({ status: "success", message: result.message });
       }
     }
-    res.status(401).send({ error: "Error en las credenciales" });
   } catch (error) {
-    res.status(500).send({ status: "error", message: error.message });
+    res.status(500).json({ status: "error", message: `Credentials Error.` });
   }
 };
 
@@ -100,29 +99,25 @@ export const restore = async (req, res) => {
     const { email, password } = req.body;
   
     if (!email || !password) {
-        return res
-            .status(400)
-            .send({ status: "error", error: "Please, complete all the information require."});
+        return res.status(400).json({ status: "error", error: "Please, complete all the information require."});
     }
 
     const user = await userModel.findOne({ email });
-    console.log(user);
 
-    if (!user)
-        return res
-        .status(400)
-        .send({ status: "error", message: "No se encuentró el usuario." });
+    if (!user){
+        return res.status(404).json({ status: "error", message: "No se encuentró el usuario." });
+    }
 
     const newPass = createHash(password);
 
     await userModel.updateOne({ _id: user._id }, { $set: { password: newPass } });
 
-    res.status(200).send({ status: "success", message: "Password actualizado" });
+    res.status(200).json({ status: "success", message: "Password actualizado" });
 }
 
 //Login using Github
 export const github = async (req, res) => {
-    res.status(201).send({ status: "success", message: "User successfully registered with GitHub!" });
+    res.status(201).json({ status: "success", message: "User successfully registered with GitHub!" });
 }
 
 export const githubcallback = async (req, res) => {

@@ -1,5 +1,10 @@
 import cartModel from "../models/carts.js";
 import productsModel from "../models/products.js";
+//ErrorHandler
+import { CustomError } from '../../errorsHandlers/customError.js';
+import { errorTypes } from '../../errorsHandlers/errorTypes.js';
+import { notFound, updateError } from "../../errorsHandlers/productsError.js"
+
 
 export default class CartManager {
 
@@ -57,7 +62,10 @@ export default class CartManager {
         let product = cart.products.findIndex((product) => product.product.toString() === pid)
 
         if(product === -1){
-            console.log("Producto no encontrado")
+                throw CustomError.CustomError(
+                "Error", `The product Id ${pid} was not found.`, 
+                errorTypes.ERROR_NOT_FOUND, 
+                notFound(pid))
         }else{
             cart.products.splice(product,1)
         }
@@ -147,7 +155,10 @@ export default class CartManager {
             );
             return cart;
         } catch (error) {
-            throw new Error("Error al actualizar el carrito: " + error.message);
+            throw CustomError.CustomError(
+                "Error updating data", `Error trying to update the chosen cart.`, 
+                errorTypes.ERROR_DATA, 
+                updateError())
         }
     }
 
@@ -160,7 +171,10 @@ export default class CartManager {
             );
             return cart;
         } catch (error) {
-            throw new Error("Error al vaciar el carrito: " + error.message);
+            throw CustomError.CustomError(
+                "Error updating data", `Error trying to empty the chosen cart.`, 
+                errorTypes.ERROR_DATA, 
+                updateError())
         }
     }
 

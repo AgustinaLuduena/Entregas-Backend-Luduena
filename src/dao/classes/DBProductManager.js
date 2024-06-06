@@ -1,4 +1,8 @@
 import productsModel from "../models/products.js"
+//ErrorHandler
+import { CustomError } from '../../errorsHandlers/customError.js';
+import { errorTypes } from '../../errorsHandlers/errorTypes.js';
+import { notFound } from "../../errorsHandlers/productsError.js"
 
 export default class DBProductManager {
 
@@ -31,6 +35,16 @@ export default class DBProductManager {
         return result
     }
 
+    getProductByTitle = async (title) => {
+        let result = await productsModel.findOne({title : title})
+        return result
+    }
+
+    getProductByCode = async (code) => {
+        let result = await productsModel.findOne({code : code})
+        return result
+    }
+
     getProductsByCategory = async (category) => {
         try {
             let result = await productsModel.aggregate([
@@ -57,8 +71,17 @@ export default class DBProductManager {
         return result
     }
     deleteProduct = async (pid) => {
-        let result = await productsModel.deleteOne({_id:pid})
-        return result
+        let result = await productsModel.findById(pid)
+        if(!result) {
+            throw CustomError.CustomError(
+                "Error", `The product Id ${pid} was not found.`, 
+                errorTypes.ERROR_NOT_FOUND, 
+                notFound(pid))
+        } else {
+            let deleteProduct = await productsModel.deleteOne({_id:pid})
+            return deleteProduct        
+        }
+
     }
 
     //Products with category details 

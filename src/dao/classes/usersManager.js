@@ -1,5 +1,10 @@
 import { createHash } from "../../utils.js";
 import userModel from "../models/users.js";
+//ErrorHandler
+import { CustomError } from '../../errorsHandlers/customError.js';
+import { errorTypes } from '../../errorsHandlers/errorTypes.js';
+import { dataError, notFound } from "../../errorsHandlers/productsError.js";
+
 
 export default class UserManager {
   constructor() {
@@ -23,18 +28,30 @@ export default class UserManager {
       const result = await userModel.create(userData);
       return result;
     } catch (error) {
-      console.log("Error al crear el usuario", error.message);
+      throw CustomError.CustomError(
+        "Error", `Error creating the user.`, 
+        errorTypes.ERROR_DATA, 
+        dataError())
     }
    
   };
 
   updateUser = async (id, userData) => {
-    // Hashear la contraseña antes de actualizar el usuario
-    if (userData.password) {
-      userData.password = createHash(userData.password);
+    let result = await userModel.findById(id)
+    if(!result) {
+        throw CustomError.CustomError(
+            "Error", `The User Id ${id} was not found.`, 
+            errorTypes.ERROR_NOT_FOUND, 
+            notFound(id))
+    } else {
+         // Hashear la contraseña antes de actualizar el usuario
+        if (userData.password) {
+          userData.password = createHash(userData.password);
+        }
+        const updateResult = await userModel.updateOne({ _id: id }, { $set: userData });
+        return updateResult;   
     }
-    const result = await userModel.updateOne({ _id: id }, { $set: userData });
-    return result;
+   
   };
 
   deleteUser = async (id) => {
@@ -48,7 +65,10 @@ export default class UserManager {
       const users = await userModel.find().populate("cart");
       return users;
     } catch (error) {
-      console.log("Error al obtener los usuarios ", error.message);
+      throw CustomError.CustomError(
+        "Error", `Error getting the users data.`, 
+        errorTypes.ERROR_DATA, 
+        dataError())
     }
   };
 
@@ -58,8 +78,10 @@ export default class UserManager {
       const user = await userModel.findById(userId).populate('cart');
       return user;
     } catch (error) {
-      console.error(`Error al obtener el usuario con el carrito: ${error}`);
-      throw error;
+      throw CustomError.CustomError(
+        "Error", `Error getting the user data with cart details.`, 
+        errorTypes.ERROR_DATA, 
+        dataError())
     }
   }
   

@@ -1,4 +1,10 @@
-import { productManager, cartManager, userManager } from "../dao/factory.js";
+//Factory
+import { productManager, cartManager } from "../dao/factory.js";
+//ErrorHandler
+import { CustomError } from '../errorsHandlers/customError.js';
+import { errorTypes } from '../errorsHandlers/errorTypes.js';
+import { notFound } from "../errorsHandlers/productsError.js";
+
 
 export const index = async (req, res) => {
     try {
@@ -10,17 +16,32 @@ export const index = async (req, res) => {
 }
 
 export const register = async (req, res) => {
-    res.render("register");
+    try{
+        res.render("register");
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
+    }
 }
 
 export const login = async (req, res) => {
-    res.render("login");
+    try{
+        res.render("login");
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
+    }
 }
 
 export const profile = async (req, res) => {
     //Tengo problemas con esta vista
-    let user = req.user ? req.user : null;
-    res.render("profile", { user: user });
+    try{
+        let user = req.user ? req.user : null;
+        res.render("profile", { user: user });
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Internal Server Error');
+    }
 }
 
 export const realTimeProducts = async (req, res) => {
@@ -128,7 +149,10 @@ export const getCartById = async (req, res) => {
         const cart = await cartManager.getCartById(cid);
 
         if(!cart){
-          return res.json(`Cart Id number ${cid} does not been found.`)
+          throw CustomError.CustomError(
+            "Error", `Cart id ${cid} was not found.`,
+            errorTypes.ERROR_NOT_FOUND, 
+            notFound(cid))
         }
 
         if (req.accepts("html")) {
@@ -138,12 +162,17 @@ export const getCartById = async (req, res) => {
         }
         
 
-      } catch (err) {
-        console.error('Error:', err);
+      } catch (error) {
+        console.error('Error:', error);
         res.status(500).json('Internal Server Error');
       }
 }
 
 export const restore = async (req, res) => {
-    res.render("restore");
+    try{
+        res.render("restore");
+    }catch (error){
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+    }
+
 }

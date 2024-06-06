@@ -3,6 +3,8 @@ import { dirname } from 'path';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from './config/config.js';
+import {fakerES as faker } from "@faker-js/faker";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,6 +36,22 @@ export const generateToken = (user) => {
   return jwt.sign({ user: user }, JWT_SECRET, { expiresIn: "1h" });
 };
 
+//Mocking
+export const generateProducts = () => {
+  return {
+    id: faker.database.mongodbObjectId(),
+    title: faker.commerce.productName(),
+    description: faker.commerce.productDescription(),
+    code: faker.helpers.rangeToNumber({ min: 100, max: 199 }),
+    price: faker.commerce.price({ min: 2000, max: 8000 }),
+    status: true,
+    stock: faker.commerce.price({ min: 0, max: 50 }),
+    category: { id: faker.database.mongodbObjectId(), name: faker.commerce.department(), description: faker.commerce.productDescription()}, 
+    colors: [faker.vehicle.color()],
+    sizes: ["S", "M", "L"],
+    thumbnails:faker.image.urlLoremFlickr({ category: 'fashion' }),
+  };
+};
 
 export default __dirname;
 

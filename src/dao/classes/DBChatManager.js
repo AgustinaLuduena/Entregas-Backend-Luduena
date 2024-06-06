@@ -3,7 +3,7 @@ import messagesModel from "../models/messages.js"
 const DBChatManager = {
     getMessages: async (req, res) => {
         try {
-            const messages = await messagesModel.find()
+            const messages = await messagesModel.find().populate()
 
             if (req.accepts('html')) {
                 return res.render('chat', { messages });

@@ -4,6 +4,7 @@ import router from './routes/apiRoutes.js';
 import middlewares from './config/middlewaresConfig.js';
 import createExpressApp from './config/createApp.js';
 import socketServer from './config/createSocket.js';
+import { errorHandler } from './middlewares/errorHandler.middleware.js';
 
 async function main(){
   const app = createExpressApp()
@@ -17,6 +18,10 @@ async function main(){
   //Global Routes
   router(app)
 
+  //ErrorHandler
+  app.use(errorHandler) 
+
+  //SocketIO
   socketServer()
 
 }

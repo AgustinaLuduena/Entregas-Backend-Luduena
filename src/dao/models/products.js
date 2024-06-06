@@ -12,7 +12,6 @@ const schema = new Schema({
     },
     description: {
         type: String,
-        require: true
     },
     code: {
         type: String,

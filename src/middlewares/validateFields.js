@@ -1,16 +1,16 @@
-const validateFields = function validateProductFields(req, res, next) {
-    const { title, description, category, price, stock } = req.body;
-    
-    if (!title || !description || !price || !stock || !category) {
-        return res.status(400).send({ error: `Please, complete all the information of the new product.` });
-    } else if (typeof title !== 'string' || typeof description !== 'string' || typeof category !== 'string' || typeof price !== 'number' || typeof stock !== 'number') {
-        return res.status(400).send({ error: 'Fields are not of the required type.' });
+import { CustomError } from "../errorsHandlers/customError.js";
+import { errorTypes } from "../errorsHandlers/errorTypes.js";
+import { validateProduct } from "../errorsHandlers/productsError.js";
+
+// Helper function to validate required fields
+export const validateProductFields = (fields, data) => {
+    for (let field of fields) {
+        if (!data[field] || data[field] === "undefined") {
+            throw CustomError.CustomError(
+                "Missing Data", `Enter the property data for ${field}`,
+                errorTypes.ERROR_INVALID_ARGUMENTS,
+                validateProduct(data)
+            );
+        }
     }
-
-    next();
-}
-
-export default validateFields;
-
-
-
+};

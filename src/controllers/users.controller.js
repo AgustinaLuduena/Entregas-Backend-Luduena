@@ -1,5 +1,9 @@
 //Factory
 import { userManager, cartManager } from "../dao/factory.js";
+//ErrorHandler
+import { CustomError } from '../errorsHandlers/customError.js';
+import { errorTypes } from '../errorsHandlers/errorTypes.js';
+import { userNotFound } from "../errorsHandlers/productsError.js";
 
 //Get all user with populate
 export const getUsers = async (req, res) => {
@@ -12,10 +16,13 @@ export const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
         const user = await userManager.getById(id);
-        if (user) {
-            res.status(200).json({ user });
-        } else {
-            res.status(404).json({ error: `Usuario con id: ${id} no encontrado` });
+        if (!user) {
+              throw CustomError.CustomError(
+              "Error", `User id ${id} was not found.`,
+              errorTypes.ERROR_NOT_FOUND, 
+              userNotFound())   
+        } else {  
+              res.status(200).json({ user });
         }
         } catch (error) {
         console.error(`Error al cargar el usuario: ${error}`);
@@ -32,8 +39,7 @@ export const createUser = async (req, res) => {
         const newCart = await cartManager.createCart();
         newUser.cart = newCart._id;
       }
-      // const newCart = await cartManager.createCart();
-      // newUser.cart = newCart._id;
+
       newUser.role = "User";
 
       const createdUser = await userManager.createUser(newUser);
@@ -69,7 +75,10 @@ export const updateUser = async (req, res) => {
         if (result) {
           res.status(200).json({ message: "Usuario actualizado exitosamente" });
         } else {
-          res.status(404).json({ error: "Usuario no encontrado" });
+          throw CustomError.CustomError(
+            "Error", `User id ${id} was not found.`,
+            errorTypes.ERROR_NOT_FOUND, 
+            userNotFound())
         }
       } catch (error) {
         console.error(`Error al actualizar el usuario: ${error}`);
@@ -85,7 +94,10 @@ export const deleteUser = async (req, res) => {
         if (deletedUser) {
           res.status(200).json({ message: "Usuario eliminado exitosamente" });
         } else {
-          res.status(404).json({ error: "Usuario no encontrado" });
+            throw CustomError.CustomError(
+            "Error", `User id ${id} was not found.`,
+            errorTypes.ERROR_NOT_FOUND, 
+            userNotFound())
         }
       } catch (error) {
         console.error(`Error al eliminar el usuario: ${error}`);

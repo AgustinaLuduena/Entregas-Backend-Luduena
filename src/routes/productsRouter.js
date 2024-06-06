@@ -1,8 +1,5 @@
 import { Router } from 'express';
-import passport from 'passport';
 import validateUpdateFields from '../middlewares/validateUpdateFields.js';
-import validateFields from '../middlewares/validateFields.js';
-//import { isAdmin } from "../middlewares/auth.js"
 import {getProducts, getAllProductsWithCategories, getProductByID, addProduct, updateProduct, deleteProduct,} from "../controllers/products.controller.js"
 import { verifyToken, checkAdminRole } from '../middlewares/auth.js';
 

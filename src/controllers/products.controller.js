@@ -1,5 +1,10 @@
 //Factory
 import { productManager } from '../dao/factory.js';
+//ErrorHandler
+import { CustomError } from '../errorsHandlers/customError.js';
+import { errorTypes } from '../errorsHandlers/errorTypes.js';
+import {notFound, validateProduct} from "../errorsHandlers/productsError.js"
+import { validateProductFields } from '../middlewares/validateFields.js';
 
 
 export const getProducts = async (req, res) => {
@@ -61,9 +66,9 @@ export const getProducts = async (req, res) => {
             console.log(responseObject);
         }  
 
-    } catch (err) {
-        console.error('Error:', err);
-        res.status(500).json('Internal Server Error');
+    } catch (error) {
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+
     }
 }
 
@@ -72,8 +77,11 @@ export const getAllProductsWithCategories = async (req, res) => {
     try {
         const products = await productManager.getAllProductsWithCategories();
         res.status(200).json({ products });
-      } catch (error) {
-        res.status(500).json({ error: `Error al recibir los productos` });
+      } catch (err) {
+        throw CustomError.CustomError(
+            "Error", `Error getting the products data`, 
+            errorTypes.ERROR_DATA, 
+            dataError())
       }
 }
 
@@ -84,31 +92,57 @@ export const getProductByID = async (req, res) => {
         const product = await productManager.getProductByID(pid);
 
         if(!product){
-            return res.status(400).json({ status: `ID NUMBER ${pid} NOT FOUND.`});
+            throw CustomError.CustomError(
+                "Error", `The product Id ${pid} was not found.`, 
+                errorTypes.ERROR_NOT_FOUND, 
+                notFound(pid))
         } else {
             return res.json(product);
         }
 
-      } catch (err) {
-        console.error('Error:', err);
-        res.status(500).json('Internal Server Error');
+      } catch (error) {
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+
       }
 }
 
 //Add a new product  
 export const addProduct = async (req, res) => {
     try {
-        const newProduct = req.body
+        const {title, code, price, stock, category} = req.body
+
+        // Validate required fields
+        validateProductFields(["title", "code", "price", "stock", "category"], req.body);
+
+        //Check for existing title
+        let checkTitle = await productManager.getProductByTitle(title)
+        if(checkTitle){
+            throw CustomError.CustomError(
+                `The product title ${title} already exists.` , "Enter a new title.", 
+                errorTypes.ERROR_INVALID_ARGUMENTS, 
+                validateProduct(req.body))
+        }
+
+        //Check for existing code
+        let checkCode = await productManager.getProductByCode(code)
+        if(checkCode){
+            throw CustomError.CustomError(
+                `The product code ${code} already exists.` , "Enter a new code.", 
+                errorTypes.ERROR_INVALID_ARGUMENTS, 
+                validateProduct(req.body))
+        }
+
+        let newProduct = {title, code, price, stock, category}
         let addedSuccessfully = await productManager.addProduct(newProduct);
         
         if (addedSuccessfully) {
             return res.status(200).json({ status: `Product with title: ${newProduct.title}, was successfully created.` });
         } else {
-            return res.status(400).json({ error: `The code ${newProduct.code} already exists.` });
+            return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
         }
-    } catch (err) {
-        console.error('Error:', err);
-        res.status(500).json('Internal Server Error');
+    } catch (error) {
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+
     }
 }
 
@@ -140,11 +174,14 @@ export const updateProduct = async (req, res) => {
         if (updateSuccessfully) {
             return res.status(200).json({ status: `Product with ID ${pid} was successfully updated.` });
         } else {
-            return res.status(404).json({ error: `Product with ID ${pid} was not found.` });
+            throw CustomError.CustomError(
+                "Error", `The product Id ${pid} was not found.`, 
+                errorTypes.ERROR_NOT_FOUND, 
+                notFound(pid))
         }
-    } catch (err) {
-        console.error('Error:', err);
-        res.status(500).json('Internal Server Error');
+    } catch (error) {
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+
     }
 }
 
@@ -155,14 +192,16 @@ export const deleteProduct = async (req, res) => {
         let pid =  req.params.pid
         const selectedProduct = await productManager.deleteProduct(pid);
         if(!selectedProduct){
-            //No logra dar respuesta en caso de no encontrarlo.
-            return res.status(400).json({ status: `Cannot delete product. Product with ID ${pid} not found.`});
+            throw CustomError.CustomError(
+                "Error", `The product Id ${pid} was not found. Cannot delete product.`, 
+                errorTypes.ERROR_NOT_FOUND, 
+                notFound(pid))
         } else {
             return res.status(200).json({status: `Product with ID ${pid} deleted successfully.`});
         }
-      } catch (err) {
-        console.error('Error:', err);
-        res.status(500).json('Internal Server Error');
+      } catch (error) {
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+
       }
 
 }

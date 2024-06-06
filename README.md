@@ -47,7 +47,7 @@
 
 <h4>app.use("/api/sessions", sessionsRouter);</h4>
 <p>POST "/login" : Log in as "user" or "admin" using "req.body" by Postman.</p>
-<p>POST "/logout" : Destroy the current session and show the login view by Postman.</p>
+<p>GET "/logout" : Destroy the current session and show the login view by Postman.</p>
 <p>GET "/current" : Show the current session data with DTO.</p>
 
 <h4>app.use("/api", categoryRouter);</h4>
@@ -57,7 +57,8 @@
 <p>PUT "/category/:id" : Update Category by ID (ADMIN ONLY)</p>
 <p>DELETE "/category/:id" : Delete Category by ID (ADMIN ONLY)</p>
 
-
+<h4>app.use("/api", mockingRouter);</h4>
+<p>GET "/mockingproducts" : List of 100 products created with Faker.</p>
 
 <h3>SOCKET IO</h3>
 <p>app.use(viewsRouter);</p>

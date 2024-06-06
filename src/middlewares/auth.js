@@ -1,6 +1,10 @@
 import jwt from 'jsonwebtoken';
-//import userModel from "../dao/models/users.js";
 import config from "../config/config.js";
+//ErrorHandler
+import { CustomError } from '../errorsHandlers/customError.js';
+import { errorTypes } from '../errorsHandlers/errorTypes.js';
+import { loginError, authError, authorizationError } from "../errorsHandlers/productsError.js";
+
 
 //auth with session
 export function auth (req, res, next) {
@@ -14,23 +18,31 @@ export function auth (req, res, next) {
 //Middleware para verificar que el usuario haya iniciado sesión correctamente.
 export const verifyToken = (req, res, next) => {
     const token = req.cookies[config.token];
-    if (!token) return res.status(403).json('Por favor, inicie sesión para acceder.');
+    if (!token) {
+      throw CustomError.CustomError(
+        "Error", `Plese, login to continue.`, 
+        errorTypes.ERROR_AUTHENTICATION, 
+        loginError())
+    }
 
     try {
         const decoded = jwt.verify(token, config.token);
         req.user = decoded;
         next();
     } catch (error) {
-        res.status(401).send('Invalid token');
+        throw CustomError.CustomError(
+          "Error", `Invalid Token.`, 
+          errorTypes.ERROR_UNAUTHORIZED, 
+          authError())
     }
 };
 
 //Middleware para verificar si es un usuario.
 export const verifyUser = (req, res, next) => {
-    const token = req.cookies[config.token]; // Asegúrate de que el nombre de la cookie coincide
+    const token = req.cookies[config.token];
 
     if (!token) {
-        req.user = null; // Si no hay token, asigna null a req.user
+        req.user = null;
         return next();
     }
 
@@ -44,14 +56,15 @@ export const verifyUser = (req, res, next) => {
     });
 };
 
-
- 
-
 // Middleware de autenticación ADMIN
 export const checkAdminRole = (req, res, next) => {
     const token = req.cookies[config.token];
-    if (!token) return res.status(403).send('Access denied');
-
+    if (!token) {
+      throw CustomError.CustomError(
+        "Error", `Access denied.`, 
+        errorTypes.ERROR_AUTHENTICATION, 
+        authError())
+    }
     try {
         const decoded = jwt.verify(token, config.token);
         req.user = decoded;
@@ -64,17 +77,28 @@ export const checkAdminRole = (req, res, next) => {
           return next();
         }
 
-        return res.status(403).json({ message: 'Acceso no autorizado a este usuario' });
+        throw CustomError.CustomError(
+          "Error", `Unauthorized user.`, 
+          errorTypes.ERROR_UNAUTHORIZED, 
+          authorizationError())
 
     } catch (error) {
-        res.status(401).json({ error: { message: 'Invalid token'}});
+        throw CustomError.CustomError(
+          "Error", `Invalid Token.`, 
+          errorTypes.ERROR_UNAUTHORIZED, 
+          authError())
     }
   };
 
 // Middleware de autenticación USER
   export const checkUserRole = (req, res, next) => {
     const token = req.cookies[config.token];
-    if (!token) return res.status(403).send('Access denied');
+    if (!token) {
+      throw CustomError.CustomError(
+        "Error", `Access denied.`, 
+        errorTypes.ERROR_AUTHENTICATION, 
+        authError())
+    }
 
     try {
         const decoded = jwt.verify(token, config.token);
@@ -88,10 +112,16 @@ export const checkAdminRole = (req, res, next) => {
           return next();
         }
 
-        return res.status(403).json({ message: 'Acceso no autorizado a este usuario' });
+        throw CustomError.CustomError(
+          "Error", `Unauthorized user.`, 
+          errorTypes.ERROR_UNAUTHORIZED, 
+          authorizationError())
 
     } catch (error) {
-        res.status(401).json({ error: { message: 'Invalid token'}});
+        throw CustomError.CustomError(
+          "Error", `Invalid Token.`, 
+          errorTypes.ERROR_UNAUTHORIZED, 
+          authError())
     }
   };
 

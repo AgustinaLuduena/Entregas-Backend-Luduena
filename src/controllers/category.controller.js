@@ -1,5 +1,10 @@
 //Factory
 import { categoryManager } from "../dao/factory.js";
+//ErrorHandler
+import { CustomError } from '../errorsHandlers/customError.js';
+import { errorTypes } from '../errorsHandlers/errorTypes.js';
+import { notFound } from "../errorsHandlers/productsError.js";
+
 
 export const getAll = async (req, res) => {
     try {
@@ -15,7 +20,10 @@ export const getById = async (req, res) => {
         const categoryId = req.params.id;
         const category = await categoryManager.getById(categoryId);
         if (!category) {
-          return res.status(404).json({ message: "Category not found" });
+          throw CustomError.CustomError(
+            "Error", `The Category Id ${categoryId} was not found.`,
+            errorTypes.ERROR_NOT_FOUND, 
+            notFound(categoryId))
         }
         res.json(category);
       } catch (error) {
@@ -28,7 +36,7 @@ export const createCategory = async (req, res) => {
         const newCategory = await categoryManager.createCategory(req.body);
         res.status(201).json(newCategory);
       } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
       }
 }
 
@@ -48,7 +56,7 @@ export const updateCategory = async (req, res) => {
         );
         res.status(200).json({ message: "Category updated successfully" });
       } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
       }
 }
 
@@ -57,7 +65,10 @@ export const deleteCategory = async (req, res) => {
         const categoryId = req.params.id;
         const result = await categoryManager.deleteCategory(categoryId);
         if (result.deletedCount === 0) {
-          return res.status(404).json({ message: "Category not found" });
+          throw CustomError.CustomError(
+            "Error", `The Category Id ${categoryId} was not found.`,
+            errorTypes.ERROR_NOT_FOUND, 
+            notFound(categoryId))
         }
         res.json({ message: "Category deleted successfully" });
       } catch (error) {

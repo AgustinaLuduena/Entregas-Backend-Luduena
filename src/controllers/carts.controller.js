@@ -9,6 +9,11 @@ import Purchase from "../dao/models/purchase.js";
 import { generateRandomCode } from "../utils.js";
 //DTO
 import CurrentUserDTO from "../dao/dto/dto.js"
+//ErrorHandler
+import { CustomError } from '../errorsHandlers/customError.js';
+import { errorTypes } from '../errorsHandlers/errorTypes.js';
+import { dataError, notFound, updateError } from "../errorsHandlers/productsError.js";
+
 
 //get list of carts
 export const getAllCarts = async (req, res) => {
@@ -16,18 +21,20 @@ export const getAllCarts = async (req, res) => {
         const carts = await cartManager.getAllCarts();
         res.status(200).json({ carts });
       } catch (error) {
-        res.status(500).json({ error: `Error al recibir los carritos` });
+        throw CustomError.CustomError(
+          "Error", `Error getting data`, 
+          errorTypes.ERROR_DATA, 
+          dataError())
       }
 }
 
 //Add a new cart (Cart Id + products:[])
 export const createCart = async (req, res) => {
     try {
-        const cart = await cartManager.createCart();
-        res.json({cart})
-    } catch (err) {
-        console.error('Error:', err);
-        res.status(500).json('Internal Server Error');
+      const cart = await cartManager.createCart();
+      res.json({cart})
+    } catch (error) {
+      return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
     }
 }
 
@@ -38,14 +45,16 @@ export const getCartById = async (req, res) => {
         const cart = await cartManager.getCartById(cid);
 
         if(!cart){
-          return res.json(`Cart Id number ${cid} does not been found.`)
+          throw CustomError.CustomError(
+            "Error", `The Cart Id ${cid} was not found.`,
+            errorTypes.ERROR_NOT_FOUND, 
+            notFound(cid))
         } else {
           res.json({cart})
         }
 
-      } catch (err) {
-        console.error('Error:', err);
-        res.status(500).json('Internal Server Error');
+      } catch (error) {
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
       }
 }
 
@@ -56,11 +65,9 @@ export const addProduct = async (req, res) => {
         let pid =  req.params.pid
         const cart = await cartManager.addProduct(cid, pid);
         res.status(200).json(`Product Id number ${pid} was succesfully add to cart Id number ${cid}.`);
-        //Try SweetAlert
 
-      } catch (err) {
-        console.error('Error:', err);
-        res.status(500).json('Internal Server Error');
+      } catch (error) {
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
       }
 }
 
@@ -72,9 +79,8 @@ export const deleteProduct = async (req, res) => {
         const cart = await cartManager.deleteProduct(cid, pid);
         res.status(200).json(`Product Id number ${pid} was succesfully deleted from cart Id number ${cid}.`);
 
-      } catch (err) {
-        console.error('Error:', err);
-        return res.status(500).json({ error: 'Error interno del servidor.' });
+      } catch (error) {
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
       }
 }
 
@@ -86,12 +92,16 @@ export const deleteAllProducts = async (req, res) => {
   
         if (deleted) {
           return res.status(200).json({ message: `Todos los productos del carrito ${cid} han sido eliminados correctamente.` });
-      } else {
-          return res.status(404).json({ error: `Carrito con ID ${cid} no encontrado.` });
-      }
+        } else {
+            throw CustomError.CustomError(
+              "Error", `The Cart Id ${cid} was not found.`, 
+              errorTypes.ERROR_NOT_FOUND, 
+              notFound(cid))
+        }
     } catch (error) {
         console.error('Error al eliminar todos los productos del carrito:', error);
-        return res.status(500).json({ error: 'Error interno del servidor.' });
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+
     }
 }
 
@@ -117,12 +127,14 @@ export const updateCart = async (req, res) => {
         if (updateSuccessfully) {
           return res.status(200).json({ status: `Cart with ID ${cid} was successfully updated.` });
         } else {
-          return res.status(404).json({ error: `Error trying to update the chosen product.` });
+          throw CustomError.CustomError(
+            "Error updating data", `Error trying to update the chosen product.`, 
+            errorTypes.ERROR_DATA, 
+            updateError())
         }
     
-      } catch (err) {
-          console.error('Error:', err);
-          res.status(500).json('Internal Server Error');
+      } catch (error) {
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
       }
 }
 
@@ -148,24 +160,29 @@ export const updateProductQuantity = async (req, res) => {
         if (updated) {
             return res.status(200).json({ message: `Cantidad del producto ID: ${pid} en el carrito ID: ${cid}, actualizada correctamente.` });
         } else {
-            return res.status(404).json({ error: `No se pudo actualizar la cantidad del producto ${pid} en el carrito ${cid}.` });
+            throw CustomError.CustomError(
+              "Error updating data", `No se pudo actualizar la cantidad del producto ${pid} en el carrito ${cid}.`, 
+              errorTypes.ERROR_DATA, 
+              updateError())
         }
     } catch (error) {
         console.error('Error al actualizar la cantidad del producto en el carrito:', error);
-        return res.status(500).json({ error: 'Error interno del servidor.' });
+        return res.status(500).json({ error: 'Error al actualizar la cantidad del producto en el carrito.' });
     }
 }
 
 //Add a new cart (Cart Id + products:[])
 export const purchase = async (req, res) => {
   try {
-      //res.send("Finalizar compra")
       let cid =  req.params.cid;
       const cart = await cartManager.getCartById(cid);
 
-      if(!cart){return res.json(`Cart Id number ${cid} does not been found.`)} 
-
-      // return res.json({cart})
+      if(!cart){
+        throw CustomError.CustomError(
+          "Error", `The Cart Id ${cid} was not found.`, 
+          errorTypes.ERROR_NOT_FOUND, 
+          notFound(cid))
+      } 
 
       let totalPurchaseAmount = 0;
       const productsToPurchase = [];
@@ -174,7 +191,10 @@ export const purchase = async (req, res) => {
       for (const item of cart.products){
         const product = await productsModel.findById(item.product);
         if (!product) {
-          throw new Error(`Producto con ID ${item.product} no encontrado`);
+            throw CustomError.CustomError(
+            "Error", `The product Id ${item.product} was not found.`, 
+            errorTypes.ERROR_NOT_FOUND, 
+            notFound(item.product))
         }
         if (product.stock >= item.quantity) {
             // Suficiente stock, reducir stock y agregar a la compra
@@ -199,7 +219,7 @@ export const purchase = async (req, res) => {
 
       //Generar la compra
       const purchase = new Purchase({
-          user: userId || "Error",
+          user: userId,
           products: productsToPurchase.map(item => ({
               product: item.product,
               productQuantity: item.quantity,
@@ -229,13 +249,12 @@ export const purchase = async (req, res) => {
       await cartManager.clearCart(cid);
       await cartManager.updatePurchasedCart(cid, productsToKeepInCart, totalPurchaseAmount);
 
-      return res.json({ticket});
       console.log("Compra generada con éxito!")
+      return res.json({ticket});
 
-      
 
-  } catch (err) {
-      console.error('Error:', err);
-      res.status(500).json('Internal Server Error');
+  } catch (error) {
+    return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+
   }
 }
