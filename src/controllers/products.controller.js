@@ -5,7 +5,8 @@ import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
 import {notFound, validateProduct} from "../errorsHandlers/productsError.js"
 import { validateProductFields } from '../middlewares/validateFields.js';
-
+//Logger
+import logger from "../utils/logger-env.js";
 
 export const getProducts = async (req, res) => {
     // List of products, page, limit, query, and sort
@@ -22,8 +23,8 @@ export const getProducts = async (req, res) => {
         if (category) {
             result = await productManager.getProductsByCategory(category);
 
-            if (!result) {
-                return res.status(400).send({ status: `Para la categoría: ${category}, no hay stock disponible.` });
+            if (result.length === 0) {
+                return res.status(400).json({ message: `Para la categoría: ${category}, no hay stock disponible.` });
             } else {
                 return res.json(result);
             }
@@ -63,7 +64,7 @@ export const getProducts = async (req, res) => {
                 prevLink,
                 nextLink
             };
-            console.log(responseObject);
+            logger.info(responseObject);
         }  
 
     } catch (error) {

@@ -3,11 +3,13 @@ import productsModel from "../models/products.js"
 import { CustomError } from '../../errorsHandlers/customError.js';
 import { errorTypes } from '../../errorsHandlers/errorTypes.js';
 import { notFound } from "../../errorsHandlers/productsError.js"
+//Logger
+import logger from "../../utils/logger-env.js";
 
 export default class DBProductManager {
 
     constructor(){
-        console.log("ProductManager Constructor")
+        logger.info("ProductManager Constructor");
     }
 
     getProducts = async (page, limit, sort) => {
@@ -47,20 +49,46 @@ export default class DBProductManager {
 
     getProductsByCategory = async (category) => {
         try {
-            let result = await productsModel.aggregate([
+            let normalizedCategory = category.toLowerCase().trim().replace(/\s+/g, ' ');
+
+            let pipeline = [
                 {
-                    $match: { category: category }
+                    $lookup: {
+                        from: "categories",
+                        localField: "category",
+                        foreignField: "_id",
+                        as: "category"
+                    }
                 },
                 {
-                    $group: { _id: "$category", totalStock: { $sum: "$stock" } }
+                    $unwind: {
+                        path: "$category",
+                        includeArrayIndex: 'categoryIndex',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $match: {
+                        "category.name": normalizedCategory
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$category.name",
+                        totalStock: { $sum: "$stock" }
+                    }
                 }
-            ]);
+            ];
+    
+            let result = await productsModel.aggregate(pipeline);
             return result;
+
         } catch (error) {
-            console.error('Error al obtener los productos según ctaegoría:', error);
+            logger.error('Error al obtener los productos según categoría:', error);
             throw error;
         }
     };
+    
 
     addProduct = async (product) => {
         let result = await productsModel.create(product)
@@ -90,7 +118,7 @@ export default class DBProductManager {
         const products = await productsModel.find().populate("category");
         return products;
         } catch (error) {
-        console.log("Error  al obtener todos lo productos");
+        logger.error("Error  al obtener todos lo productos", error);
         }
     };
 

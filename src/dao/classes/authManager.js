@@ -1,14 +1,16 @@
 import userModel from "../models/users.js";
-import { isValidPassword, generateToken } from "../../utils.js";
+import { isValidPassword, generateToken } from "../../utils/utils.js";
 //ErrorHandler
 import { CustomError } from '../../errorsHandlers/customError.js';
 import { errorTypes } from '../../errorsHandlers/errorTypes.js';
 import { userNotFound, authError } from "../../errorsHandlers/productsError.js";
+//Logger
+import logger from "../../utils/logger-env.js"; 
 
 
 export default class AuthManager {
   constructor() {
-    console.log("Constructor AuthManager");
+    logger.info("Constructor AuthManager");
   }
 
     login = async ({ email, password }) => {
@@ -28,11 +30,11 @@ export default class AuthManager {
             authError())
         }
         const token = generateToken(user);
-        console.log(token)
+        logger.info(token)
         return { message: "Autenticacion exitosa", token };
 
         } catch (error) {
-        console.log(error);
+        logger.error(error);
         return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
 
         }
@@ -54,7 +56,7 @@ export default class AuthManager {
         const token = generateToken(user);
         return { message: "Autenticacion del administrador exitosa", token };
         } catch (error) {
-        console.log(error);
+        logger.error(error);
         return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
       }
     }

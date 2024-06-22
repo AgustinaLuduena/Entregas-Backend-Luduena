@@ -1,8 +1,10 @@
 import Category from "../models/category.js"
+//Logger
+import logger from "../../utils/logger-env.js"; 
 
 export default class CategoryManager {
   constructor() {
-    console.log("CategoryManager Constructor");
+    logger.info("CategoryManager Constructor")
   }
 
   getAll = async () => {

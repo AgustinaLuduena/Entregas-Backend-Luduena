@@ -1,11 +1,13 @@
 import userModel from "../dao/models/users.js";
-import { createHash } from "../utils.js";
+import { createHash } from "../utils/utils.js";
 //Factory
 import { authManager } from "../dao/factory.js";
 //ENV
 import config from "../config/config.js";
 //DTO
 import CurrentUserDTO from "../dao/dto/dto.js"
+//Logger
+import logger from "../utils/logger-env.js";
 
 //Register
 export const register = async (req, res) => {
@@ -87,9 +89,9 @@ export const logoutJWT = async (req, res) => {
   try {
     authManager.borrarCookie(res, config.token);
     res.redirect('http://localhost:8081/');
-    console.log("Ha cerrado su sesión correctamente.");
+    logger.info("Ha cerrado su sesión correctamente.");
   } catch (error) {
-    console.error('Error al destruir la sesión.', error);
+    logger.error('Error al destruir la sesión.', error);
     res.status(500).send('Error interno del servidor');
   }
 }

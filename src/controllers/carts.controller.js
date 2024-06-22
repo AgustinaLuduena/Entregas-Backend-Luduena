@@ -1,4 +1,4 @@
-import __dirname from "../utils.js";
+import __dirname from "../utils/utils.js";
 //Factory
 import {cartManager} from "../dao/factory.js"
 //Models
@@ -6,14 +6,15 @@ import productsModel from "../dao/models/products.js";
 import Ticket from "../dao/models/ticket.js";
 import Purchase from "../dao/models/purchase.js";
 //Utils
-import { generateRandomCode } from "../utils.js";
+import { generateRandomCode } from "../utils/utils.js";
 //DTO
 import CurrentUserDTO from "../dao/dto/dto.js"
 //ErrorHandler
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
 import { dataError, notFound, updateError } from "../errorsHandlers/productsError.js";
-
+//Logger
+import logger from "../utils/logger-env.js";
 
 //get list of carts
 export const getAllCarts = async (req, res) => {
@@ -99,7 +100,7 @@ export const deleteAllProducts = async (req, res) => {
               notFound(cid))
         }
     } catch (error) {
-        console.error('Error al eliminar todos los productos del carrito:', error);
+        logger.error('Error al eliminar todos los productos del carrito:', error);
         return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
 
     }
@@ -166,7 +167,7 @@ export const updateProductQuantity = async (req, res) => {
               updateError())
         }
     } catch (error) {
-        console.error('Error al actualizar la cantidad del producto en el carrito:', error);
+        logger.error('Error al actualizar la cantidad del producto en el carrito:', error);
         return res.status(500).json({ error: 'Error al actualizar la cantidad del producto en el carrito.' });
     }
 }
@@ -249,7 +250,7 @@ export const purchase = async (req, res) => {
       await cartManager.clearCart(cid);
       await cartManager.updatePurchasedCart(cid, productsToKeepInCart, totalPurchaseAmount);
 
-      console.log("Compra generada con éxito!")
+      logger.info("Compra generada con éxito!")
       return res.json({ticket});
 
 

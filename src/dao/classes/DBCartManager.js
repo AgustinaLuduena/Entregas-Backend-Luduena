@@ -4,12 +4,14 @@ import productsModel from "../models/products.js";
 import { CustomError } from '../../errorsHandlers/customError.js';
 import { errorTypes } from '../../errorsHandlers/errorTypes.js';
 import { notFound, updateError } from "../../errorsHandlers/productsError.js"
+//Logger
+import logger from "../../utils/logger-env.js";
 
 
 export default class CartManager {
 
     constructor(){
-        console.log("Trabajando con CartManager")
+        logger.info("Trabajando con CartManager");
     }
 
     getAllCarts = async () => {
@@ -36,7 +38,7 @@ export default class CartManager {
                 }
             })
             .lean();
-        console.log(result)
+        logger.info(result)
         return result
     }
 
@@ -96,7 +98,7 @@ export default class CartManager {
             await cart.save();
             return true;
         } catch (error) {
-            console.error('Error al actualizar el carrito:', error);
+            logger.error('Error al actualizar el carrito:', error);
             return false;
         }
     }
@@ -121,7 +123,7 @@ export default class CartManager {
             return true; 
 
         } catch (error) {
-            console.error('Error al actualizar la cantidad del producto en el carrito:', error);
+            logger.error('Error al actualizar la cantidad del producto en el carrito:', error);
             return false;
         }
     
@@ -141,7 +143,7 @@ export default class CartManager {
     
             return true; 
         } catch (error) {
-            console.error('Error al eliminar todos los productos del carrito:', error);
+            logger.error('Error al eliminar todos los productos del carrito:', error);
             return false; 
         }
     }

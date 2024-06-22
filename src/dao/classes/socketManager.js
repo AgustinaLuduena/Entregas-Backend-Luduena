@@ -1,13 +1,15 @@
 //Manager
 import ProductManager from "../../ProductManager.js";
 import socketServer from "../../config/createSocket.js";
+//Logger
+import logger from "../../utils/logger-env.js";
 
 const productManager = new ProductManager();
 
 socketServer.on('connection', async socket =>{
 
     socket.on("conectionMessage", (data)=> {
-        console.log(data, "(server side)")
+        logger.info(data, "(server side)")
     });
 
     //List of produducts
@@ -20,13 +22,13 @@ socketServer.on('connection', async socket =>{
         if (result) {
             const products = await productManager.getProducts();
             socket.emit("info", products);
-            console.log("Producto correctamente agregado.")
+            logger.info("Producto correctamente agregado.")
         }
     });
 
     socket.on("addMessage", (addMessage) => {
-        console.log("Mensaje agregado", addMessage);
+        logger.info("Mensaje agregado", addMessage);
         socketServer.emit("addedMessage", addMessage);
     })
 
-    })
+})

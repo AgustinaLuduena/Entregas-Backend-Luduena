@@ -4,6 +4,8 @@ import { userManager, cartManager } from "../dao/factory.js";
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
 import { userNotFound } from "../errorsHandlers/productsError.js";
+//Logger
+import logger from "../utils/logger-env.js";
 
 //Get all user with populate
 export const getUsers = async (req, res) => {
@@ -25,7 +27,7 @@ export const getUserById = async (req, res) => {
               res.status(200).json({ user });
         }
         } catch (error) {
-        console.error(`Error al cargar el usuario: ${error}`);
+        logger.error(`Error al cargar el usuario: ${error}`);
         res.status(500).json({ error: `Error al recibir el usuario` });
         }
 }
@@ -43,13 +45,13 @@ export const createUser = async (req, res) => {
       newUser.role = "User";
 
       const createdUser = await userManager.createUser(newUser);
-      console.log(createdUser);
+      logger.info(createdUser);
 
       const populatedUser = await userManager.getUserWithCart(createdUser._id);
 
       res.status(201).json({ user: populatedUser });
   } catch (error) {
-      console.error(`Error al crear el usuario: ${error}`);
+      logger.error(`Error al crear el usuario: ${error}`);
       res.status(500).json({ error: 'Error al crear el usuario' });
   }
 };
@@ -81,7 +83,7 @@ export const updateUser = async (req, res) => {
             userNotFound())
         }
       } catch (error) {
-        console.error(`Error al actualizar el usuario: ${error}`);
+        logger.error(`Error al actualizar el usuario: ${error}`);
         res.status(500).json({ error: `Error al actualizar el usuario` });
       }
 }
@@ -100,7 +102,7 @@ export const deleteUser = async (req, res) => {
             userNotFound())
         }
       } catch (error) {
-        console.error(`Error al eliminar el usuario: ${error}`);
+        logger.error(`Error al eliminar el usuario: ${error}`);
         res.status(500).json({ error: `Error al eliminar el usuario` });
       }
 }

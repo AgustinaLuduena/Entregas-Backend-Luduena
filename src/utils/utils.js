@@ -1,9 +1,15 @@
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+//password
 import bcrypt from "bcrypt";
+//jwt
 import jwt from "jsonwebtoken";
-import config from './config/config.js';
+//config
+import config from '../config/config.js';
+//faker
 import {fakerES as faker } from "@faker-js/faker";
+//Logger
+import logger from './logger-env.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,7 +20,7 @@ export const createHash=(password)=>bcrypt.hashSync(password, bcrypt.genSaltSync
 
 //validate password
 export const isValidPassword = (user, password) => {
-  console.log(`Datos a validar: user-password: ${user.password}, password: ${password}`);
+  logger.info(`Datos a validar: user-password: ${user.password}, password: ${password}`);
   return bcrypt.compareSync(password, user.password);
 };
 

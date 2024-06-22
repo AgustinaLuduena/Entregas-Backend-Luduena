@@ -6,7 +6,7 @@ import handlebars from "express-handlebars";
 //Cookie parser
 import cookieParser from "cookie-parser";
 //Utils
-import __dirname from "../utils.js";
+import __dirname from "../utils/utils.js";
 //DB
 import MongoStore from 'connect-mongo';
 import config from './config.js';
@@ -16,6 +16,8 @@ import initializePassport from '../config/passport.config.js';
 import initializePassportJWT from '../config/jwt.config.js';
 //Cors
 import cors from "cors";
+//Logger
+import { loggerMiddleware } from "../utils/logger-env.js";
 
 
 const middlewares = async (app) => {
@@ -23,9 +25,11 @@ const middlewares = async (app) => {
     app.use(express.urlencoded({extended:true}));
     app.use(express.static(__dirname+'/public'));
     //Cookie parser
-    app.use(cookieParser())
+    app.use(cookieParser());
     //Cors
     app.use(cors());
+    //Logger
+    app.use(loggerMiddleware);
     //DB
     app.use(session({
         store: new MongoStore({

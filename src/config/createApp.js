@@ -1,7 +1,10 @@
 import express from 'express';
 import { Server as SocketServer } from 'socket.io';
 import http from 'http';
+//config
 import config from './config.js';
+//Logger
+import logger from "../utils/logger-env.js";
 
 export default function createExpressApp() {
     const app = express();
@@ -14,7 +17,7 @@ export default function createExpressApp() {
         res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
     });
 
-    server.listen(port, () => console.log("Server running on port: ", port));
+    server.listen(port, () => logger.info(`Server running on port: ${port}`));
 
     return app;
 }

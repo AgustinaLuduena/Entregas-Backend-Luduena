@@ -4,13 +4,14 @@ import { productManager, cartManager } from "../dao/factory.js";
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
 import { notFound } from "../errorsHandlers/productsError.js";
-
+//Logger
+import logger from "../utils/logger-env.js";
 
 export const index = async (req, res) => {
     try {
         res.render('index', {title: "Home"});
       } catch (error) {
-        console.error(error);
+        logger.error(error);
         res.status(500).send('Error interno del servidor');
       }
 }
@@ -19,7 +20,7 @@ export const register = async (req, res) => {
     try{
         res.render("register");
     } catch (err) {
-        console.error('Error:', err);
+        logger.error('Error:', err);
         res.status(500).send('Internal Server Error');
     }
 }
@@ -28,7 +29,7 @@ export const login = async (req, res) => {
     try{
         res.render("login");
     } catch (err) {
-        console.error('Error:', err);
+        logger.error('Error:', err);
         res.status(500).send('Internal Server Error');
     }
 }
@@ -39,7 +40,7 @@ export const profile = async (req, res) => {
         let user = req.user ? req.user : null;
         res.render("profile", { user: user });
     } catch (err) {
-        console.error('Error:', err);
+        logger.error('Error:', err);
         res.status(500).send('Internal Server Error');
     }
 }
@@ -50,7 +51,7 @@ export const realTimeProducts = async (req, res) => {
         res.render('realTimeProducts')
 
     } catch (err) {
-        console.error('Error:', err);
+        logger.error('Error:', err);
         res.status(500).send('Internal Server Error');
     }
 }
@@ -95,7 +96,7 @@ export const getProducts = async (req, res) => {
             result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort}` : "";
             result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
-            console.log(user)
+            logger.info(user);
             // res.render('products', {
             //     user: user,
             //     products: result.docs
@@ -137,7 +138,7 @@ export const getProducts = async (req, res) => {
         }  
 
     } catch (err) {
-        console.error('Error:', err);
+        logger.error('Error:', err);
         res.status(500).send('Internal Server Error');
     }
 }
@@ -163,7 +164,7 @@ export const getCartById = async (req, res) => {
         
 
       } catch (error) {
-        console.error('Error:', error);
+        logger.error('Error:', error);
         res.status(500).json('Internal Server Error');
       }
 }

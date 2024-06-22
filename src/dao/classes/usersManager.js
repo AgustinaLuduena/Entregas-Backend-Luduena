@@ -1,14 +1,15 @@
-import { createHash } from "../../utils.js";
+import { createHash } from "../../utils/utils.js";
 import userModel from "../models/users.js";
 //ErrorHandler
 import { CustomError } from '../../errorsHandlers/customError.js';
 import { errorTypes } from '../../errorsHandlers/errorTypes.js';
 import { dataError, notFound } from "../../errorsHandlers/productsError.js";
-
+//Logger
+import logger from "../../utils/logger-env.js";
 
 export default class UserManager {
   constructor() {
-    console.log("Constructor UserManager");
+    logger.info("Constructor UserManager");
   }
 
   getAll = async () => {

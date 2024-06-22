@@ -1,4 +1,5 @@
-import messagesModel from "../models/messages.js"
+import messagesModel from "../models/messages.js";
+import logger from "../../utils/logger-env.js";
 
 const DBChatManager = {
     getMessages: async (req, res) => {
@@ -10,7 +11,7 @@ const DBChatManager = {
             }
             res.json(messages);
         } catch (err) {
-            console.error('Error:', err);
+            logger.error('Error:', err);
             return res.status(500).json({ error: "Error en la base de datos", details: err.message });
         }
 
@@ -33,7 +34,7 @@ const DBChatManager = {
                 messagesModel: newMessage,
             });
         } catch (err) {
-            console.error('Error al guardar el mensaje:', err);
+            logger.error('Error al guardar el mensaje:', err);
             return res.status(500).json({ error: 'Error en la base de datos', details: err.message });
         }
     },

@@ -4,7 +4,8 @@ import config from "../config/config.js";
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
 import { loginError, authError, authorizationError } from "../errorsHandlers/productsError.js";
-
+//Logger
+import logger from '../utils/logger-env.js';
 
 //auth with session
 export function auth (req, res, next) {
@@ -73,7 +74,7 @@ export const checkAdminRole = (req, res, next) => {
         let requiredRoles = ["admin"]
 
         if(requiredRoles.includes(userRole)){
-          console.log(userRole)
+          logger.info(userRole)
           return next();
         }
 
@@ -108,7 +109,7 @@ export const checkAdminRole = (req, res, next) => {
         let requiredRoles = ["User"]
 
         if(requiredRoles.includes(userRole)){
-          console.log(userRole)
+          logger.info(userRole)
           return next();
         }
 
