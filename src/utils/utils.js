@@ -39,7 +39,7 @@ export const generateToken = (user) => {
 // Generar un token JWT para el mail de recuperación de contraseña
 export const generateRestorePassToken = (email) => {
   const JWT_SECRET = config.token;
-  return jwt.sign({ email }, JWT_SECRET, { expiresIn: "2m" });
+  return jwt.sign({ email }, JWT_SECRET, { expiresIn: "1h" });
 };
 
 export const verifyRestorePassToken = (token) => {
