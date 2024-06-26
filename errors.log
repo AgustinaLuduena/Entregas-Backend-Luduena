@@ -35,3 +35,9 @@
 {"level":"error","message":"Este es un mensaje de testing: error","timestamp":"2024-06-26T01:52:34.088Z"}
 {"level":"fatal","message":"Este es un mensaje de testing: fatal","timestamp":"2024-06-26T01:53:09.092Z"}
 {"level":"error","message":"Este es un mensaje de testing: error","timestamp":"2024-06-26T01:53:09.094Z"}
+{"level":"error","message":"Error al cambiar el rol del usuario: Error: Error updating the user role.","timestamp":"2024-06-26T16:25:06.403Z"}
+{"level":"error","message":"Error al cambiar el rol del usuario: Error: Error updating the user role.","timestamp":"2024-06-26T16:25:58.767Z"}
+{"level":"error","message":"Error al cambiar el rol del usuario: Error: Error updating the user role.","timestamp":"2024-06-26T16:26:01.375Z"}
+{"level":"error","message":"Error al cambiar el rol del usuario: Error: Error updating the user role.","timestamp":"2024-06-26T16:31:58.075Z"}
+{"level":"error","message":"Error al cambiar el rol del usuario: Error: Error updating the user role.","timestamp":"2024-06-26T16:32:04.472Z"}
+{"level":"error","message":"Error al cambiar el rol del usuario: Error: Error updating the user role.","timestamp":"2024-06-26T18:21:56.161Z"}

@@ -85,6 +85,34 @@ export default class UserManager {
         dataError())
     }
   }
-  
+
+  checkUserRole = async (id) => {
+    try {
+      let user = await userModel.findById(id)
+      if(!user) {
+          throw CustomError.CustomError(
+              "Error", `The User Id ${id} was not found.`, 
+              errorTypes.ERROR_NOT_FOUND, 
+              notFound(id))
+      } else {
+          if (user.role === "User") {
+            user.role = "Premium";
+            await user.save();
+            return user;
+          } else if(user.role === "Premium") {
+            user.role = "User";
+            await user.save();
+            return user;
+          } else {
+            return false;
+          }
+      }
+    } catch (error) {
+        throw CustomError.CustomError(
+          "Error", `Error updating the user role.`, 
+          errorTypes.ERROR_DATA, 
+          dataError())
+    }
+  };
 
 }

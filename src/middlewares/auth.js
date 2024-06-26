@@ -6,6 +6,8 @@ import { errorTypes } from '../errorsHandlers/errorTypes.js';
 import { loginError, authError, authorizationError } from "../errorsHandlers/productsError.js";
 //Logger
 import logger from '../utils/logger-env.js';
+//Managers
+import { userManager } from '../dao/factory.js';
 
 //auth with session
 export function auth (req, res, next) {
@@ -92,7 +94,36 @@ export const checkAdminRole = (req, res, next) => {
   };
 
 // Middleware de autenticación USER
-  export const checkUserRole = (req, res, next) => {
+  export const checkUserRole = async (req, res, next) => {
+    const token = req.cookies[config.token];
+    if (!token) {
+      throw CustomError.CustomError(
+        "Error", `Access denied.`, 
+        errorTypes.ERROR_AUTHENTICATION, 
+        authError())
+    }
+
+    try {
+        const decoded = jwt.verify(token, config.token);
+        req.user = decoded;
+        
+        let user = req.user.user
+        if(!user) {return res.status(404).json({ error: 'Usuario no encontrado' });}
+        let checkDB = await userManager.getById(user._id)
+          if(checkDB.role === 'User') {
+            logger.info(userRole)
+            return next();
+          } else {
+              return res.status(403).json({ error: 'Acceso no autorizado' });
+          }
+
+    } catch (error) {
+        return res.status(403).json({ error: 'Acceso no autorizado' });
+    }
+  };
+
+  // Middleware de autenticación USER PREMIUM
+  export const checkPremiumRole = (req, res, next) => {
     const token = req.cookies[config.token];
     if (!token) {
       throw CustomError.CustomError(
@@ -106,7 +137,7 @@ export const checkAdminRole = (req, res, next) => {
         req.user = decoded;
         const userRole = req.user.user.role;
 
-        let requiredRoles = ["User"]
+        let requiredRoles = ["Premium"]
 
         if(requiredRoles.includes(userRole)){
           logger.info(userRole)
@@ -127,3 +158,29 @@ export const checkAdminRole = (req, res, next) => {
   };
 
 
+export const isUserOrPremium = async (req, res, next) => {
+    let user = req.user.user
+    if(!user) {return res.status(404).json({ error: 'Usuario no encontrado' });}
+
+    let checkDB = await userManager.getById(user._id)
+
+    if(checkDB && checkDB.role === 'User' || checkDB.role === 'Premium') {
+        next();
+    }
+    else {
+        return res.status(403).json({ error: 'Acceso no autorizado' });
+    }
+}
+
+export const isPremiumOrAdmin = async (req, res, next) => {
+  let user = req.user.user
+  if(!user) {return res.status(404).json({ error: 'Usuario no encontrado' });}
+
+  let checkDB = await userManager.getById(user._id)
+  if(checkDB.role === 'Premium' || checkDB.role === 'admin') {
+      next();
+  }
+  else {
+      return res.status(403).json({ error: 'Acceso no autorizado' });
+  }
+}

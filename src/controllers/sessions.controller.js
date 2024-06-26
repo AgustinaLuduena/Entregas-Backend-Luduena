@@ -2,7 +2,7 @@ import userModel from "../dao/models/users.js";
 //Password
 import { createHash, isValidPassword, verifyRestorePassToken } from "../utils/utils.js";
 //Factory
-import { authManager } from "../dao/factory.js";
+import { authManager, userManager } from "../dao/factory.js";
 //ENV
 import config from "../config/config.js";
 //DTO
@@ -45,10 +45,22 @@ export const loginJWT = async (req, res) => {
 //Estrategia current for JWT
 export const current = async (req, res) => {
     try{
-      let user = req.user
-      let userDTO = new CurrentUserDTO(user.user)
-      let result = userDTO.currentUser
-      res.json( result );
+      let user = req.user.user
+      if (user.role === "admin") {
+        let userDTO = new CurrentUserDTO(user)
+        let result = userDTO.currentUser
+        res.json( result );
+      } else {
+        let userDB = await userManager.getById(user._id)
+          if (!userDB) {
+            logger.error(`Error. Usuario no encontrado: ${error}`);
+            res.status(404).json({ error: 'Error. Usuario no encontrado. Inicie sesión nuevamente.' });
+          } else {
+            let userDTO = new CurrentUserDTO(userDB)
+            let result = userDTO.currentUser
+            res.json( result );
+          }
+      }
     } catch {
         res.status(500).json({ message: "Error del servidor." });
     }

@@ -106,3 +106,25 @@ export const deleteUser = async (req, res) => {
         res.status(500).json({ error: `Error al eliminar el usuario` });
       }
 }
+
+//Update the user role to "premium"
+export const changeUserRole = async (req, res) => {
+  try {
+      const { id } = req.params;
+
+      const result = await userManager.checkUserRole(id);
+      if (result) {
+        const userRole = result.role
+        res.status(200).json({ message: `Rol del usuario actualizado a ${userRole}` });
+        logger.info(`Rol del usuario actualizado a ${userRole}`)
+      } else {
+        throw CustomError.CustomError(
+          "Error", `User id ${id} was not found.`,
+          errorTypes.ERROR_NOT_FOUND, 
+          userNotFound())
+      }
+    } catch (error) {
+      logger.error(`Error al cambiar el rol del usuario: ${error}`);
+      res.status(500).json({ error: `Error al cambiar el rol del usuario` });
+    }
+}

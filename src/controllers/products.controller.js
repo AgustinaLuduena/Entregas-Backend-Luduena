@@ -1,5 +1,6 @@
 //Factory
 import { productManager } from '../dao/factory.js';
+import { userManager } from '../dao/factory.js';
 //ErrorHandler
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
@@ -111,6 +112,7 @@ export const getProductByID = async (req, res) => {
 export const addProduct = async (req, res) => {
     try {
         const {title, code, price, stock, category} = req.body
+        const owner = req.user.user._id
 
         // Validate required fields
         validateProductFields(["title", "code", "price", "stock", "category"], req.body);
@@ -133,14 +135,30 @@ export const addProduct = async (req, res) => {
                 validateProduct(req.body))
         }
 
-        let newProduct = {title, code, price, stock, category}
-        let addedSuccessfully = await productManager.addProduct(newProduct);
+        //Check for owner
+        if (!owner) {
+            logger.warning(`User no encontrado: ${owner}`);
+            let newProduct = {title, code, price, stock, category}
+            let addedSuccessfully = await productManager.addProduct(newProduct);
         
-        if (addedSuccessfully) {
-            return res.status(200).json({ status: `Product with title: ${newProduct.title}, was successfully created.` });
+            if (addedSuccessfully) {
+                return res.status(200).json({ status: `Product with title: ${newProduct.title}, was successfully created.` });
+            } else {
+                return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+            }
+
         } else {
-            return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+            let newProduct = {title, code, price, stock, category, owner}
+
+            let addedSuccessfully = await productManager.addProduct(newProduct);
+            
+            if (addedSuccessfully) {
+                return res.status(200).json({ status: `Product with title: ${newProduct.title}, was successfully created.` });
+            } else {
+                return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+            }
         }
+        
     } catch (error) {
         return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
 
@@ -169,16 +187,16 @@ export const updateProduct = async (req, res) => {
     try {
         let pid = req.params.pid;
         let productData = req.body;
+        let userId = req.user.user._id
 
-        const updateSuccessfully = await productManager.updateProduct(pid, productData)
+        const product = await productManager.getProductByID(pid);
+        const user = await userManager.getById(userId);
 
-        if (updateSuccessfully) {
+        if (req.user.user.role === 'admin' || (user.role === 'Premium' && user && user._id.toString() == product.owner.toString()) || req.user.user.role === 'admin' && !product.owner) {
+            await productManager.updateProduct(pid, productData)
             return res.status(200).json({ status: `Product with ID ${pid} was successfully updated.` });
         } else {
-            throw CustomError.CustomError(
-                "Error", `The product Id ${pid} was not found.`, 
-                errorTypes.ERROR_NOT_FOUND, 
-                notFound(pid))
+            return res.status(403).json({ message: 'Unahutorized user to update products.' });
         }
     } catch (error) {
         return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
@@ -191,15 +209,18 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
     try {
         let pid =  req.params.pid
-        const selectedProduct = await productManager.deleteProduct(pid);
-        if(!selectedProduct){
-            throw CustomError.CustomError(
-                "Error", `The product Id ${pid} was not found. Cannot delete product.`, 
-                errorTypes.ERROR_NOT_FOUND, 
-                notFound(pid))
-        } else {
+        let userId = req.user.user._id
+
+        const product = await productManager.getProductByID(pid);
+        const user = await userManager.getById(userId);
+
+        if (req.user.user.role === 'admin' || (user.role === 'Premium' && user && user._id.toString() == product.owner.toString()) || req.user.user.role === 'admin' && !product.owner) {
+            await productManager.deleteProduct(pid);
             return res.status(200).json({status: `Product with ID ${pid} deleted successfully.`});
+        } else {
+            return res.status(403).json({ message: 'Unahutorized user to delete products.' });
         }
+    
       } catch (error) {
         return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
 
