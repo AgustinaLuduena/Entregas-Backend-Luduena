@@ -485,7 +485,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/api/products/66315b1a789d7a753fb0a8a8",
+							"raw": "http://localhost:8081/api/products/667c31366bcf86ffb943a47b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -494,14 +494,14 @@
 							"path": [
 								"api",
 								"products",
-								"66315b1a789d7a753fb0a8a8"
+								"667c31366bcf86ffb943a47b"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Create a new product (admin only)",
+					"name": "Create a new product (admin and PremiumUser only)",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -531,7 +531,7 @@
 					"response": []
 				},
 				{
-					"name": "Update a product (admin only)",
+					"name": "Update a product (admin and PremiumUser only)",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -545,7 +545,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/api/products/66314df6acb3b7caac87f631",
+							"raw": "http://localhost:8081/api/products/667c31366bcf86ffb943a47b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -554,28 +554,19 @@
 							"path": [
 								"api",
 								"products",
-								"66314df6acb3b7caac87f631"
+								"667c31366bcf86ffb943a47b"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete a product  (admin only)",
+					"name": "Delete a product (admin and PremiumUser only)",
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "//ID del último producto de la lista: \"Remera Brillitos\"\n//665fb06e56dd8d9632a74ab1\n//Se puede borrar",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "http://localhost:8081/api/products/665fb06e56dd8d9632a74ab1",
+							"raw": "http://localhost:8081/api/products/667c3d7b5860b22d18c38289",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -584,7 +575,7 @@
 							"path": [
 								"api",
 								"products",
-								"665fb06e56dd8d9632a74ab1"
+								"667c3d7b5860b22d18c38289"
 							]
 						}
 					},
@@ -621,7 +612,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/api/user/665a6ceda99a04faefe61d24",
+							"raw": "http://localhost:8081/api/user/664d246a1e43939605b2d191",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -630,7 +621,29 @@
 							"path": [
 								"api",
 								"user",
-								"665a6ceda99a04faefe61d24"
+								"664d246a1e43939605b2d191"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change User Role by Id (User o PremiumUser only)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/users/premium/664d246a1e43939605b2d191",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"users",
+								"premium",
+								"664d246a1e43939605b2d191"
 							]
 						}
 					},
