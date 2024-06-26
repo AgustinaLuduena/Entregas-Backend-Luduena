@@ -5,6 +5,7 @@ export let productManager;
 export let userManager;
 export let categoryManager;
 export let authManager;
+export let mailingService;
 
 switch (config.persistence) {
     case "MONGODB" :
@@ -24,12 +25,16 @@ switch (config.persistence) {
         const {default : AuthManager } = await import (
             "./classes/authManager.js"
         );
+        const {default : MailingService } = await import (
+            "../services/mailing.js"
+        );
 
         cartManager = new CartManager();
         productManager = new DBProductManager();
         userManager = new UserManager();
         categoryManager = new CategoryManager();
         authManager = new AuthManager();
+        mailingService = new MailingService();
         break;
  
     case "FS":

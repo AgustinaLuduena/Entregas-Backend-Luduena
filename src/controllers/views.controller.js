@@ -171,7 +171,16 @@ export const getCartById = async (req, res) => {
 
 export const restore = async (req, res) => {
     try{
-        res.render("restore");
+        const { token } = req.query;
+        res.render("restore", { token });
+    }catch (error){
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+    }
+}
+
+export const forgottenPass = async (req, res) => {
+    try{
+        res.render("forgottenPass");
     }catch (error){
         return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
     }

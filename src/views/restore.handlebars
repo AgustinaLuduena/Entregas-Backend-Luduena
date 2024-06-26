@@ -1,12 +1,17 @@
 <div>
     <h1>Restaura la contraseña del usuario</h1>
     <form id="restoreForm">
-        <label>Correo electrónico</label>
+        <input type="hidden" name="token" value="{{ token }}"> <!-- Aquí deberías pasar el token recibido -->
+        <label>Correo electrónico del usuario</label>
         <input name="email">
         <label>Nueva contraseña</label>
         <input type="password" name="password">
         <input type="submit">
     </form>
     <div id="restoreSuccess"></div>
+    <hr>
+    <div>
+        <a href="/login">Volver al inicio.</a>
+    </div>
 </div>
 <script src="./js/restore.js"></script>

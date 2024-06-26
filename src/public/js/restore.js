@@ -1,4 +1,3 @@
-
 const form = document.getElementById("restoreForm");
 const responseSuccess = document.getElementById("restoreSuccess");
 const successMsg = document.createElement('p');
@@ -20,10 +19,12 @@ form.addEventListener("submit", (e) => {
     if (response.status === 200) {
       console.log('Successful password restore.');
       //Try sweet alert.
-      successMsg.innerHTML = `<p>Contraseña actualizada con éxito. <a href="/login">Volver al inicio.</a></p>`;
+      successMsg.innerHTML = `<p>Contraseña actualizada con éxito.</p>`;
       responseSuccess.appendChild(successMsg)
     } else {
       console.log("Something went wrong. Try again.");
+      successMsg.innerHTML = `<p>Error al actualizar la contraseña. Intente con una contraseña diferente.</p>`;
+      responseSuccess.appendChild(successMsg)
     }
   });
 });

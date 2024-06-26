@@ -5,6 +5,8 @@ import http from 'http';
 import config from './config.js';
 //Logger
 import logger from "../utils/logger-env.js";
+//Dirname
+import __dirname from '../dirname.js';
 
 export default function createExpressApp() {
     const app = express();

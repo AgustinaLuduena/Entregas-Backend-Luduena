@@ -3,7 +3,7 @@ import { productManager } from '../dao/factory.js';
 //ErrorHandler
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
-import {notFound, validateProduct} from "../errorsHandlers/productsError.js"
+import {notFound, validateProduct, dataError} from "../errorsHandlers/productsError.js"
 import { validateProductFields } from '../middlewares/validateFields.js';
 //Logger
 import logger from "../utils/logger-env.js";

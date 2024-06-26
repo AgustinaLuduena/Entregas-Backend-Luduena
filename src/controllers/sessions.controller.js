@@ -1,5 +1,6 @@
 import userModel from "../dao/models/users.js";
-import { createHash } from "../utils/utils.js";
+//Password
+import { createHash, isValidPassword, verifyRestorePassToken } from "../utils/utils.js";
 //Factory
 import { authManager } from "../dao/factory.js";
 //ENV
@@ -18,24 +19,7 @@ export const register = async (req, res) => {
       }
 }
 
-//Login con session
-// export const login = async (req, res) => {
-//     if(!req.user)return res.status(401).send({ error: "Failed to process login!" })
-
-//     const user = req.user;
-
-//     req.session.user = {
-//         name: `${user.first_name} ${user.last_name}`,
-//         email: user.email,
-//         age: user.age,
-//         cart: user.cart,
-//         role: user.role,
-//     };
-//     res.status(201).send({ status: "success", payload: req.user });
-// }
-
-
-
+//Login 
 export const loginJWT = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -58,7 +42,6 @@ export const loginJWT = async (req, res) => {
   }
 };
 
-
 //Estrategia current for JWT
 export const current = async (req, res) => {
     try{
@@ -70,19 +53,6 @@ export const current = async (req, res) => {
         res.status(500).json({ message: "Error del servidor." });
     }
 }
-
-
-//Destroy the session = LOG OUT route con session
-// export const logout = async (req, res) => {
-//     req.session.destroy((err) => {
-//         if (err) {
-//             console.error('Error al destruir la sesión:', err);
-//             res.status(500).send('Error interno del servidor');
-//         } else {
-//             res.redirect('http://localhost:8081/');
-//         }
-//     });
-// }
 
 //Destroy the session with cookie = LOG OUT route
 export const logoutJWT = async (req, res) => {
@@ -96,26 +66,34 @@ export const logoutJWT = async (req, res) => {
   }
 }
 
-//Restore password
 export const restore = async (req, res) => {
-    const { email, password } = req.body;
+  const { token, email, password } = req.body;
+
+  try {
+      const verifyToken = verifyRestorePassToken(token);
   
-    if (!email || !password) {
-        return res.status(400).json({ status: "error", error: "Please, complete all the information require."});
-    }
+      if (!email || !password) {
+          return res.status(400).json({ status: "error", error: "Please, complete all the information require."});
+      }
+      const user = await userModel.findOne({ email });
 
-    const user = await userModel.findOne({ email });
+      if (!user) {
+          return res.status(404).json({ status: "error", message: "User was not found." });
+      }
 
-    if (!user){
-        return res.status(404).json({ status: "error", message: "No se encuentró el usuario." });
-    }
+      if (isValidPassword(user, password)) {
+          return res.status(400).json({ status: "error", message: "La contraseña no puede ser igual a la anterior." });
+      }
 
-    const newPass = createHash(password);
+      const newPass = createHash(password);
+      await userModel.updateOne({ _id: user._id }, { $set: { password: newPass } });
+      res.status(200).json({ status: "success", message: "Contraseña actualizada exitosamente." });
 
-    await userModel.updateOne({ _id: user._id }, { $set: { password: newPass } });
-
-    res.status(200).json({ status: "success", message: "Password actualizado" });
-}
+  } catch (error) {
+      logger.error("Error al restablecer la contraseña:", error);
+      res.status(500).json({ status: "error", message: "Error al restablecer la contraseña. Inténtelo nuevamente." });
+  }
+};
 
 //Login using Github
 export const github = async (req, res) => {

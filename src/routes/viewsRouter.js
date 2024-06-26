@@ -2,10 +2,11 @@ import { Router } from "express";
 //ChatManager - without controller
 import DBChatManager from "../dao/classes/DBChatManager.js";
 //Views controller
-import {index, register, login, profile, realTimeProducts, getProducts, getCartById, restore} from "../controllers/views.controller.js"
+import {index, register, login, profile, realTimeProducts, getProducts, getCartById, restore, forgottenPass} from "../controllers/views.controller.js"
 //Middlewares
 import { auth, verifyUser } from "../middlewares/auth.js";
 import { active } from "../middlewares/activeSession.js";
+import { verifyTokenExpiration } from "../utils/utils.js";
 
 //instanciación
 const viewsRouter = Router();
@@ -17,7 +18,8 @@ viewsRouter.get('/', active, index);
 viewsRouter.get("/register", register);
 viewsRouter.get("/login", login);
 viewsRouter.get('/profile', verifyUser, profile);
-viewsRouter.get("/restore", restore);
+viewsRouter.get("/restore", verifyTokenExpiration, restore);
+viewsRouter.get("/forgottenPass", forgottenPass);
 
 // REAL TIME PRODUCTS (FS) - Not working
 viewsRouter.get("/api/products/realTimeProducts", realTimeProducts);

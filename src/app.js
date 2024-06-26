@@ -1,4 +1,4 @@
-import __dirname from './utils/utils.js';
+import __dirname from './dirname.js';
 import connectDb from './config/database.js';
 import router from './routes/apiRoutes.js';
 import middlewares from './config/middlewaresConfig.js';

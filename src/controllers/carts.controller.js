@@ -1,4 +1,4 @@
-import __dirname from "../utils/utils.js";
+import __dirname from "../dirname.js";
 //Factory
 import {cartManager} from "../dao/factory.js"
 //Models

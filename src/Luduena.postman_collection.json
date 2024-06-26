@@ -103,6 +103,25 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "forgotten password view",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/forgottenPass",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"forgottenPass"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -812,6 +831,66 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "(x) Leer JSON - Restore Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "//La funcionalidad fue limitada en el 3er integrador para ser utilizado con mailing. No le dejará restablecer la contraseña sin el token necesario.\n//Deberá utilizar las vistas para probar esta funcionalidad.\n\n{\n    \"email\": \"may@mail.com\",\n    \"password\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/sessions/restore",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"sessions",
+								"restore"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Restore Password Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "//La funcionalidad fue limitada en el 3er integrador para ser utilizado con mailing. No le dejará restablecer la contraseña sin el token necesario (Esta funcionalidad está mejor pensada para las vistas).\n//Proporcione aquí el mail REAL al que recibirá el correo para restaurar su contraseña. Luego, en la vista \"/restore\", deberá poner el email del usuario que ya esté registrado en la base de datos, que aún no tienen ningún control que lo obligue a ser un mail real (es decir, que pueden ser diferentes emails).\n//De ejemplo está mi corro electrónico.\n{\n    \"email\": \"agusluduena@live.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/sessions/restoreReq",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"sessions",
+								"restoreReq"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -903,7 +982,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/api/category/66620f2ed731ed36cd62275b",
+							"raw": "http://localhost:8081/api/category/66314a18b4275625c52199ee",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -912,7 +991,7 @@
 							"path": [
 								"api",
 								"category",
-								"66620f2ed731ed36cd62275b"
+								"66314a18b4275625c52199ee"
 							]
 						}
 					},
@@ -968,6 +1047,30 @@
 							"path": [
 								"api",
 								"mockingproducts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Logger",
+			"item": [
+				{
+					"name": "Logger Test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/loggerTest",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"loggerTest"
 							]
 						}
 					},

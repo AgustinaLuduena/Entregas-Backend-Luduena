@@ -5,8 +5,8 @@ import session from 'express-session';
 import handlebars from "express-handlebars";
 //Cookie parser
 import cookieParser from "cookie-parser";
-//Utils
-import __dirname from "../utils/utils.js";
+//Dirname
+import __dirname from "../dirname.js";
 //DB
 import MongoStore from 'connect-mongo';
 import config from './config.js';

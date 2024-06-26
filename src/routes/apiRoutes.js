@@ -8,6 +8,11 @@ import userRouter from "./userRouter.js";
 import mockingRouter from "./mockingRoter.js"
 //Logger Testing
 import logger from "../utils/logger-env.js";
+//import { mailTranstport } from "../controllers/mail.controller.js";
+import MailingService from "../services/mailing.js";
+import config from "../config/config.js";
+
+const service = new MailingService()
 
 const router = (app) => {
     app.use(viewsRouter);
@@ -30,7 +35,7 @@ const router = (app) => {
         logger.debug("Este es un mensaje de testing: depuración");
 
 
-        res.status(200).json({message: "Logs probados correctamente"});
+        res.status(200).json({message: "Logs probados correctamente. Revise su consola para visualizarlos."});
       } catch (error) {
         logger.error("Error al probar los logs:", error);
         res.status(500).json({message: "Error al probar los logs"});
