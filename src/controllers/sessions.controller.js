@@ -69,7 +69,7 @@ export const current = async (req, res) => {
 //Destroy the session with cookie = LOG OUT route
 export const logoutJWT = async (req, res) => {
   try {
-    authManager.borrarCookie(res, config.token);
+    authManager.clearCookie(res, config.token);
     res.redirect('http://localhost:8081/');
     logger.info("Ha cerrado su sesión correctamente.");
   } catch (error) {

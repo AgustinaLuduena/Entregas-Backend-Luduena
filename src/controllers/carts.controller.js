@@ -198,14 +198,14 @@ export const purchase = async (req, res) => {
             notFound(item.product))
         }
         if (product.stock >= item.quantity) {
-            // Suficiente stock, reducir stock y agregar a la compra
+            // Enough stock, reduce stock and add to purchase
             product.stock -= item.quantity;
             await product.save();
 
             totalPurchaseAmount += product.price*item.quantity;
             productsToPurchase.push(item);
         } else {
-            // No suficiente stock, mantener en el carrito
+            // Insufficient stock, keep in cart
             productsToKeepInCart.push(item);
         }
       }
@@ -218,7 +218,7 @@ export const purchase = async (req, res) => {
       let userDTO = new CurrentUserDTO(user);
       let userId = user._id;
 
-      //Generar la compra
+      //Generate purchase
       const purchase = new Purchase({
           user: userId,
           products: productsToPurchase.map(item => ({
@@ -227,7 +227,7 @@ export const purchase = async (req, res) => {
           })),
       })
 
-      //Crear el ticket de compra con los productos que se pueden comprar
+      // Create purchase ticket with purchasable products
       const ticket = new Ticket({
           code: generateRandomCode(10),
           purchaseDatetime: new Date(),
@@ -243,10 +243,9 @@ export const purchase = async (req, res) => {
       });
 
       await ticket.save();
-
       await purchase.save();
 
-      // Limpiar el carrito y mantener los productos que no se pudieron comprar
+      // Clear cart and keep products that couldn't be purchased
       await cartManager.clearCart(cid);
       await cartManager.updatePurchasedCart(cid, productsToKeepInCart, totalPurchaseAmount);
 

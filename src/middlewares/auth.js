@@ -175,12 +175,15 @@ export const isUserOrPremium = async (req, res, next) => {
 export const isPremiumOrAdmin = async (req, res, next) => {
   let user = req.user.user
   if(!user) {return res.status(404).json({ error: 'Usuario no encontrado' });}
-
-  let checkDB = await userManager.getById(user._id)
-  if(checkDB.role === 'Premium' || checkDB.role === 'admin') {
-      next();
-  }
-  else {
+  if(user.role === 'admin') {
+    next();
+  } else {
+    let checkDB = await userManager.getById(user._id)
+    if(checkDB.role === 'Premium') {
+        next();
+    } else {
       return res.status(403).json({ error: 'Acceso no autorizado' });
+    }
   }
+  
 }

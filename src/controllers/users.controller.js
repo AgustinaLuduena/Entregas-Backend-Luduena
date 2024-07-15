@@ -1,3 +1,134 @@
+// //Factory
+// import { userManager, cartManager } from "../dao/factory.js";
+// //ErrorHandler
+// import { CustomError } from '../errorsHandlers/customError.js';
+// import { errorTypes } from '../errorsHandlers/errorTypes.js';
+// import { userNotFound } from "../errorsHandlers/productsError.js";
+// //Logger
+// import logger from "../utils/logger-env.js";
+
+// //Get all user with populate
+// export const getUsers = async (req, res) => {
+//     const users = await userManager.getAllUsersWithCart();
+//     res.status(200).json({ users });
+// }
+
+// //Get user by ID
+// export const getUserById = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const user = await userManager.getById(id);
+//         if (!user) {
+//               throw CustomError.CustomError(
+//               "Error", `User id ${id} was not found.`,
+//               errorTypes.ERROR_NOT_FOUND, 
+//               userNotFound())   
+//         } else {  
+//               res.status(200).json({ user });
+//         }
+//         } catch (error) {
+//         logger.error(`Error al cargar el usuario: ${error}`);
+//         res.status(500).json({ error: `Error al recibir el usuario` });
+//         }
+// }
+
+// //Create a new user with role and cart
+// export const createUser = async (req, res) => {
+//   try {
+//       const newUser = req.body;
+
+//       if (!newUser.cart) {
+//         const newCart = await cartManager.createCart();
+//         newUser.cart = newCart._id;
+//       }
+
+//       newUser.role = "User";
+
+//       const createdUser = await userManager.createUser(newUser);
+//       logger.info(createdUser);
+
+//       const populatedUser = await userManager.getUserWithCart(createdUser._id);
+
+//       res.status(201).json({ user: populatedUser });
+//   } catch (error) {
+//       logger.error(`Error al crear el usuario: ${error}`);
+//       res.status(500).json({ error: 'Error al crear el usuario' });
+//   }
+// };
+
+
+// /* Modelo para Postman
+// {
+//     "first_name": "Ejemplo",
+//     "last_name": "Ejemplo",
+//     "email": "ejemplo@mail.com",
+//     "password" : "123",
+//     "age": "20"
+// }
+// */
+
+
+// //Update existing user
+// export const updateUser = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const updatedUser = req.body;
+//         const result = await userManager.updateUser(id, updatedUser);
+//         if (result) {
+//           res.status(200).json({ message: "Usuario actualizado exitosamente" });
+//         } else {
+//           throw CustomError.CustomError(
+//             "Error", `User id ${id} was not found.`,
+//             errorTypes.ERROR_NOT_FOUND, 
+//             userNotFound())
+//         }
+//       } catch (error) {
+//         logger.error(`Error al actualizar el usuario: ${error}`);
+//         res.status(500).json({ error: `Error al actualizar el usuario` });
+//       }
+// }
+
+// //Delete user from the db
+// export const deleteUser = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const deletedUser = await userManager.deleteUser(id);
+//         if (deletedUser) {
+//           res.status(200).json({ message: "Usuario eliminado exitosamente" });
+//         } else {
+//             throw CustomError.CustomError(
+//             "Error", `User id ${id} was not found.`,
+//             errorTypes.ERROR_NOT_FOUND, 
+//             userNotFound())
+//         }
+//       } catch (error) {
+//         logger.error(`Error al eliminar el usuario: ${error}`);
+//         res.status(500).json({ error: `Error al eliminar el usuario` });
+//       }
+// }
+
+// //Update the user role to "premium"
+// export const changeUserRole = async (req, res) => {
+//   try {
+//       const { id } = req.params;
+
+//       const result = await userManager.checkUserRole(id);
+//       if (result) {
+//         const userRole = result.role
+//         res.status(200).json({ message: `Rol del usuario actualizado a ${userRole}` });
+//         logger.info(`Rol del usuario actualizado a ${userRole}`)
+//       } else {
+//         throw CustomError.CustomError(
+//           "Error", `User id ${id} was not found.`,
+//           errorTypes.ERROR_NOT_FOUND, 
+//           userNotFound())
+//       }
+//     } catch (error) {
+//       logger.error(`Error al cambiar el rol del usuario: ${error}`);
+//       res.status(500).json({ error: `Error al cambiar el rol del usuario` });
+//     }
+// }
+
 //Factory
 import { userManager, cartManager } from "../dao/factory.js";
 //ErrorHandler
@@ -7,124 +138,116 @@ import { userNotFound } from "../errorsHandlers/productsError.js";
 //Logger
 import logger from "../utils/logger-env.js";
 
-//Get all user with populate
 export const getUsers = async (req, res) => {
-    const users = await userManager.getAllUsersWithCart();
-    res.status(200).json({ users });
-}
+    try {
+        const users = await userManager.getAllUsers();
+        res.status(200).json({ users });
+    } catch (error) {
+        logger.error(`Error fetching users: ${error}`);
+        res.status(500).json({ error: 'Error fetching users' });
+    }
+};
 
-//Get user by ID
 export const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
         const user = await userManager.getById(id);
         if (!user) {
-              throw CustomError.CustomError(
-              "Error", `User id ${id} was not found.`,
-              errorTypes.ERROR_NOT_FOUND, 
-              userNotFound())   
-        } else {  
-              res.status(200).json({ user });
+            throw CustomError.CustomError(
+                "Error", `User with id ${id} not found.`,
+                errorTypes.ERROR_NOT_FOUND,
+                userNotFound()
+            );
+        } else {
+            res.status(200).json({ user });
         }
-        } catch (error) {
-        logger.error(`Error al cargar el usuario: ${error}`);
-        res.status(500).json({ error: `Error al recibir el usuario` });
-        }
-}
-
-//Create a new user with role and cart
-export const createUser = async (req, res) => {
-  try {
-      const newUser = req.body;
-
-      if (!newUser.cart) {
-        const newCart = await cartManager.createCart();
-        newUser.cart = newCart._id;
-      }
-
-      newUser.role = "User";
-
-      const createdUser = await userManager.createUser(newUser);
-      logger.info(createdUser);
-
-      const populatedUser = await userManager.getUserWithCart(createdUser._id);
-
-      res.status(201).json({ user: populatedUser });
-  } catch (error) {
-      logger.error(`Error al crear el usuario: ${error}`);
-      res.status(500).json({ error: 'Error al crear el usuario' });
-  }
+    } catch (error) {
+        logger.error(`Error fetching user: ${error}`);
+        res.status(500).json({ error: 'Error fetching user' });
+    }
 };
 
+export const createUser = async (req, res) => {
+    try {
+        const newUser = req.body;
 
-/* Modelo para Postman
-{
-    "first_name": "Ejemplo",
-    "last_name": "Ejemplo",
-    "email": "ejemplo@mail.com",
-    "password" : "123",
-    "age": "20"
-}
-*/
+        if (!newUser.cart) {
+            const newCart = await cartManager.createCart();
+            newUser.cart = newCart._id;
+        }
 
+        newUser.role = "User";
 
-//Update existing user
+        const createdUser = await userManager.createUser(newUser);
+
+        const populatedUser = await userManager.getUserWithCart(createdUser._id);
+
+        res.status(201).json({ user: populatedUser });
+        logger.info("User created successfully")
+    } catch (error) {
+        logger.error(`Error creating user: ${error}`);
+        res.status(500).json({ error: 'Error creating user' });
+    }
+};
+
 export const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
         const updatedUser = req.body;
         const result = await userManager.updateUser(id, updatedUser);
         if (result) {
-          res.status(200).json({ message: "Usuario actualizado exitosamente" });
+            res.status(200).json({ message: "User updated successfully" });
+            logger.info("User updated successfully")
         } else {
-          throw CustomError.CustomError(
-            "Error", `User id ${id} was not found.`,
-            errorTypes.ERROR_NOT_FOUND, 
-            userNotFound())
+            throw CustomError.CustomError(
+                "Error", `User with id ${id} not found.`,
+                errorTypes.ERROR_NOT_FOUND,
+                userNotFound()
+            );
         }
-      } catch (error) {
-        logger.error(`Error al actualizar el usuario: ${error}`);
-        res.status(500).json({ error: `Error al actualizar el usuario` });
-      }
-}
+    } catch (error) {
+        logger.error(`Error updating user: ${error}`);
+        res.status(500).json({ error: 'Error updating user' });
+    }
+};
 
-//Delete user from the db
 export const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
         const deletedUser = await userManager.deleteUser(id);
         if (deletedUser) {
-          res.status(200).json({ message: "Usuario eliminado exitosamente" });
+            res.status(200).json({ message: "User deleted successfully" });
+            logger.info("User deleted successfully")
         } else {
             throw CustomError.CustomError(
-            "Error", `User id ${id} was not found.`,
-            errorTypes.ERROR_NOT_FOUND, 
-            userNotFound())
+                "Error", `User with id ${id} not found.`,
+                errorTypes.ERROR_NOT_FOUND,
+                userNotFound()
+            );
         }
-      } catch (error) {
-        logger.error(`Error al eliminar el usuario: ${error}`);
-        res.status(500).json({ error: `Error al eliminar el usuario` });
-      }
-}
-
-//Update the user role to "premium"
-export const changeUserRole = async (req, res) => {
-  try {
-      const { id } = req.params;
-
-      const result = await userManager.checkUserRole(id);
-      if (result) {
-        const userRole = result.role
-        res.status(200).json({ message: `Rol del usuario actualizado a ${userRole}` });
-        logger.info(`Rol del usuario actualizado a ${userRole}`)
-      } else {
-        throw CustomError.CustomError(
-          "Error", `User id ${id} was not found.`,
-          errorTypes.ERROR_NOT_FOUND, 
-          userNotFound())
-      }
     } catch (error) {
-      logger.error(`Error al cambiar el rol del usuario: ${error}`);
-      res.status(500).json({ error: `Error al cambiar el rol del usuario` });
+        logger.error(`Error deleting user: ${error}`);
+        res.status(500).json({ error: 'Error deleting user' });
     }
-}
+};
+
+export const changeUserRole = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await userManager.checkUserRole(id);
+        if (result) {
+            const userRole = result.role;
+            res.status(200).json({ message: `User role updated to ${userRole}` });
+            logger.info(`User role updated to ${userRole}`);
+        } else {
+            throw CustomError.CustomError(
+                "Error", `User with id ${id} not found.`,
+                errorTypes.ERROR_NOT_FOUND,
+                userNotFound()
+            );
+        }
+    } catch (error) {
+        logger.error(`Error changing user role: ${error}`);
+        res.status(500).json({ error: 'Error changing user role' });
+    }
+};
