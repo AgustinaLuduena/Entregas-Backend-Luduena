@@ -1,0 +1,173 @@
+paths:
+#User router
+#Ruta para obtener lista de usuarios (solo Admin)
+  /api/users:
+    get:
+      summary: Obtiene todos los usuarios
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Usuarios cargados correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+#Ruta para obtener un usuario por ID
+  /api/user/{uid}:
+    get:
+      summary: Obtiene un usuario por su id
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: Parámetro id del usuario
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuario cargado correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+#Ruta para actualizar un usuario por ID
+    put:
+      summary: Actualiza un usuario según su id
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: Parámetro id del usuario a actualizar
+          schema:
+            type: string
+      requestBody:
+        requiered: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateUser"
+
+      responses:
+        "200":
+          description: Usuarios cargados correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+#Ruta para obtener la data del usuario actual
+  /api/sessions/current:
+    get:
+      summary: Current Session Data (DTO)
+      tags:
+       - Users
+      responses:
+        "200":
+          description: User data cargada correctamente.
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+
+components:
+  schemas:
+#User schema
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id del usuario (Autogenerado)
+        first_name:
+          type: string
+          description: Nombre de usuario
+        last_name:
+          type: string
+          description: Apellido de usuario
+        email:
+          type: string
+          description: Email de usuario
+        password:
+          type: string
+          description: Contraseña de usuario
+        age:
+          type: Number
+          description: Edad de usuario
+        role:
+          type: string
+          description: Tipo de usuario (Autogenerado)
+        cart:
+          type: mongoose.Schema.Types.ObjectId
+          description: Carrito asociado al usuario (Autogenerado)
+      example:
+        _id: 665a6ceda99a04faefe61d24
+        first_name: Nombre
+        last_name: Apellido
+        email: example@mail.com
+        password: $3h$a235ks.wi22asooip1
+        age: 25
+        role: User
+        cart: 665a6ceda99a04faefe61d22
+
+  requestBodies:
+    updateUser:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id del usuario (Autogenerado)
+        first_name:
+          type: string
+          description: Nombre de usuario
+        last_name:
+          type: string
+          description: Apellido de usuario
+        email:
+          type: string
+          description: Email de usuario
+        password:
+          type: string
+          description: Contraseña de usuario
+        age:
+          type: Number
+          description: Edad de usuario
+        role:
+          type: string
+          description: Tipo de usuario (Autogenerado)
+        cart:
+          type: mongoose.Schema.Types.ObjectId
+          description: Carrito asociado al usuario (Autogenerado)
+      example:
+        first_name: Nombre
+        last_name: Apellido
+        email: example@mail.com
+        age: 30
+
+  #Seguridad y autenticación del usuario
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

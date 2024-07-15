@@ -18,18 +18,43 @@ import initializePassportJWT from '../config/jwt.config.js';
 import cors from "cors";
 //Logger
 import { loggerMiddleware } from "../utils/logger-env.js";
+//Swagger
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
+//Swagger config
+const swaggerOptions = {
+    definition: {
+      openapi: "3.0.1",
+      info: {
+        title: "API - Proyecto E-commerce",
+        version: "1.0.0",
+        description: "Documentacion de la API del Curso de Backend",
+      },
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`],
+  };
+const specs = swaggerJsdoc(swaggerOptions);
 
 const middlewares = async (app) => {
+    //Swagger
+    app.use("/api-docs", swaggerUiExpress.serve, swaggerUiExpress.setup(
+        specs, 
+        { customCss: ".swagger-ui .topbar {display: none}"}
+        ));
+
+    //Express
     app.use(express.json());
     app.use(express.urlencoded({extended:true}));
     app.use(express.static(__dirname+'/public'));
+
     //Cookie parser
     app.use(cookieParser());
     //Cors
     app.use(cors());
     //Logger
     app.use(loggerMiddleware);
+
     //DB
     app.use(session({
         store: new MongoStore({
@@ -40,6 +65,7 @@ const middlewares = async (app) => {
         resave: false,
         saveUninitialized: false
     }));
+
     //Carpeta de vistas
     app.set('views', `${__dirname}/views`);
 

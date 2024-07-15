@@ -1,0 +1,280 @@
+paths:
+#Products Router
+#Ruta para obtener el listado de productos
+  /api/products:
+    get:
+      summary: List of products
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Listado de productos obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+#Ruta para crear un nuevo producto
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create a new product
+      description: Only "admin" or "Premium" users have access to this function
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/NewProduct'
+      responses:
+        "200":
+          description: Listado de productos obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+#Ruta para obtener el listado de productos desde la página 2 (limit=10)
+  /api/products?page=2:
+    get:
+      summary: List of products (page=2)
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Listado de productos obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+#Ruta para obtener el listado de productos (limit=4)
+  /api/products?limit=4:
+    get:
+      summary: List of products (limit=4)
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Listado de productos obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+#Ruta para obtener el listado de productos con el detalle de las categorías
+  /api/products/categories:
+    get:
+      summary: List of products with category details
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Listado de productos obtenido correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+  /api/products/{pid}:
+  #Ruta para obtener un producto por ID
+    get:
+      summary: Product by Id
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Parámetro id del producto
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto cargado correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+#Ruta para actualizar un producto por ID
+    put:
+      security:
+        - bearerAuth: []
+      summary: Update a product
+      description: Only "admin" or "Premium" users have access to this function
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Parámetro id del producto
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/NewProduct'
+      responses:
+        "200":
+          description: Producto actualizado correctamente.
+          # content:
+          #   application/json:
+          #     schema:
+          #       type: array
+          #       items:
+          #         $ref: "#/components/schemas/Product"
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+  #Ruta para eliminar un producto por ID
+    delete:
+      security:
+        - bearerAuth: []
+      summary: Delete a product
+      description: Only "admin" or "Premium" users have access to this function
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Parámetro id del producto
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto eliminado correctamente.
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 66314ef2acb3b7caac87f633
+        title:
+          type: string
+          example: "Producto de ejemplo"
+        description:
+          type: string
+          example: "Descripción del producto"
+        code:
+          type: string
+          example: "PROD001"
+        price:
+          type: number
+          example: 100.0
+        status:
+          type: boolean
+          example: true
+        stock:
+          type: number
+          example: 50
+        category:
+          type: string
+          example: "60a42ec6c36d0b73b6fd92a6"
+        colors:
+          type: array
+          items:
+            type: string
+          example: ["red", "blue"]
+        sizes:
+          type: array
+          items:
+            type: string
+          example: ["S", "M", "L"]
+        thumbnails:
+          type: array
+          items:
+            type: string
+          example: ["image1.jpg", "image2.jpg"]
+        owner:
+          type: string
+          example: "admin"
+
+  requestBodies:
+    NewProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Remera testing"
+        description:
+          type: string
+          example: "Necesita una descripción"
+        code:
+          type: integer
+          example: 132
+        price:
+          type: number
+          example: 4500
+        status:
+          type: boolean
+          example: true
+        stock:
+          type: integer
+          example: 10
+        category:
+          type: string
+          example: "66314a18b4275625c52199ee"
+        colors:
+          type: array
+          items:
+            type: string
+            enum:
+              - amarillo
+              - rojo
+        sizes:
+          type: array
+          items:
+            type: string
+            enum:
+              - S
+              - M
+#Seguridad y autenticación del usuario
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

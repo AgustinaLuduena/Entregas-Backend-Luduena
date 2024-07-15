@@ -110,12 +110,12 @@ export const checkAdminRole = (req, res, next) => {
         let user = req.user.user
         if(!user) {return res.status(404).json({ error: 'Usuario no encontrado' });}
         let checkDB = await userManager.getById(user._id)
-          if(checkDB.role === 'User') {
-            logger.info(userRole)
-            return next();
-          } else {
-              return res.status(403).json({ error: 'Acceso no autorizado' });
-          }
+        if(checkDB.role === 'User') {
+          logger.info(checkDB.role)
+          return next();
+        } else {
+          return res.status(403).json({ error: 'Acceso no autorizado' });
+        }
 
     } catch (error) {
         return res.status(403).json({ error: 'Acceso no autorizado' });

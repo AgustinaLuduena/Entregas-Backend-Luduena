@@ -1,0 +1,74 @@
+paths:
+#Router de las vistas
+  /:
+    get:
+      summary: home page view
+      tags:
+        - Views
+      responses:
+        '200':
+          description: Respuesta exitosa
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+  /login:
+    get:
+      summary: login view
+      tags:
+        - Views
+      responses:
+        '200':
+          description: Respuesta exitosa
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+  /register:
+    get:
+      summary: register view
+      tags:
+        - Views
+      responses:
+        '200':
+          description: Respuesta exitosa
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+  /products:
+    get:
+      summary: products view
+      tags:
+        - Views
+      responses:
+        '200':
+          description: Respuesta exitosa
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+  /profile:
+    get:
+      summary: profile view
+      tags:
+        - Views
+      responses:
+        '200':
+          description: Respuesta exitosa
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
+  /forgottenPass:
+    get:
+      summary: forgotten password view
+      tags:
+        - Views
+      responses:
+        '200':
+          description: Respuesta exitosa
+        "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+        "500":
+          description: Error del servidor.
