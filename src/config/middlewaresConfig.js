@@ -66,10 +66,10 @@ const middlewares = async (app) => {
         saveUninitialized: false
     }));
 
-    //Carpeta de vistas
+    //Views folder
     app.set('views', `${__dirname}/views`);
 
-    //Motor de plantillas
+    //Views engine (Motor de plantillas)
     app.set('view engine', 'handlebars');
     app.engine('handlebars', handlebars.engine());
 

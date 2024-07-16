@@ -5,7 +5,11 @@
   "main": "./src/app.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon ./src/app.js"
+    "start": "nodemon ./src/app.js",
+    "test": "mocha 'test/**/*.js' --exit",
+    "chaiTest": "mocha test/productManager.chai.test.js --exit",
+    "supertest": "mocha test/productManager.supertest.test.js --exit",
+    "supertest2": "mocha test/cartManager.supertest.test.js --exit"
   },
   "keywords": [],
   "author": "",
@@ -34,6 +38,9 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
-    "nodemon": "^3.0.3"
+    "chai": "^5.1.1",
+    "mocha": "^10.6.0",
+    "nodemon": "^3.0.3",
+    "supertest": "^7.0.0"
   }
 }

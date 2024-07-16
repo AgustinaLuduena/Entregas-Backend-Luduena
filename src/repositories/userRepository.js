@@ -31,6 +31,19 @@ export default class UserRepository {
         }
     }
 
+    async getUserByEmail(email) {
+        try {
+            const result = await userModel.findOne({ email: email });
+            return result;
+        } catch (error) {
+            throw CustomError.CustomError(
+                "Error", `Error deleting user with id ${id}.`,
+                errorTypes.ERROR_DATA,
+                dataError()
+            );
+        }
+    }
+
     async createUser(userData) {
         try {
             userData.password = createHash(userData.password);
