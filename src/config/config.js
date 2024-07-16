@@ -12,7 +12,7 @@ token: process.env.JWT_SECRET,
 // Factory
 persistence: process.env.PERSISTENCE,
 // Entorno de desarrollo / producción
-env: process.env.ENTORNO,
+env: process.env.NODE_ENV || "production",
 // Mailing
 mailing: {
     mail_host: process.env.HOST,

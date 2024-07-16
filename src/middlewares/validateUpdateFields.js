@@ -1,4 +1,3 @@
-
 const validateUpdateFields = function validateProductFields(req, res, next) {
     const { title, description, category, price, stock } = req.body;
     const fieldsToUpdate = { title, description, category, price, stock };
