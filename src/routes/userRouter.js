@@ -1,6 +1,6 @@
 import { Router } from "express";
-import {getUsers, getUserById, createUser, updateUser, deleteUser, changeUserRole,} from "../controllers/users.controller.js"
-import { verifyToken, checkAdminRole, checkUserRole, isUserOrPremium } from "../middlewares/auth.js";
+import {getUsers, getUserById, createUser, updateUser, deleteUser, changeUserRole, uploadDocuments} from "../controllers/users.controller.js"
+import { verifyToken, checkAdminRole, isUserOrPremium } from "../middlewares/auth.js";
 
 //instanciación
 const userRouter = Router();
@@ -11,5 +11,6 @@ userRouter.post("/user", createUser);
 userRouter.put("/user/:id", updateUser);
 userRouter.delete("/user/:id", deleteUser);
 userRouter.get("/users/premium/:id",  verifyToken, isUserOrPremium, changeUserRole);
+userRouter.post("/users/:uid/documents", verifyToken, uploadDocuments);
 
 export default userRouter;

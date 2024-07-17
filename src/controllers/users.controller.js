@@ -1,5 +1,8 @@
 //Factory
 import { userManager, cartManager } from "../dao/factory.js";
+//Multer Middleware
+import multer from "multer";
+import { upload } from "../middlewares/multerMiddleware.js";
 //ErrorHandler
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
@@ -64,19 +67,30 @@ export const createUser = async (req, res) => {
         }
         const newUser = { first_name, last_name, email, password, age }
         
+        //Check for existing user
+        const checkUser = await userManager.getByEmail(newUser.email);
+        if (checkUser) {
+            logger.warning(`Error creating the user. User email ${newUser.email} already exist in the database.`);
+            return res.status(400).json({ error: `User email ${newUser.email} already exist in the database.` });
+        }
+
         //Age control
         if(isNaN(newUser.age)){return res.status(400).json({ error: 'Age must be a number.' });}
-        if(newUser.age < 18){return res.status(400).json({ error: 'You must be olther tah 18 years old.' });}
-        
+        if(newUser.age < 18){
+            logger.warning(`Error. User must be olther tah 18 years old, not ${newUser.age}`);
+            return res.status(400).json({ error: 'You must be olther tah 18 years old.' });
+        }
+
+        //Add a cart to the user
         if (!newUser.cart) {
             const newCart = await cartManager.createCart();
             newUser.cart = newCart._id;
         }
 
+        //Add the user role
         newUser.role = "User";
 
         const createdUser = await userManager.createUser(newUser);
-
         const populatedUser = await userManager.getUserWithCart(createdUser._id);
 
         res.status(201).json({ user: populatedUser });
@@ -146,5 +160,54 @@ export const changeUserRole = async (req, res) => {
     } catch (error) {
         logger.error(`Error changing user role: ${error}`);
         res.status(500).json({ error: 'Error changing user role' });
+    }
+};
+
+export const uploadDocuments = (req, res, next) => {
+    upload.fields([
+        { name: 'profile', maxCount: 1 },
+        { name: 'product', maxCount: 1 },
+        { name: 'document', maxCount: 5 }
+    ])(req, res, async function (err) {
+        if (err instanceof multer.MulterError) {
+            return res.status(400).json({ error: err.message });
+        } else if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+
+        try {
+            const { uid } = req.params;
+            const files = req.files;
+
+            const documents = [];
+            for (const key in files) {
+                files[key].forEach(file => {
+                    documents.push({
+                        name: file.originalname,
+                        reference: file.path
+                    });
+                });
+            }
+
+            await updateUserStatus(uid, { documentsUploaded: true, documents });
+
+            res.status(200).json({ message: "Files uploaded and user status updated successfully" });
+        } catch (error) {
+            next(error);
+        }
+    });
+};
+
+const updateUserStatus = async (userId, updateData) => {
+    try {
+        const updatedUser = await userManager.updateUserDocs(userId, updateData);
+        if (updatedUser) {
+            logger.info(`User status updated successfully for user ID: ${userId}`);
+        } else {
+            throw new Error(`User with ID ${userId} not found`);
+        }
+    } catch (error) {
+        logger.error(`Error updating user status: ${error}`);
+        throw error;
     }
 };

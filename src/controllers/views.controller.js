@@ -186,3 +186,12 @@ export const forgottenPass = async (req, res) => {
     }
 
 }
+
+export const upload = async (req, res) => {
+    try{
+        res.render("uploadDocs");
+    }catch (error){
+        return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
+    }
+
+}

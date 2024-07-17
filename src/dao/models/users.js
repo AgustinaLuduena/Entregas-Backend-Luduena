@@ -28,7 +28,15 @@ const schema = new Schema({
   cart: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Carts",
-  }
+  },
+  documentsUploaded: { type: Boolean, default: false },
+  documents: [
+      {
+          name: String,
+          reference: String
+      }
+  ],
+  lastConnection: { type: Date, default: null }
 });
 
 

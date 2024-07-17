@@ -19,29 +19,6 @@ export const register = async (req, res) => {
       }
 }
 
-//Login 
-export const loginJWT = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-        let result = await authManager.adminLogin({ email, password });
-        if (result.token) {
-          res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none", });
-          return res.json({ status: "success", message: result.message });
-        }
-      } else {
-      let result = await authManager.login({ email, password });
-      if (result.token) {
-        res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none", });
-        return res.json({ status: "success", message: result.message });
-      }
-    }
-  } catch (error) {
-    res.status(500).json({ status: "error", message: `Credentials Error.` });
-  }
-};
-
 //Estrategia current for JWT
 export const current = async (req, res) => {
     try{
@@ -64,18 +41,6 @@ export const current = async (req, res) => {
     } catch {
         res.status(500).json({ message: "Error del servidor." });
     }
-}
-
-//Destroy the session with cookie = LOG OUT route
-export const logoutJWT = async (req, res) => {
-  try {
-    authManager.clearCookie(res, config.token);
-    res.redirect('http://localhost:8081/');
-    logger.info("Ha cerrado su sesión correctamente.");
-  } catch (error) {
-    logger.error('Error al destruir la sesión.', error);
-    res.status(500).send('Error interno del servidor');
-  }
 }
 
 export const restore = async (req, res) => {
@@ -126,3 +91,72 @@ export const githubcallback = async (req, res) => {
    
     res.redirect("/products");
 }
+
+
+export const loginJWT = async (req, res) => {
+  try {
+      const { email, password } = req.body;
+      let result;
+
+      if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
+          result = await authManager.adminLogin({ email, password });
+      } else {
+          result = await authManager.login({ email, password });
+      }
+
+      if (result.token) {
+        if (email === "adminCoder@coder.com"){
+          res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none" });
+          return res.json({ status: "success", message: result.message });
+        }
+          let user = await userManager.getByEmail(email);
+          if(!user){
+            logger.error(`User not found.`);
+            res.status(400).json({ status: "error", message: "User not found." });
+          }
+          await updateUserLastConnection(user._id);
+          
+          res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none" });
+          return res.json({ status: "success", message: result.message });
+      }
+  } catch (error) {
+      logger.error(`Error en el inicio de sesión: ${error}`);
+      res.status(500).json({ status: "error", message: "Credenciales inválidas." });
+  }
+};
+
+export const logoutJWT = async (req, res) => {
+  try {
+      authManager.clearCookie(res, config.token);
+      res.redirect('http://localhost:8081/');
+      logger.info("Sesión cerrada correctamente.");
+  } catch (error) {
+      logger.error('Error al cerrar la sesión.', error);
+      res.status(500).send('Error interno del servidor');
+  }
+};
+
+
+const updateUserLastConnection = async (userId) => {
+  try {
+    logger.info(`Updating last conection info`);
+
+    const currentDate = new Date().toLocaleDateString()
+    const updateResult = await userManager.updateUser(userId, { lastConnection: currentDate });
+    console.log(updateResult);
+    if (!updateResult) {
+      logger.error(`Error trying to update last connection for user ${userId}.`);
+      throw new Error(`User was not found.`);
+    } else if (updateResult.nModified === 0) {
+      logger.error(`Error trying to update last connection for user ${userId}.`);
+      throw new Error(`It was not possible to update the user data.`);
+
+    }
+
+    logger.info(`Last connection data was successfully updated for user id: ${userId}`);
+  } catch (error) {
+    logger.error(`Error trying to update last connection for user ${userId}: ${error}`);
+    throw error;
+  }
+};
+

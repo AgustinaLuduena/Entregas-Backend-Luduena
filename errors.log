@@ -50,3 +50,17 @@
 {"level":"error","message":"Error creating user: TypeError: Cannot destructure property 'first_name' of 'req.body' as it is undefined.","timestamp":"2024-07-16T19:16:48.139Z"}
 {"level":"error","message":"Error creating user: TypeError: Cannot destructure property 'first_name' of 'req.body' as it is undefined.","timestamp":"2024-07-16T19:20:58.326Z"}
 {"level":"error","message":"Error creating user: TypeError: Cannot destructure property 'first_name' of 'req.body' as it is undefined.","timestamp":"2024-07-16T19:21:09.777Z"}
+{"level":"error","message":"Error creating user: TypeError: logger.warn is not a function","timestamp":"2024-07-16T19:34:45.794Z"}
+{"level":"error","message":"Error creating user: Error: Error creating the user.","timestamp":"2024-07-16T19:35:33.256Z"}
+{"level":"error","message":"Error uploading documents: ReferenceError: userManager is not defined","timestamp":"2024-07-16T21:57:15.488Z"}
+{"level":"error","message":"Error changing user role: TypeError: Cannot destructure property 'file' of 'req.file' as it is undefined.","timestamp":"2024-07-16T23:30:44.540Z"}
+{"level":"error","message":"Error changing user role: TypeError: Cannot read properties of undefined (reading 'files')","timestamp":"2024-07-16T23:34:42.503Z"}
+{"level":"error","message":"Error en el inicio de sesión: TypeError: Cannot read properties of undefined (reading '_id')","timestamp":"2024-07-17T00:59:19.130Z"}
+{"level":"error","message":"Error en el inicio de sesión: TypeError: Cannot read properties of undefined (reading 'user')","timestamp":"2024-07-17T01:01:34.102Z"}
+{"level":"error","message":"Error al actualizar last_connection para el usuario 664d246a1e43939605b2d191: ReferenceError: last_connection is not defined","timestamp":"2024-07-17T01:17:12.117Z"}
+{"level":"error","message":"Error en el inicio de sesión: ReferenceError: last_connection is not defined","timestamp":"2024-07-17T01:17:12.119Z"}
+{"level":"error","message":"Error al actualizar last_connection para el usuario 664d246a1e43939605b2d191: ReferenceError: last_connection is not defined","timestamp":"2024-07-17T01:18:51.517Z"}
+{"level":"error","message":"Error en el inicio de sesión: ReferenceError: last_connection is not defined","timestamp":"2024-07-17T01:18:51.519Z"}
+{"level":"error","message":"Error fetching user: Error: User with id 6697236b4208da3ece832c45 not found.","timestamp":"2024-07-17T02:26:58.730Z"}
+{"level":"error","message":"Error trying to update last connection for user 66972e9188c06ffd8860d61b: TypeError: (intermediate value).toLocaleDate is not a function","timestamp":"2024-07-17T02:46:11.993Z"}
+{"level":"error","message":"Error en el inicio de sesión: TypeError: (intermediate value).toLocaleDate is not a function","timestamp":"2024-07-17T02:46:11.995Z"}

@@ -2,7 +2,7 @@ import { Router } from "express";
 //ChatManager - without controller
 import DBChatManager from "../dao/classes/DBChatManager.js";
 //Views controller
-import {index, register, login, profile, realTimeProducts, getProducts, getCartById, restore, forgottenPass} from "../controllers/views.controller.js"
+import {index, register, login, profile, realTimeProducts, getProducts, getCartById, restore, forgottenPass, upload} from "../controllers/views.controller.js"
 //Middlewares
 import { auth, verifyUser } from "../middlewares/auth.js";
 import { active } from "../middlewares/activeSession.js";
@@ -34,6 +34,8 @@ viewsRouter.get('/products', verifyUser, getProducts);
 // CART VIEW Route
 viewsRouter.get("/carts/:cid/", auth, getCartById);
 
+// DOCUMENTS UPLOAD VIEW Route
+viewsRouter.get('/users/documents', upload);
 
 
 

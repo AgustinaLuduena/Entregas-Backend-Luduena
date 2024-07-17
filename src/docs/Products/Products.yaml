@@ -232,6 +232,8 @@ components:
         owner:
           type: string
           example: "admin"
+      # example:
+
 
   requestBodies:
     NewProduct:

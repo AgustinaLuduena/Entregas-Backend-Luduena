@@ -142,4 +142,24 @@ export default class UserRepository {
             );
         }
     }
+
+    async updateUserDocs(id, updateData) {
+        try {
+            const updatedUser = await userModel.findByIdAndUpdate(
+                id,
+                { 
+                    $set: { documentsUploaded: updateData.documentsUploaded }, 
+                    $push: { documents: { $each: updateData.documents } } 
+                },
+                { new: true }
+            );
+            return updatedUser;
+        } catch (error) {
+            throw CustomError.CustomError(
+                "Error", `Error updating documents for user with id ${id}.`,
+                errorTypes.ERROR_DATA,
+                dataError()
+            );
+        }
+    }
 }

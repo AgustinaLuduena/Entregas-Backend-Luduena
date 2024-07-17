@@ -38,4 +38,8 @@ export default class UserManager {
     async checkUserRole(id) {
         return await userRepository.checkUserRole(id);
     }
+    
+    async updateUserDocs(id, updateData) {
+        return await userRepository.updateUserDocs(id, updateData);
+    }
 }
