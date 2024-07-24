@@ -2,7 +2,7 @@
 import { productManager } from '../dao/factory.js';
 import { userManager } from '../dao/factory.js';
 //Mail Controller
-import { deletedProductNotification } from "./mail.controller.js";
+import { deletedProductNotification, addedProductNotification } from "./mail.controller.js";
 //ErrorHandler
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
@@ -116,6 +116,8 @@ export const addProduct = async (req, res) => {
             let newProduct = { title, code, price, stock, category, owner };
             let addedSuccessfully = await productManager.addProduct(newProduct);
             if (addedSuccessfully) {
+                const productOwner = await userManager.getById(owner);
+                await addedProductNotification(productOwner.email, newProduct);
                 return res.status(200).json({ status: `Product with title: ${newProduct.title}, was successfully created.` });
             } else {
                 return res.status(500).json({ status: 'Internal Server Error', message: error.message });

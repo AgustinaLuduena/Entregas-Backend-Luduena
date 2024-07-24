@@ -27,7 +27,7 @@ export const restoreRequest = async (req, res) => {
             attachments: [],
         };
 
-        await mailingService.restoreMail(mailData)
+        await mailingService.sendMail(mailData)
         logger.info(`Correo para restaurar la contraseña enviado exitosamente a ${email}.`);
         res.status(200).json({message: "Correo para restaurar la contraseña enviado exitosamente. Ingrese al link que figurará allí."})
     } catch (error) {
@@ -57,7 +57,7 @@ export const deletedAcountNotification = async (email, inactiveLimitdate) => {
                     <a href="${createUserLink}"> Si deseas crear una nueva cuenta, haz click aquí y serás redireccionado a nuestra web.</a>
                 </div>
                 <div>
-                    <a> Ante cualquier duda, no dudes en contactarte.<a>
+                    <a> Este mail es sólo informativo. Ante cualquier duda, no dudes en contactarte.<a>
                 </div>
                 <h4> Lamentamos cualquier molestia que pudiera ser ocasionada. </h4>
             </div>
@@ -65,7 +65,7 @@ export const deletedAcountNotification = async (email, inactiveLimitdate) => {
             attachments: [],
         };
 
-        await mailingService.deletedAcountMail(mailData)
+        await mailingService.sendMail(mailData)
         logger.info(`Correo para avisar de la eliminación de una cuenta por inactividad, enviado exitosamente a ${email}.`);
     } catch (error) {
         logger.error("Error al enviar el correo:", error);
@@ -95,7 +95,6 @@ export const deletedProductNotification = async (email, product) => {
                         <p>
                             <a> El producto es: </a>
                         </p>
-                    <br>
                         <p>
                             <a>Título: ${deletedProduct.title} </a>
                             <br>
@@ -106,7 +105,7 @@ export const deletedProductNotification = async (email, product) => {
                     <a href="${HomePageLink}"> Si deseas ingresar a la web, haz click aquí y serás redireccionado.</a>
                 </div>
                 <div>
-                    <a> Ante cualquier duda, no dudes en contactarte.<a>
+                    <a> Este mail es sólo informativo. Ante cualquier duda, no dudes en contactarte.<a>
                 </div>
                 <h4> Lamentamos cualquier molestia que pudiera ser ocasionada. </h4>
             </div>
@@ -114,7 +113,55 @@ export const deletedProductNotification = async (email, product) => {
             attachments: [],
         };
 
-        await mailingService.deletedProductMail(mailData)
+        await mailingService.sendMail(mailData)
+        logger.info(`Correo para avisar de la eliminación de una cuenta por inactividad, enviado exitosamente a ${email}.`);
+    } catch (error) {
+        logger.error("Error al enviar el correo:", error);
+        throw error;
+    }
+}
+
+export const addedProductNotification = async (email, newProduct) => {
+    try {
+        if(!email){
+            return res.status(400).json({ status: "error", error: "Please, complete all the information require."});
+        }
+        const HomePageLink = `http://localhost:8081`;
+        const addedProduct = newProduct
+        
+        let mailData = {
+            to: email,
+            subject: "Nuevo aviso: tu producto ha sido exitosamente cargado.",
+            html: `
+            <div>
+                <h2> ¡Has cargado un nuevo producto a la web! </h2>
+                <div>
+                        <p>
+                            <a> Hemos recibido un aviso de que un producto ha sido cargado a nuestra base de datos con tu cuenta y por ello hemos decidido avisarte.<a>
+                        </p>
+                    <br>
+                        <p>
+                            <a> El producto es: </a>
+                        </p>
+                        <p>
+                            <a>Título: ${addedProduct.title} </a>
+                            <br>
+                            <a> Código del producto: ${addedProduct.code}</a>
+                        </p>
+                </div>
+                <div>
+                    <a href="${HomePageLink}"> Si deseas ingresar a la web, haz click aquí y serás redireccionado.</a>
+                </div>
+                <div>
+                    <a> Este mail es sólo informativo. Ante cualquier duda, no dudes en contactarte.<a>
+                </div>
+                <h4> Lamentamos cualquier molestia que pudiera ser ocasionada. </h4>
+            </div>
+            `,
+            attachments: [],
+        };
+
+        await mailingService.sendMail(mailData)
         logger.info(`Correo para avisar de la eliminación de una cuenta por inactividad, enviado exitosamente a ${email}.`);
     } catch (error) {
         logger.error("Error al enviar el correo:", error);

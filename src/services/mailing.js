@@ -17,7 +17,7 @@ export default class MailingService {
         })
     }
 
-    deletedAcountMail = async ({ to, subject, html, attachments=[]}) => {
+    sendMail = async ({ to, subject, html, attachments=[]}) => {
         try {
             let result = await this.client.sendMail({
                 from: `API Mail <${config.mailing.mail_host}>`,
@@ -35,40 +35,23 @@ export default class MailingService {
         }
     }
 
-    deletedProductMail = async ({ to, subject, html, attachments=[]}) => {
-        try {
-            let result = await this.client.sendMail({
-                from: `API Mail <${config.mailing.mail_host}>`,
-                to,
-                subject,
-                html,
-                attachments,
-            })
-    
-            logger.info(result);
-            return result;
-        } catch (error) {
-            logger.error("Error al enviar el correo:", error);
-            throw error;
-        }
-    }
 
-    restoreMail = async ({ to, subject, html, attachments=[]}) => {
-        try {
-            let result = await this.client.sendMail({
-                from: `API Mail <${config.mailing.mail_host}>`,
-                to,
-                subject,
-                html,
-                attachments,
-            })
+//     restoreMail = async ({ to, subject, html, attachments=[]}) => {
+//         try {
+//             let result = await this.client.sendMail({
+//                 from: `API Mail <${config.mailing.mail_host}>`,
+//                 to,
+//                 subject,
+//                 html,
+//                 attachments,
+//             })
     
-            logger.info(result);
-            return result;
-        } catch (error) {
-            logger.error("Error al enviar el correo:", error);
-            throw error;
-        }
-    }
+//             logger.info(result);
+//             return result;
+//         } catch (error) {
+//             logger.error("Error al enviar el correo:", error);
+//             throw error;
+//         }
+//     }
 
 }
