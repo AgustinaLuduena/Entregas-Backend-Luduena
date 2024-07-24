@@ -87,6 +87,39 @@ export default class UserRepository {
         }
     }
 
+    async getInactiveUsers(inactiveLimitdate) {
+        try {
+            const inactiveUsers = await userModel.find({
+                lastConnection: { $lt: inactiveLimitdate }
+            });
+            return inactiveUsers;
+
+        } catch (error) {
+            throw CustomError.CustomError(
+                "Error", `Error finding inactive users in the database.`,
+                errorTypes.ERROR_NOT_FOUND,
+                notFound()
+            );
+        }
+    }
+
+    async deleteInactiveUsers (inactiveUsers) {
+        try {    
+            let result = await userModel.deleteMany({
+                _id: { $in: inactiveUsers.map(user => user._id) }
+            });
+            return result;
+
+        } catch (error) {
+            //throw new Error(`Error deleting inactive users: ${error.message}`);
+            throw CustomError.CustomError(
+                "Error", `Error deleting user with id ${id}.`,
+                errorTypes.ERROR_DATA,
+                dataError()
+            );
+        }
+    };
+    
     async getAllUsersWithCart() {
         try {
             const users = await userModel.find().populate("cart");

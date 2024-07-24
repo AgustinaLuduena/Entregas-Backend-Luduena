@@ -1,12 +1,14 @@
 //Factory
 import { userManager, cartManager } from "../dao/factory.js";
+//Mail Controller
+import { deletedAcountNotification } from "./mail.controller.js";
 //Multer Middleware
 import multer from "multer";
 import { upload } from "../middlewares/multerMiddleware.js";
 //ErrorHandler
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
-import { userNotFound } from "../errorsHandlers/productsError.js";
+import { dataError, userNotFound } from "../errorsHandlers/productsError.js";
 //Logger
 import logger from "../utils/logger-env.js";
 
@@ -139,6 +141,44 @@ export const deleteUser = async (req, res) => {
     } catch (error) {
         logger.error(`Error deleting user: ${error}`);
         res.status(500).json({ error: 'Error deleting user' });
+    }
+};
+
+export const deleteInactiveUsers = async (req, res) => {
+    try {
+        const inactiveLimitdate = new Date();
+        const limitTime = 1
+        //inactiveLimitdate.setDate(inactiveLimitdate.getDate() - 2);
+        inactiveLimitdate.setMinutes(inactiveLimitdate.getMinutes() - limitTime);
+
+        const inactiveUsers = await userManager.getInactiveUsers(inactiveLimitdate)
+
+        if (!inactiveUsers){
+            throw CustomError.CustomError(
+                "Error", `Error getting inactive users data.`,
+                errorTypes.ERROR_DATA,
+                dataError()
+            );
+        }
+
+        if (inactiveUsers.length === 0) {
+            return res.status(200).json({ message: 'No inactive users found', deletedCount: 0 });
+        }
+
+        const deletedResult = await userManager.deleteInactiveUsers(inactiveUsers)
+        
+        if (deletedResult.deletedCount > 0) {
+            for (let user of inactiveUsers) {
+                await deletedAcountNotification( user.email, inactiveLimitdate );
+            }
+        
+            res.status(200).json({ message: 'Inactive users deleted', deletedCount: deletedResult, deletedUsers: inactiveUsers  });
+            logger.info('Inactive users deleted')
+        }
+
+    } catch (error) {
+        logger.error(`Error deleting inactive users: ${error.message}`);
+        res.status(500).json({ error: 'Error deleting inactive users' });
     }
 };
 

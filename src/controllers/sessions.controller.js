@@ -127,6 +127,9 @@ export const loginJWT = async (req, res) => {
 
 export const logoutJWT = async (req, res) => {
   try {
+      let user = req.user.user
+      await updateUserLastConnection(user._id);
+
       authManager.clearCookie(res, config.token);
       res.redirect('http://localhost:8081/');
       logger.info("Sesión cerrada correctamente.");
@@ -141,7 +144,7 @@ const updateUserLastConnection = async (userId) => {
   try {
     logger.info(`Updating last conection info`);
 
-    const currentDate = new Date().toLocaleDateString()
+    const currentDate = new Date()
     const updateResult = await userManager.updateUser(userId, { lastConnection: currentDate });
     console.log(updateResult);
     if (!updateResult) {

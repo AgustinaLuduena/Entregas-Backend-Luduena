@@ -27,6 +27,14 @@ export default class UserManager {
         return await userRepository.deleteUser(id);
     }
 
+    async getInactiveUsers(inactiveLimitdate) {
+        return await userRepository.getInactiveUsers(inactiveLimitdate);
+    }
+
+    async deleteInactiveUsers(inactiveUsers) {
+        return await userRepository.deleteInactiveUsers(inactiveUsers);
+    }
+
     async getAllUsersWithCart() {
         return await userRepository.getAllUsersWithCart();
     }
