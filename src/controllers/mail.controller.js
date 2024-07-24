@@ -38,12 +38,9 @@ export const restoreRequest = async (req, res) => {
 
 export const deletedAcountNotification = async (email, inactiveLimitdate) => {
     try {
-        //const {email} = req.body
         if(!email){
             return res.status(400).json({ status: "error", error: "Please, complete all the information require."});
         }
-        // const token = generateRestorePassToken(email);
-        // const restoreLink = `http://localhost:8081/restore?token=${token}`;
         const createUserLink = `http://localhost:8081/register`;
         const limitTime = 1
         
@@ -62,7 +59,7 @@ export const deletedAcountNotification = async (email, inactiveLimitdate) => {
                 <div>
                     <a> Ante cualquier duda, no dudes en contactarte.<a>
                 </div>
-                <h4> Lamentamos cualquier molestia que pudieramos ocasionar. </h4>
+                <h4> Lamentamos cualquier molestia que pudiera ser ocasionada. </h4>
             </div>
             `,
             attachments: [],
@@ -70,7 +67,55 @@ export const deletedAcountNotification = async (email, inactiveLimitdate) => {
 
         await mailingService.deletedAcountMail(mailData)
         logger.info(`Correo para avisar de la eliminación de una cuenta por inactividad, enviado exitosamente a ${email}.`);
-        //res.status(200).json({message: "Correo para avisar de la eliminación de una cuenta por inactividad, enviado exitosamente."})
+    } catch (error) {
+        logger.error("Error al enviar el correo:", error);
+        throw error;
+    }
+}
+
+export const deletedProductNotification = async (email, product) => {
+    try {
+        if(!email){
+            return res.status(400).json({ status: "error", error: "Please, complete all the information require."});
+        }
+        const HomePageLink = `http://localhost:8081`;
+        const deletedProduct = product
+        
+        let mailData = {
+            to: email,
+            subject: "Nuevo aviso: uno de tus productos ha sido eliminado.",
+            html: `
+            <div>
+                <h2> Uno de tus productos ha sido eliminado </h2>
+                <div>
+                        <p>
+                            <a> Hemos recibido un aviso de que uno de tus productos ha sido eliminado de nuestra base de datos y por ello hemos decidido avisarte.<a>
+                        </p>
+                    <br>
+                        <p>
+                            <a> El producto es: </a>
+                        </p>
+                    <br>
+                        <p>
+                            <a>Título: ${deletedProduct.title} </a>
+                            <br>
+                            <a> ID: ${deletedProduct._id}</a>
+                        </p>
+                </div>
+                <div>
+                    <a href="${HomePageLink}"> Si deseas ingresar a la web, haz click aquí y serás redireccionado.</a>
+                </div>
+                <div>
+                    <a> Ante cualquier duda, no dudes en contactarte.<a>
+                </div>
+                <h4> Lamentamos cualquier molestia que pudiera ser ocasionada. </h4>
+            </div>
+            `,
+            attachments: [],
+        };
+
+        await mailingService.deletedProductMail(mailData)
+        logger.info(`Correo para avisar de la eliminación de una cuenta por inactividad, enviado exitosamente a ${email}.`);
     } catch (error) {
         logger.error("Error al enviar el correo:", error);
         throw error;

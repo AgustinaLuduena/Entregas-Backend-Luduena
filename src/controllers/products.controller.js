@@ -1,6 +1,8 @@
 //Factory
 import { productManager } from '../dao/factory.js';
 import { userManager } from '../dao/factory.js';
+//Mail Controller
+import { deletedProductNotification } from "./mail.controller.js";
 //ErrorHandler
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
@@ -150,12 +152,33 @@ export const deleteProduct = async (req, res) => {
         let userId = req.user.user._id;
 
         const product = await productManager.getProductByID(pid);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found.' });
+        }
+
         const user = await userManager.getById(userId);
 
         if (req.user.user.role === 'admin' || (user.role === 'Premium' && user && user._id.toString() == product.owner.toString()) || req.user.user.role === 'admin' && !product.owner) {
             await productManager.deleteProduct(pid);
+            
+            if(product.owner === 'admin') {
+                return res.status(200).json({ status: `Product with ID ${pid} deleted successfully.` });
+            }
+
+            if(!product.owner) {
+                logger.warning("Product´s owner was not correctly define.")
+                return res.status(200).json({ status: `Product with ID ${pid} deleted successfully. Warning: Product´s owner was not correctly define.` });
+            }
+
+            const owner = await userManager.getById(product.owner);  
+            console.log(owner);          
+            if (owner && owner.role === 'Premium') {
+                await deletedProductNotification(owner.email, product);
+            }
             return res.status(200).json({ status: `Product with ID ${pid} deleted successfully.` });
-        } else {
+            
+        } 
+        else {
             return res.status(403).json({ message: 'Unauthorized user to delete products.' });
         }
     } catch (error) {
