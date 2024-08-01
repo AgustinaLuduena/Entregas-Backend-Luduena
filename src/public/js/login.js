@@ -25,6 +25,7 @@ form.addEventListener("submit", (e) => {
 })
 .then(data => {
   localStorage.setItem("proyecto_backend", data.token); // Guardar el token en localStorage
+  res.cookie("proyecto_backend", data.token)
   window.location.replace("/products");
 })
 .catch(error => {
