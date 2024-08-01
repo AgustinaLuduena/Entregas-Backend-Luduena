@@ -1,4 +1,4 @@
-
+{{!-- 
 <h1>My Cart Details</h1>
 <hr>
 <p>Cart ID: {{cart.cid}}</p>
@@ -33,4 +33,124 @@
     </div>
     {{/if}}
 </ul>
-<script src="/js/cart.js"></script>
+<script src="/js/cart.js"></script> --}}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        ul.cart-items {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .cart-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-info {
+            flex-grow: 1;
+        }
+
+        .remove-btn {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .buttons button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .buttons button:hover {
+            background-color: #2980b9;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Detalles del Carrito</h1>
+    <hr>
+    <p>Carrito ID: {{cart.cid}}</p>
+    <ul class="cart-items">
+        {{#if cart.products}}
+            {{#each cart.products}}
+                <li class="cart-item">
+                    <div class="product-info">
+                        <p>Producto: {{this.product}}</p>
+                        <p>Cantidad: {{this.quantity}}</p>
+                        <p>Precio: $ {{this.price}}</p>
+                    </div>
+                    <button class="remove-btn" data-product-id="{{@index}}">Eliminar</button>
+                </li>
+            {{/each}}
+            <div class="cart-total">
+                <p>Total: $ {{ cart.total }}</p>
+            </div>
+            <input type="hidden" id="cart-id" value="{{cart.cid}}" />
+            <div class="buttons">
+                <button id="shop-btn">Finalizar compra</button>
+                <button id="home-btn">Volver a inicio</button>
+                <button id="profile-btn">Volver al perfil</button>
+            </div>
+        {{else}}
+            <h1>¡Aún no hay productos en el carrito!</h1>
+            <div>
+                <p><a href="https://entregas-backend-luduena-production.up.railway.app/products">Ver productos</a></p>
+            </div>
+        {{/if}}
+    </ul>
+    <script src="/js/cart.js"></script>
+</body>
+</html>

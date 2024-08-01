@@ -22,8 +22,8 @@
   </style>
 </head>
 <body>
-  <h1>Ticket de Compra</h1>
   <div class="ticket">
+    <h1>Ticket de Compra</h1>
     <p><strong>Código del Ticket:</strong> {{ticket.code}}</p>
     <p><strong>Fecha de Compra:</strong> {{ticket.purchase_datetime}}</p>
     <p><strong>Comprador:</strong> {{ticket.purchaserDetails.name}} ({{ticket.purchaserDetails.email}})</p>
@@ -43,6 +43,8 @@
     <p>Contáctese con el vendedor para coordinar el pago y la entrega de su compra.</p>
 
     <h4>¡Hasta la próxima!</h4>
+    <br>
+    <a href="https://entregas-backend-luduena-production.up.railway.app/products">Volver a inicio</a>
   </div>
 </body>
 </html>
