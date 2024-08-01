@@ -13,7 +13,8 @@ export const restoreRequest = async (req, res) => {
             return res.status(400).json({ status: "error", error: "Please, complete all the information require."});
         }
         const token = generateRestorePassToken(email);
-        const restoreLink = `http://localhost:8081/restore?token=${token}`;
+        //const restoreLink = `http://localhost:8081/restore?token=${token}`;
+        const restoreLink = `https://entregas-backend-luduena-production.up.railway.app/restore?token=${token}`;
         
         let mailData = {
             to: email,
@@ -41,7 +42,8 @@ export const deletedAcountNotification = async (email, inactiveLimitdate) => {
         if(!email){
             return res.status(400).json({ status: "error", error: "Please, complete all the information require."});
         }
-        const createUserLink = `http://localhost:8081/register`;
+        //const createUserLink = `http://localhost:8081/register`;
+        const createUserLink = `https://entregas-backend-luduena-production.up.railway.app/register`;
         const limitTime = 1
         
         let mailData = {
@@ -78,7 +80,8 @@ export const deletedProductNotification = async (email, product) => {
         if(!email){
             return res.status(400).json({ status: "error", error: "Please, complete all the information require."});
         }
-        const HomePageLink = `http://localhost:8081`;
+        //const HomePageLink = `http://localhost:8081`;
+        const HomePageLink = `https://entregas-backend-luduena-production.up.railway.app/`;
         const deletedProduct = product
         
         let mailData = {
@@ -126,7 +129,8 @@ export const addedProductNotification = async (email, newProduct) => {
         if(!email){
             return res.status(400).json({ status: "error", error: "Please, complete all the information require."});
         }
-        const HomePageLink = `http://localhost:8081`;
+        //const HomePageLink = `http://localhost:8081`;
+        const HomePageLink = `https://entregas-backend-luduena-production.up.railway.app/`;
         const addedProduct = newProduct
         
         let mailData = {
