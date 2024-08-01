@@ -51,7 +51,6 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("proyecto_backend");
-  console.log(user)
 
   // PROFILE BUTTON
   const profileBtn = document.getElementById("profile-btn");
@@ -65,14 +64,14 @@ document.addEventListener("DOMContentLoaded", () => {
           })
           .then((response) => {
               if (response.status === 200) {
-                  window.location.replace("/profile"); 
+                  window.location.replace("https://entregas-backend-luduena-production.up.railway.app/profile"); 
               } else {
                   throw new Error('No autorizado. Por favor, inicie sesión nuevamente.');
               }
           })
           .catch(error => {
               console.error('Error:', error);
-              window.location.replace("/login"); // Redirige al login si el token no es válido
+              window.location.replace("https://entregas-backend-luduena-production.up.railway.app/login");
           });
       });
   }
@@ -85,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const productId = button.getAttribute('data-product-id');
           const cartId = document.getElementById("cart-id").value;
 
-          fetch(`/api/carts/${cartId}/product/${productId}`, {
+          fetch(`https://entregas-backend-luduena-production.up.railway.app/api/carts/${cartId}/product/${productId}`, {
               method: 'POST',
               headers: { 'Authorization': `Bearer ${token}` }
           })
@@ -98,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
           })
           .catch(error => {
               console.error('Error:', error);
-              window.location.replace("/login"); // Redirige al login si el token no es válido
+              window.location.replace("https://entregas-backend-luduena-production.up.railway.app/login"); // Redirige al login si el token no es válido
           });
       });
   });
