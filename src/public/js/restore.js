@@ -9,7 +9,7 @@ form.addEventListener("submit", (e) => {
   console.log(data);
   data.forEach((value, key) => (obj[key] = value));
 
-  fetch("/api/sessions/restore", {
+  fetch("https://entregas-backend-luduena-production.up.railway.app/api/sessions/restore", {
     method: "POST",
     body: JSON.stringify(obj),
     headers: {

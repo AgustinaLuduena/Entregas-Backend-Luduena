@@ -2,14 +2,14 @@ import { Router } from "express";
 //ChatManager - without controller
 import DBChatManager from "../dao/classes/DBChatManager.js";
 //Views controller
-import {index, register, login, profile, realTimeProducts, getProducts, getCartById, restore, forgottenPass, upload, getUsersView, updateUserRole, deleteUser} from "../controllers/views.controller.js"
+import {index, register, login, profile, realTimeProducts, getProducts, getCartById, restore, forgottenPass, upload, getUsersView, updateUserRole, deleteUser, purchase} from "../controllers/views.controller.js"
 //Middlewares
 //import { auth, verifyUser } from "../middlewares/auth.js";
 import { verifyUser } from "../middlewares/auth.js";
 import { active } from "../middlewares/activeSession.js";
 import { verifyTokenExpiration } from "../utils/utils.js";
 import { isUserOrPremium, checkAdminRole } from "../middlewares/auth.js";
-import { purchase } from "../controllers/carts.controller.js";
+//import { purchase } from "../controllers/carts.controller.js";
 
 //instanciación
 const viewsRouter = Router();

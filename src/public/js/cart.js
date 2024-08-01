@@ -10,7 +10,7 @@ shopBtn.addEventListener('click', async (e) => {
   
   if (cartId) {
     try {
-      window.location.replace(`/carts/${cartId}/purchase`);
+      window.location.replace(`https://entregas-backend-luduena-production.up.railway.app/carts/${cartId}/purchase`);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -32,7 +32,7 @@ profileBtn.addEventListener('click', (e) => {
     })
   .then((response) => {
       if (response.status === 200) {
-        window.location.replace("/profile"); 
+        window.location.replace("https://entregas-backend-luduena-production.up.railway.app/profile"); 
       } else {
         response.status === 401
         response.statusText('No autorizado. Por favor, inicie sesión nuevamente.');
@@ -45,6 +45,6 @@ profileBtn.addEventListener('click', (e) => {
 
 homeBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  window.location.replace("/products"); 
+  window.location.replace("https://entregas-backend-luduena-production.up.railway.app/products"); 
 });
 

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = form.email.value;
 
         try {
-            const response = await fetch('/api/sessions/restoreReq', {
+            const response = await fetch('https://entregas-backend-luduena-production.up.railway.app/api/sessions/restoreReq', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
