@@ -28,7 +28,7 @@ form.addEventListener("submit", (e) => {
   console.log(data)
   console.log(data.token)
   //res.cookie("proyecto_backend", data.token)
-  window.location.replace("https://entregas-backend-luduena-production.up.railway.app/products");
+  //window.location.replace("https://entregas-backend-luduena-production.up.railway.app/products");
 })
 .catch(error => {
   console.error(error);
