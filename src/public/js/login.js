@@ -7,7 +7,7 @@ form.addEventListener("submit", (e) => {
   const data = new FormData(form);
   const obj = {};
   data.forEach((value, key) => (obj[key] = value));
-
+  console.log(data)
   fetch("https://entregas-backend-luduena-production.up.railway.app/api/sessions/login", {
     method: "POST",
     body: JSON.stringify(obj),
