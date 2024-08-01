@@ -181,6 +181,7 @@ export const getCartById = async (req, res) => {
 
             let products = cartData.products.map(product => ({
                 product: product.product.title,
+                productId: product.product._id,
                 quantity: product.quantity,
                 price: product.price
             }));
