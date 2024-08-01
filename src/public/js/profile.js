@@ -23,10 +23,10 @@ cartBtn.addEventListener('click', async (e) => {
 logoutBtn.addEventListener('click', (e) => {
   e.preventDefault();
 
-  fetch('https://entregas-backend-luduena-production.up.railway.app/api/sessions/logout', { method: 'POST' })
+  fetch('https://entregas-backend-luduena-production.up.railway.app/api/sessions/logout', { method: 'GET' })
   .then((response) => {
       if (response.status === 200) {
-        window.location.replace("/"); 
+        window.location.replace("https://entregas-backend-luduena-production.up.railway.app/"); 
       }
     });
 });
