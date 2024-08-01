@@ -26,7 +26,7 @@ form.addEventListener("submit", (e) => {
 .then(data => {
   localStorage.setItem("proyecto_backend", data.token); // Guardar el token en localStorage
   res.cookie("proyecto_backend", data.token)
-  window.location.replace("/products");
+  window.location.replace("https://entregas-backend-luduena-production.up.railway.app/products");
 })
 .catch(error => {
   console.error(error);
