@@ -331,7 +331,7 @@ export const purchase = async (req, res) => {
     
         const ticket = new Ticket({
             code: generateRandomCode(10),
-            purchaseDatetime: new Date(),
+            purchaseDatetime: new Date().toDateString(),
             amount: totalPurchaseAmount,
             purchaser: userId,
             purchaserDetails: userDTO.currentUser,
