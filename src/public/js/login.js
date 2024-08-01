@@ -8,7 +8,7 @@ form.addEventListener("submit", (e) => {
   const obj = {};
   data.forEach((value, key) => (obj[key] = value));
 
-  fetch("/api/sessions/login", {
+  fetch("https://entregas-backend-luduena-production.up.railway.app/api/sessions/login", {
     method: "POST",
     body: JSON.stringify(obj),
     headers: {
@@ -24,7 +24,6 @@ form.addEventListener("submit", (e) => {
   return response.json(); // Obtener el cuerpo de la respuesta en formato JSON
 })
 .then(data => {
-  console.log(data)
   localStorage.setItem("proyecto_backend", data.token); // Guardar el token en localStorage
   window.location.replace("/products");
 })
@@ -33,39 +32,6 @@ form.addEventListener("submit", (e) => {
 })
 })
 
-
-// // Login de formulario
-// document.addEventListener('DOMContentLoaded', function () {
-//   const loginForm = document.getElementById('loginForm');
-
-//   if (loginForm) {
-//       loginForm.addEventListener('submit', function (event) {
-//           event.preventDefault();
-
-//           const formData = new FormData(loginForm);
-//           const obj = {};
-//           formData.forEach((val, key) => obj[key]=val);
-//           const errorMessage = document.getElementById('errorMessage');
-
-//           fetch('https://backend-final-production-8834.up.railway.app/api/sessions/login', {
-//               method: 'POST',
-//               body: JSON.stringify(obj),
-//               headers: {
-//                   'Content-Type': 'application/json',
-//                   "Access-Control-Allow-Origin": "*"
-//               }
-//           })
-//           .then(response => {
-//               if (response.status === 200) {
-//                   // La respuesta exitosa
-//                   return response.json();
-//               } else {
-//                   // Si la respuesta no es exitosa, mostrar un mensaje de error
-//                   errorMessage.textContent = 'Email o contraseña incorrectos. Por favor, inténtalo de nuevo.';
-//                   errorMessage.style.display = 'block';
-//                   throw new Error('Credenciales incorrectas');
-//               }
-//           })
 //           .then(data => {
 //               // Extraer el token de la respuesta JSON
 //               // Almacenar el token en el almacenamiento local
