@@ -21,10 +21,12 @@ form.addEventListener("submit", (e) => {
     document.getElementById('loginMsg').innerText = 'Error en las credenciales. Intente nuevamente.';
     throw new Error('Failed to login');
   } 
+  console.log(response)
   return response.json(); // Obtener el cuerpo de la respuesta en formato JSON
 })
 .then(data => {
   localStorage.setItem("proyecto_backend", data.token); // Guardar el token en localStorage
+  console.log(response)
   console.log(data)
   console.log(data.token)
   //res.cookie("proyecto_backend", data.token)
