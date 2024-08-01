@@ -118,6 +118,7 @@ export const getProducts = async (req, res) => {
         // });
             if(user) {
                 logger.info(user);
+                console.log(user)
 
                 res.render('products', {
                     user: user,
