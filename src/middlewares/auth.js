@@ -39,6 +39,28 @@ import { userManager } from '../dao/factory.js';
 //           authError())
 //     }
 // };
+
+export const verifyHeaderToken = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        req.user = null;
+        return next();
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    jwt.verify(token, config.token, (err, decoded) => {
+        if (err) {
+            req.user = null;
+        } else {
+            req.user = decoded;
+        }
+        next();
+    });
+};
+
+
 export const verifyToken = (req, res, next) => {
   const token = req.cookies[config.token];
   if (!token) {
@@ -57,24 +79,6 @@ export const verifyToken = (req, res, next) => {
       });
   }
 };
-
-//VerifyHeaderToken
-export const verifyHeaderToken = (req, res, next) => {
-    const token = localStorage.getItem(config.token);
-  //const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    return res.status(401).send('Access denied. No token provided.');
-  }
-
-  try {
-    const decoded = jwt.verify(token, config.token);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res.status(401).send('Token inválido.');
-  }
-};
-
 
 //Middleware para verificar si es un usuario.
 export const verifyUser = (req, res, next) => {

@@ -1,9 +1,9 @@
+const token = localStorage.getItem("proyecto_backend");
+
 //PROFILE BUTTON  
 const profileBtn = document.getElementById("profile-btn");
 profileBtn.addEventListener('click', (e) => {
     e.preventDefault();
-
-    const token = localStorage.getItem("proyecto_backend");
 
     fetch('/products', 
       { method: 'GET', 
@@ -31,7 +31,11 @@ document.querySelectorAll('.add-btn').forEach(button => {
         const productId = button.getAttribute('data-product-id');
         const cartId = document.getElementById("cart-id").value;
 
-        fetch(`/api/carts/${cartId}/product/${productId}`, { method: 'POST' })
+        fetch(`/api/carts/${cartId}/product/${productId}`, 
+        { method: 'POST',
+          headers: {'Authorization': `Bearer ${token}`
+          }
+        })
         .then((response) => {
             if (response.status === 200) {
                 window.location.replace("/products"); 

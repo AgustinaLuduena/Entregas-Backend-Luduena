@@ -105,8 +105,18 @@ export const getProducts = async (req, res) => {
             result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort}` : "";
             result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
-            if(req.user) {
-                let user = req.user.user
+            const user = req.user;
+
+        // res.render('products', {
+        //     user: user ? new CurrentUserDTO(user) : null,
+        //     products: result.docs,
+        //     hasPrevPage: result.hasPrevPage,
+        //     prevLink: result.prevLink,
+        //     page: result.page,
+        //     hasNextPage: result.hasNextPage,
+        //     nextLink: result.nextLink
+        // });
+            if(user) {
                 logger.info(user);
 
                 res.render('products', {
