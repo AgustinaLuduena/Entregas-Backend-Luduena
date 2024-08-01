@@ -3,11 +3,11 @@ const profileBtn = document.getElementById("profile-btn");
 profileBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem("proyecto_backend"); // Asumiendo que el token se almacena en localStorage
+    const token = localStorage.getItem("proyecto_backend");
 
     fetch('/products', 
       { method: 'GET', 
-        headers: {'Authorization': `Bearer ${token}` // Incluir el token en los encabezados
+        headers: {'Authorization': `Bearer ${token}`
         } 
       })
     .then((response) => {

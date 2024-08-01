@@ -6,6 +6,7 @@ import {index, register, login, profile, realTimeProducts, getProducts, getCartB
 //Middlewares
 //import { auth, verifyUser } from "../middlewares/auth.js";
 import { verifyUser } from "../middlewares/auth.js";
+import { verifyHeaderToken } from "../middlewares/auth.js";
 import { active } from "../middlewares/activeSession.js";
 import { verifyTokenExpiration } from "../utils/utils.js";
 import { isUserOrPremium, checkAdminRole } from "../middlewares/auth.js";
@@ -26,7 +27,7 @@ viewsRouter.get("/forgottenPass", forgottenPass);
 // DOCUMENTS UPLOAD VIEW Route
 viewsRouter.get('/users/documents', verifyUser, upload);
 // PRODUCTS VIEW Route
-viewsRouter.get('/products', verifyUser, getProducts);
+viewsRouter.get('/products', verifyHeaderToken, getProducts);
 // CART VIEW Route
 viewsRouter.get("/carts/:cid", verifyUser, isUserOrPremium, getCartById);
 //viewsRouter.get("/carts/:cid/", auth, getCartById);

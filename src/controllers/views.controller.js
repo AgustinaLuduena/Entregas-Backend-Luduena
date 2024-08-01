@@ -105,7 +105,6 @@ export const getProducts = async (req, res) => {
             result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort}` : "";
             result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
-
             if(req.user) {
                 let user = req.user.user
                 logger.info(user);

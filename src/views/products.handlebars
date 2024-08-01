@@ -1,65 +1,64 @@
-
+{{#if user}}
+    <h1>Bienvenido/a {{user.first_name}}</h1>
+    {{#if admin}} 
+    {{!-- No ingresa nunca a esta validación. ¿Por qué? --}}
+        <p>Tu email: {{user.email}}</p>
+        <p>Tu rol: {{user.role}}</p>
+    {{/if}}
     {{#if user}}
-        <h1>Bienvenido/a {{user.first_name}}</h1>
-        {{#if admin}} 
-        {{!-- No ingresa nunca a esta validación. ¿Por qué? --}}
-            <p>Tu email: {{user.email}}</p>
-            <p>Tu rol: {{user.role}}</p>
-        {{/if}}
-        {{#if user}}
-            <p>Tu email: {{user.email}}</p>
-            <p>Tu edad: {{user.age}}</p>
-            <p>Tu rol: {{user.role}}</p>
-            <input type="hidden" id="cart-id" value="{{user.cart}}" />
-        {{/if}}
-        <div>
-            <button id="profile-btn">Ver perfil</button>
-        </div>
-    {{else}}
-        <h1>Hola invitado</h1>
-         <div>
-            <button id="profile-btn">Ver perfil</button>
-        </div>
+        <p>Tu email: {{user.email}}</p>
+        <p>Tu edad: {{user.age}}</p>
+        <p>Tu rol: {{user.role}}</p>
+        <input type="hidden" id="cart-id" value="{{user.cart}}" />
     {{/if}}
-
-    <h3>Listado de Productos</h3>
-    <hr>
-    {{#if products.length}}
     <div>
-        <ul>
-            {{#each products}}
-                <li>
-                    <p> <strong> Producto ID:</strong> {{this.id}}</p>
-                    <p> <strong> Título:</strong> {{this.title}}</p>
-                    <p> <strong> Descripción:</strong> {{this.description}}</p>
-                    <p> <strong> Código:</strong> {{this.code}}</p>
-                    <p> <strong> Precio:</strong> ${{this.price}}</p>
-                    {{!-- <p> <strong> Status:</strong> {{this.status}}</p> --}}
-                    <p> <strong> Stock:</strong> {{this.stock}}</p>
-                    <p> <strong> Categoría:</strong> {{this.category}}</p>
-                    {{!-- <p>Imagen:</strong> {{this.thumbnail}}</p> --}}
-                    {{!-- <button id="add-btn">Agregar al carrito</button> --}}
-                     <button class="add-btn" data-product-id="{{this._id}}">Agregar al carrito</button>
-                </li>
-            {{/each}}
-        </ul>  
-    </div> 
-    <br/>
-    <hr>
-    <div>
-        {{#if hasPrevPage}}
-            <a href={{this.prevLink}}>  << Anterior</a>
-        {{/if}}
-        &nbsp;
-        {{this.page}}
-        &nbsp;
-        {{#if hasNextPage}}
-            <a href={{this.nextLink}}>Siguiente >></a>
-        {{/if}}
+        <button id="profile-btn">Ver perfil</button>
     </div>
-    {{else}}
-    <p>No hay productos en listado todavía.</p>
+{{else}}
+    <h1>Hola invitado</h1>
+        <div>
+        <button id="profile-btn">Ver perfil</button>
+    </div>
+{{/if}}
+
+<h3>Listado de Productos</h3>
+<hr>
+{{#if products.length}}
+<div>
+    <ul>
+        {{#each products}}
+            <li>
+                <p> <strong> Producto ID:</strong> {{this.id}}</p>
+                <p> <strong> Título:</strong> {{this.title}}</p>
+                <p> <strong> Descripción:</strong> {{this.description}}</p>
+                <p> <strong> Código:</strong> {{this.code}}</p>
+                <p> <strong> Precio:</strong> ${{this.price}}</p>
+                {{!-- <p> <strong> Status:</strong> {{this.status}}</p> --}}
+                <p> <strong> Stock:</strong> {{this.stock}}</p>
+                <p> <strong> Categoría:</strong> {{this.category}}</p>
+                {{!-- <p>Imagen:</strong> {{this.thumbnail}}</p> --}}
+                {{!-- <button id="add-btn">Agregar al carrito</button> --}}
+                    <button class="add-btn" data-product-id="{{this._id}}">Agregar al carrito</button>
+            </li>
+        {{/each}}
+    </ul>  
+</div> 
+<br/>
+<hr>
+<div>
+    {{#if hasPrevPage}}
+        <a href={{this.prevLink}}>  << Anterior</a>
     {{/if}}
+    &nbsp;
+    {{this.page}}
+    &nbsp;
+    {{#if hasNextPage}}
+        <a href={{this.nextLink}}>Siguiente >></a>
+    {{/if}}
+</div>
+{{else}}
+    <p>No hay productos en listado todavía.</p>
+{{/if}}
 
 
 </div>
