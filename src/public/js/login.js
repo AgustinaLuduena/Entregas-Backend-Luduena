@@ -26,7 +26,6 @@ form.addEventListener("submit", (e) => {
 })
 .then(data => {
   localStorage.setItem("proyecto_backend", data.token); // Guardar el token en localStorage
-  console.log(response)
   console.log(data)
   console.log(data.token)
   //res.cookie("proyecto_backend", data.token)

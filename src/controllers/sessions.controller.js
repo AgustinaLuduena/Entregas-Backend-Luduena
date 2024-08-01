@@ -116,7 +116,7 @@ export const loginJWT = async (req, res) => {
             res.status(400).json({ status: "error", message: "User not found." });
           }
           await updateUserLastConnection(user._id);
-          
+          console.log(result.token)
           res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none" });
           return res.json({ status: "success", message: result.message });
       }
