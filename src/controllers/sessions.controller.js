@@ -108,7 +108,7 @@ export const loginJWT = async (req, res) => {
       if (result.token) {
         if (email === "adminCoder@coder.com"){
           res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none" });
-          return res.json({ status: "success", message: result.message });
+          return res.json({ status: "success", message: result.message, result: result.token });
         }
           let user = await userManager.getByEmail(email);
           if(!user){
