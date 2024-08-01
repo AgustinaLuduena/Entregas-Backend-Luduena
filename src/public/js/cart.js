@@ -48,7 +48,7 @@ const removeButtons = document.querySelectorAll('.remove-btn');
 removeButtons.forEach(button => {
     button.addEventListener('click', (event) => {
         const productId = event.target.getAttribute('data-product-id');
-        fetch(`https://entregas-backend-luduena-production.up.railway.app/carts/${cartId}/product/${productId}`, 
+        fetch(`https://entregas-backend-luduena-production.up.railway.app/api/carts/${cartId}/product/${productId}`, 
         { method: 'DELETE', 
           headers: {'Authorization': `Bearer ${token}`
           } 
