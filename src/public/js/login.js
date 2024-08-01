@@ -24,7 +24,9 @@ form.addEventListener("submit", (e) => {
   return response.json(); // Obtener el cuerpo de la respuesta en formato JSON
 })
 .then(data => {
-  localStorage.setItem("proyecto_backend", data); // Guardar el token en localStorage
+  localStorage.setItem("proyecto_backend", data.token); // Guardar el token en localStorage
+  console.log(data)
+  console.log(data.token)
   //res.cookie("proyecto_backend", data.token)
   window.location.replace("https://entregas-backend-luduena-production.up.railway.app/products");
 })
