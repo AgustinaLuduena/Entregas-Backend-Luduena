@@ -107,7 +107,11 @@ export const loginJWT = async (req, res) => {
 
       if (result.token) {
         if (email === "adminCoder@coder.com"){
-          res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none" });
+          res.cookie(config.token, result.token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None'
+          });
           return res.json({ status: "success", message: result.message, token: result.token });
         }
           let user = await userManager.getByEmail(email);
@@ -116,7 +120,11 @@ export const loginJWT = async (req, res) => {
             res.status(400).json({ status: "error", message: "User not found." });
           }
           await updateUserLastConnection(user._id);
-          res.cookie(config.token, result.token, { httpOnly: true, sameSite: "none" });
+          res.cookie(config.token, result.token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None'
+          });
           return res.json({ status: "success", message: result.message, token: result.token });
       }
   } catch (error) {
