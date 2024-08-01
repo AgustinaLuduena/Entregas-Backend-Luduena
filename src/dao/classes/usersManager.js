@@ -43,8 +43,8 @@ export default class UserManager {
         return await userRepository.getUserWithCart(userId);
     }
 
-    async checkUserRole(id) {
-        return await userRepository.checkUserRole(id);
+    async changeUserRole(id) {
+        return await userRepository.changeUserRole(id);
     }
     
     async updateUserDocs(id, updateData) {

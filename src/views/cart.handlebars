@@ -1,14 +1,36 @@
 
 <h1>My Cart Details</h1>
 <hr>
-<p>Cart ID: {{cart._id}}</p>
+<p>Cart ID: {{cart.cid}}</p>
 <ul>
-    {{#each cart.products}}
-        <li>
-            <p>Product: {{this.product}}</p>
-            <p>Quantity: {{this.quantity}}</p>
-        </li>
-    {{/each}}
+     {{#if cart.products}}
+        {{#each cart.products}}
+            <li>
+                <p>Product: {{this.product}}</p>
+                <p>Quantity: {{this.quantity}}</p>
+                <p>Price: $ {{this.price}}</p>
+            </li>
+        {{/each}}
+        <div>
+            <p>Total: $ {{ cart.total }}</p>
+        </div>
+        <input type="hidden" id="cart-id" value="{{cart.cid}}" />
+        <div>
+            <button id="shop-btn">Finalizar compra</button>
+        </div>
+        <div>
+            <button id="home-btn">Volver a inicio</button>
+        </div>
+        <div>
+            <button id="profile-btn">Volver al perfil</button>
+        </div>
+    {{else}}
+    <h1>¡Aún no hay productos en el carrito!</h1>
+        <div>
+        <p>
+            <a href="http://localhost:8081/products">Ver productos</a>
+        </p>
+    </div>
+    {{/if}}
 </ul>
-
-
+<script src="/js/cart.js"></script>

@@ -1,0 +1,28 @@
+<!-- views/ticket.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ticket de Compra</title>
+</head>
+<body>
+  <h1>Ticket de Compra</h1>
+  <div class="ticket">
+    <p><strong>Código del Ticket:</strong> {{ticket.code}}</p>
+    <p><strong>Fecha de Compra:</strong> {{ticket.purchaseDatetime}}</p>
+    <p><strong>Comprador:</strong> {{ticket.purchaserDetails}}</p>
+    <p><strong>Total de la Compra:</strong> ${{ticket.amount}}</p>
+
+    <h2>Productos Comprados</h2>
+    <ul>
+      {{#each ticket.products}}
+      <li>
+        <p><strong>Producto:</strong> {{this.product}}</p>
+        <p><strong>Cantidad:</strong> {{this.productQuantity}}</p>
+        <p><strong>Total:</strong> ${{this.productTotal}}</p>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</body>
+</html>

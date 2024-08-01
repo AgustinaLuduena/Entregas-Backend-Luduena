@@ -1,4 +1,5 @@
 import CartRepository from "../../repositories/cartRepository.js";
+import productRepository from "../../repositories/productRepository.js";
 import { CustomError } from '../../errorsHandlers/customError.js';
 import { errorTypes } from '../../errorsHandlers/errorTypes.js';
 import { notFound, updateError } from "../../errorsHandlers/productsError.js";
@@ -48,16 +49,18 @@ export default class CartManager {
                 notFound(cid)
             );
         }
-        console.log(pid);
-        console.log(cart.products);
+
+        const selectedProduct = await productRepository.findById(pid)
+        console.log(selectedProduct);
         const product = cart.products.find((product) => product.product._id.toString() === pid);
         console.log(product);
        
         if (product) {
             console.log(product.quantity);
             product.quantity += 1;
+            product.price = selectedProduct.price * product.quantity;
         } else {
-            cart.products.push({ product: pid, quantity: 1 });
+            cart.products.push({ product: pid, quantity: 1, price: selectedProduct.price });
         }
         
         await cart.save();

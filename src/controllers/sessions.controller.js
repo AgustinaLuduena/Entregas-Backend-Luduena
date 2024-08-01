@@ -19,7 +19,7 @@ export const register = async (req, res) => {
       }
 }
 
-//Estrategia current for JWT
+//Current strategy for JWT
 export const current = async (req, res) => {
     try{
       let user = req.user.user
@@ -77,6 +77,7 @@ export const github = async (req, res) => {
     res.status(201).json({ status: "success", message: "User successfully registered with GitHub!" });
 }
 
+//Revisar si el req.session funciona ok para github
 export const githubcallback = async (req, res) => {
     if(!req.user)return res.status(400).send('error')
 

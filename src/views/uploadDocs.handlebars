@@ -1,27 +1,3 @@
-{{!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload Files</title>
-</head>
-<body>
-  <h1>Upload Files</h1>
-  <form action="/api/users/:id/documents" method="POST" enctype="multipart/form-data">
-    <label for="profile">Profile Image:</label>
-    <input type="file" name="profile" id="profile">
-    <br>
-    <label for="product">Product Image:</label>
-    <input type="file" name="product" id="product">
-    <br>
-    <label for="documents">Other Documents:</label>
-    <input type="file" name="documents" id="documents" multiple>
-    <br>
-    <button type="submit">Upload</button>
-  </form>
-</body>
-</html> --}}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,18 +7,27 @@
 </head>
 <body>
   <h1>Upload Files</h1>
-  <form action="/api/users/664d246a1e43939605b2d191/documents" method="POST" enctype="multipart/form-data">
+  {{!-- <form action="/api/users/:uid/documents" method="POST" enctype="multipart/form-data"> --}}
+  <form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
     <label for="profile">Profile Image:</label>
     <input type="file" name="profile" id="profile">
     <br>
     <label for="product">Product Image:</label>
     <input type="file" name="product" id="product">
     <br>
-    <label for="documents">Other Documents:</label>
+    <label for="id">Identification:</label>
+    <input type="file" name="id" id="id">
+    <br>
+    <label for="adress">Proof of Address:</label>
+    <input type="file" name="adress" id="adress">
+    <br>
+    <label for="acount">Bank Account Statement:</label>
+    <input type="file" name="acount" id="acount" multiple>
+    <br>
+    <label for="document">Other Documents:</label>
     <input type="file" name="document" id="document" multiple>
     <br>
     <button type="submit">Upload</button>
   </form>
 </body>
 </html>
-

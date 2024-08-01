@@ -172,7 +172,6 @@ export const updateProductQuantity = async (req, res) => {
     }
 }
 
-//Add a new cart (Cart Id + products:[])
 export const purchase = async (req, res) => {
   try {
       let cid =  req.params.cid;

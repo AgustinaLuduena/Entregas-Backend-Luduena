@@ -10,7 +10,7 @@ import __dirname from '../dirname.js';
 
 export default function createExpressApp() {
     const app = express();
-    const port = config.port;
+    const port = config.port || 8081;
     const server = http.createServer(app);
     const io = new SocketServer(server);
 

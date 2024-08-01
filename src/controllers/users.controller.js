@@ -185,17 +185,14 @@ export const deleteInactiveUsers = async (req, res) => {
 export const changeUserRole = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await userManager.checkUserRole(id);
+        const result = await userManager.changeUserRole(id);
         if (result) {
             const userRole = result.role;
             res.status(200).json({ message: `User role updated to ${userRole}` });
             logger.info(`User role updated to ${userRole}`);
         } else {
-            throw CustomError.CustomError(
-                "Error", `User with id ${id} not found.`,
-                errorTypes.ERROR_NOT_FOUND,
-                userNotFound()
-            );
+            res.status(403).json({ message: `The necesary documentation is not complete to updated the user role.` });
+            logger.info(`The necesary documentation is not complete to updated the user role.`);
         }
     } catch (error) {
         logger.error(`Error changing user role: ${error}`);
@@ -207,6 +204,9 @@ export const uploadDocuments = (req, res, next) => {
     upload.fields([
         { name: 'profile', maxCount: 1 },
         { name: 'product', maxCount: 1 },
+        { name: 'id', maxCount: 1 },
+        { name: 'adress', maxCount: 1 },
+        { name: 'acount', maxCount: 1 },
         { name: 'document', maxCount: 5 }
     ])(req, res, async function (err) {
         if (err instanceof multer.MulterError) {
@@ -216,22 +216,52 @@ export const uploadDocuments = (req, res, next) => {
         }
 
         try {
-            const { uid } = req.params;
-            const files = req.files;
+            const user = req.user.user;
+            if (!user){
+                throw CustomError.CustomError(
+                    "Error", `User was not found.`,
+                    errorTypes.ERROR_NOT_FOUND,
+                    userNotFound()
+                );
+            };
 
-            const documents = [];
-            for (const key in files) {
-                files[key].forEach(file => {
-                    documents.push({
-                        name: file.originalname,
-                        reference: file.path
+            //Quizás el admin no debería poder subir archivos
+            if (user.role === "admin") {
+                let { uid } = req.params;
+                const files = req.files;
+
+                const documents = [];
+                for (const key in files) {
+                    files[key].forEach(file => {
+                        documents.push({
+                            name: file.originalname,
+                            reference: file.path,
+                            fieldname: file.fieldname
+                        });
                     });
-                });
+                }
+
+                await updateUserStatus(uid, { documents });
+            } else {
+                let uid = user._id;
+                const files = req.files;
+
+                const documents = [];
+                for (const key in files) {
+                    files[key].forEach(file => {
+                        documents.push({
+                            name: file.originalname,
+                            reference: file.path, 
+                            fieldname: file.fieldname
+                        });
+                    });
+                }
+
+                await updateUserStatus(uid, { documents });
             }
 
-            await updateUserStatus(uid, { documentsUploaded: true, documents });
-
             res.status(200).json({ message: "Files uploaded and user status updated successfully" });
+
         } catch (error) {
             next(error);
         }

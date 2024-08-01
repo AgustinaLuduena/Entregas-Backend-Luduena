@@ -3,6 +3,7 @@ import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
 import { dataError, notFound } from "../errorsHandlers/productsError.js";
 import { createHash } from "../utils/utils.js";
+import logger from '../utils/logger-env.js';
 
 export default class UserRepository {
     async getAllUsers() {
@@ -146,7 +147,7 @@ export default class UserRepository {
         }
     }
 
-    async checkUserRole(id) {
+    async changeUserRole(id) {
         try {
             const user = await userModel.findById(id);
             if (!user) {
@@ -157,14 +158,22 @@ export default class UserRepository {
                 );
             }
 
-            if (user.role === "User") {
+            const requiredDocuments = ["id", "adress", "acount"];
+            const userDocuments = user.documents.map(doc => doc.fieldname);
+            const hasAllRequiredDocuments = requiredDocuments.every(doc => userDocuments.includes(doc));
+            
+            if (hasAllRequiredDocuments) {
+                user.documentsUploaded = true;
+            }
+
+            if (user.role === "User" && hasAllRequiredDocuments) {
                 user.role = "Premium";
             } else if (user.role === "Premium") {
                 user.role = "User";
             } else {
                 return false;
             }
-
+            
             await user.save();
             return user;
         } catch (error) {

@@ -1,15 +1,16 @@
 
     {{#if user}}
-        <h1>Bienvenido/a {{user.user.first_name}}</h1>
+        <h1>Bienvenido/a {{user.first_name}}</h1>
         {{#if admin}} 
         {{!-- No ingresa nunca a esta validación. ¿Por qué? --}}
-            <p>Tu email: {{user.user.email}}</p>
-            <p>Tu rol: {{user.user.role}}</p>
+            <p>Tu email: {{user.email}}</p>
+            <p>Tu rol: {{user.role}}</p>
         {{/if}}
         {{#if user}}
-            <p>Tu email: {{user.user.email}}</p>
-            <p>Tu edad: {{user.user.age}}</p>
-            <p>Tu rol: {{user.user.role}}</p>
+            <p>Tu email: {{user.email}}</p>
+            <p>Tu edad: {{user.age}}</p>
+            <p>Tu rol: {{user.role}}</p>
+            <input type="hidden" id="cart-id" value="{{user.cart}}" />
         {{/if}}
         <div>
             <button id="profile-btn">Ver perfil</button>
@@ -37,7 +38,8 @@
                     <p> <strong> Stock:</strong> {{this.stock}}</p>
                     <p> <strong> Categoría:</strong> {{this.category}}</p>
                     {{!-- <p>Imagen:</strong> {{this.thumbnail}}</p> --}}
-                    <button>Agregar al carrito</button>
+                    {{!-- <button id="add-btn">Agregar al carrito</button> --}}
+                     <button class="add-btn" data-product-id="{{this._id}}">Agregar al carrito</button>
                 </li>
             {{/each}}
         </ul>  

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrar Usuarios</title>
+</head>
+<body>
+    <h1>Administrar Usuarios</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.email}}</td>
+                    <td>
+                        <form action="/admin/users/{{this._id}}/role" method="POST">
+                            <select name="role">
+                                <option value="User" {{#if (eq this.role "User")}}selected{{/if}}>User</option>
+                                <option value="Premium" {{#if (eq this.role "Premium")}}selected{{/if}}>Premium</option>
+                                <option value="Admin" {{#if (eq this.role "Admin")}}selected{{/if}}>Admin</option>
+                            </select>
+                            <button type="submit">Actualizar</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/admin/users/{{this._id}}" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</body>
+</html>

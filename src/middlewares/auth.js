@@ -10,12 +10,12 @@ import logger from '../utils/logger-env.js';
 import { userManager } from '../dao/factory.js';
 
 //auth with session
-export function auth (req, res, next) {
-    if (!req.session || !req.session.user) {
-      return res.redirect("/login");
-    }
-    next();
-  }
+// export function auth (req, res, next) {
+//     if (!req.session || !req.session.user) {
+//       return res.redirect("/login");
+//     }
+//     next();
+//   }
 
 
 //Middleware para verificar que el usuario haya iniciado sesión correctamente.
@@ -57,6 +57,7 @@ export const verifyToken = (req, res, next) => {
       });
   }
 };
+
 //Middleware para verificar si es un usuario.
 export const verifyUser = (req, res, next) => {
     const token = req.cookies[config.token];

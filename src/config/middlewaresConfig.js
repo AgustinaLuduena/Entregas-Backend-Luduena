@@ -71,7 +71,17 @@ const middlewares = async (app) => {
 
     //Views engine (Motor de plantillas)
     app.set('view engine', 'handlebars');
-    app.engine('handlebars', handlebars.engine());
+    app.engine('handlebars', handlebars.engine({
+      runtimeOptions: {
+          allowProtoPropertiesByDefault: true,
+          allowProtoMethodsByDefault: true
+      },
+      helpers: {
+          eq: function (a, b) {
+              return a === b;
+          }
+      }
+  }));
 
     //Passport
     initializePassport()
@@ -80,7 +90,3 @@ const middlewares = async (app) => {
     app.use(passport.session())
 };
 export default middlewares;
-
-
-
-

@@ -1,5 +1,14 @@
 //Factory
-import { productManager, cartManager } from "../dao/factory.js";
+import { productManager, cartManager, userManager } from "../dao/factory.js";
+//Models
+import userModel from "../dao/models/users.js";
+import productsModel from "../dao/models/products.js";
+import Ticket from "../dao/models/ticket.js";
+import Purchase from "../dao/models/purchase.js";
+//Utils
+import { generateRandomCode } from "../utils/utils.js";
+//DTO
+import CurrentUserDTO from "../dao/dto/dto.js"
 //ErrorHandler
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
@@ -18,7 +27,7 @@ export const index = async (req, res) => {
 
 export const register = async (req, res) => {
     try{
-        res.render("register");
+        res.render("register", {title: "Register"});
     } catch (err) {
         logger.error('Error:', err);
         res.status(500).send('Internal Server Error');
@@ -27,7 +36,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try{
-        res.render("login");
+        res.render("login", {title: "Login"});
     } catch (err) {
         logger.error('Error:', err);
         res.status(500).send('Internal Server Error');
@@ -35,10 +44,17 @@ export const login = async (req, res) => {
 }
 
 export const profile = async (req, res) => {
-    //Tengo problemas con esta vista
     try{
-        let user = req.user ? req.user : null;
-        res.render("profile", { user: user });
+        // let user = req.user ? req.user : null;
+        // res.render("profile", {title: "Profile"}, { user: user });
+
+        if(req.user) {
+            let user = req.user.user
+            res.render("profile", { user: user });
+        } else {
+            res.render("notAvailable", {title: "Page Not Available"});
+        }
+
     } catch (err) {
         logger.error('Error:', err);
         res.status(500).send('Internal Server Error');
@@ -64,13 +80,6 @@ export const getProducts = async (req, res) => {
     let category = req.query.category;
     let sort = req.query.sort;
     
-    //Tengo problemas con esta vista
-    // let id = req.user
-    // console.log(id)
-    // let userLog = await userManager.getById(id)
-    
-    let user = req.user ? req.user : null;
-
     try {
         if (isNaN(page) || page < 1) { page = 1 };
         if (isNaN(limit) || limit < 1) { limit = 10 };
@@ -96,21 +105,30 @@ export const getProducts = async (req, res) => {
             result.nextLink = result.hasNextPage ? `/products?page=${result.nextPage}&limit=${limit}&sort=${sort}` : "";
             result.prevLink = result.hasPrevPage ? `/products?page=${result.prevPage}&limit=${limit}&sort=${sort}` : "";
 
-            logger.info(user);
-            // res.render('products', {
-            //     user: user,
-            //     products: result.docs
-            // });
 
-            res.render('products', {
-                user: user,
-                products: result.docs,
-                hasPrevPage: result.hasPrevPage,
-                prevLink: result.prevLink,
-                page: result.page,
-                hasNextPage: result.hasNextPage,
-                nextLink: result.nextLink
-            });
+            if(req.user) {
+                let user = req.user.user
+                logger.info(user);
+
+                res.render('products', {
+                    user: user,
+                    products: result.docs,
+                    hasPrevPage: result.hasPrevPage,
+                    prevLink: result.prevLink,
+                    page: result.page,
+                    hasNextPage: result.hasNextPage,
+                    nextLink: result.nextLink
+                });
+            } else {
+                res.render('products', {
+                    products: result.docs,
+                    hasPrevPage: result.hasPrevPage,
+                    prevLink: result.prevLink,
+                    page: result.page,
+                    hasNextPage: result.hasNextPage,
+                    nextLink: result.nextLink
+                });
+            }
 
             //Console response
             const status = result.isValid ? "success" : "error";
@@ -134,7 +152,6 @@ export const getProducts = async (req, res) => {
                 prevLink,
                 nextLink
             };
-            //console.log(responseObject); 
         }  
 
     } catch (err) {
@@ -145,23 +162,47 @@ export const getProducts = async (req, res) => {
 export const getCartById = async (req, res) => {
     //List of products inside the cart chosen by Id
     //Example cart id: 661404ba661a8432389a150f
+
     try {
-        let cid =  req.params.cid
-        const cart = await cartManager.getCartById(cid);
+        if(req.user){
+            let user = req.user.user
+            console.log(user)
 
-        if(!cart){
-          throw CustomError.CustomError(
-            "Error", `Cart id ${cid} was not found.`,
-            errorTypes.ERROR_NOT_FOUND, 
-            notFound(cid))
-        }
+            let cid = user.cart
+            const cartData = await cartManager.getCartById(cid);
+            console.log(cartData)
 
-        if (req.accepts("html")) {
-          return res.render("cart", { cart: cart });
+            if(!cartData){
+                throw CustomError.CustomError(
+                  "Error", `Cart id ${cid} was not found.`,
+                  errorTypes.ERROR_NOT_FOUND, 
+                  notFound(cid))
+            }
+
+            let products = cartData.products.map(product => ({
+                product: product.product.title,
+                quantity: product.quantity,
+                price: product.price
+            }));
+
+            // Calcular el total del carrito
+            let total = cartData.products.reduce((sum, product) => sum + product.price, 0);
+
+            let cart = {
+                cid: cartData._id,
+                products: products,
+                total: total // Agregar el total al objeto cart
+            };
+
+            if (req.accepts("html")) {
+                console.log(cart)
+                return res.render("cart", { cart: cart });
+            } else {
+                return res.json(cart);
+            }
         } else {
-          return res.json(cart);
+            res.render("notAvailable", {title: "Page Not Available"});
         }
-        
 
       } catch (error) {
         logger.error('Error:', error);
@@ -189,9 +230,129 @@ export const forgottenPass = async (req, res) => {
 
 export const upload = async (req, res) => {
     try{
-        res.render("uploadDocs");
+        if(req.user) {
+            let user = req.user.user
+            res.render("uploadDocs", { user: user });
+        } else {
+            res.render("notAvailable", {title: "Page Not Available"});
+        }
     }catch (error){
         return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
     }
 
 }
+
+export const getUsersView = async (req, res) => {
+    try {
+        const users = await userManager.getAllUsers();
+        res.render('adminUsers', { users });
+    } catch (error) {
+        logger.error(`Error fetching users: ${error}`);
+        res.status(500).json({ error: 'Error fetching users' });
+    }
+};
+
+export const updateUserRole = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const newRole = req.body.role;
+        await userModel.findByIdAndUpdate(userId, { role: newRole })
+        res.redirect('/admin/users');
+    } catch (error) {
+        logger.error(`Error updating user: ${error}`);
+        res.status(500).json({ error: 'Error updating user' });
+    }
+};
+  
+export const deleteUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        await userModel.findByIdAndDelete(userId)
+        res.redirect('/admin/users');
+    } catch (error) {
+        logger.error(`Error updating user: ${error}`);
+        res.status(500).json({ error: 'Error deleting user' });
+    }
+};
+
+export const purchase = async (req, res) => {
+    try {
+        const user = req.user.user;
+        //let cid = req.params.cid;ç
+        let cid = user.cart
+        const cart = await cartManager.getCartById(cid);
+    
+        if (!cart) {
+            throw CustomError.CustomError(
+            "Error", `The Cart Id ${cid} was not found.`,
+            errorTypes.ERROR_NOT_FOUND,
+            notFound(cid)
+            );
+        }
+    
+        let totalPurchaseAmount = 0;
+        const productsToPurchase = [];
+        const productsToKeepInCart = [];
+    
+        for (const item of cart.products) {
+            const product = await productsModel.findById(item.product);
+            if (!product) {
+            throw CustomError.CustomError(
+                "Error", `The product Id ${item.product} was not found.`,
+                errorTypes.ERROR_NOT_FOUND,
+                notFound(item.product)
+            );
+            }
+            if (product.stock >= item.quantity) {
+            product.stock -= item.quantity;
+            await product.save();
+    
+            totalPurchaseAmount += product.price * item.quantity;
+            productsToPurchase.push(item);
+            } else {
+            productsToKeepInCart.push(item);
+            }
+        }
+    
+        if (productsToPurchase.length === 0) {
+            return res.send("No hay stock suficiente de los productos seleccionados.");
+        }
+    
+        let userDTO = new CurrentUserDTO(user);
+        let userId = user._id;
+    
+        const purchase = new Purchase({
+            user: userId,
+            products: productsToPurchase.map(item => ({
+            product: item.product,
+            productQuantity: item.quantity,
+            })),
+        });
+    
+        const ticket = new Ticket({
+            code: generateRandomCode(10),
+            purchaseDatetime: new Date(),
+            amount: totalPurchaseAmount,
+            purchaser: userId,
+            purchaserDetails: userDTO.currentUser,
+            products: productsToPurchase.map(item => ({
+            id: item.product,
+            product: item.product.title,
+            productQuantity: item.quantity,
+            productTotal: item.product.price * item.quantity,
+            })),
+        });
+    
+        await ticket.save();
+        await purchase.save();
+    
+        await cartManager.clearCart(cid);
+        await cartManager.updatePurchasedCart(cid, productsToKeepInCart, totalPurchaseAmount);
+    
+        logger.info("Compra generada con éxito!");
+        return res.render('purchase', { ticket });
+  
+    } catch (error) {
+      return res.status(500).json({ status: 'Internal Server Error', message: error.message });
+    }
+  };

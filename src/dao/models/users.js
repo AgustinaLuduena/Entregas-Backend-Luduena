@@ -33,7 +33,8 @@ const schema = new Schema({
   documents: [
       {
           name: String,
-          reference: String
+          reference: String,
+          fieldname: String,
       }
   ],
   lastConnection: { type: Date, default: null }

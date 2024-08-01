@@ -1,12 +1,16 @@
 <div>
     {{#if user}}
         <h1>Tu perfil (sin datos sensibles)</h1>
-        <p>Nombre: {{user.user.first_name}} {{user.user.last_name}}</p>
-        <p>Email: {{user.user.email}}</p>
-        <p>Edad: {{user.user.age}}</p>
-        <p>Carrito ID: {{user.user.cart}}</p>
+        <p>Nombre: {{user.first_name}} {{user.last_name}}</p>
+        <p>Email: {{user.email}}</p>
+        <p>Edad: {{user.age}}</p>
+        <p>Carrito ID: {{user.cart}}</p>
+        <input type="hidden" id="cart-id" value="{{user.cart}}" />
         <div>
             <button id="logout-btn">Log Out</button>
+        </div>
+        <div>
+            <button id="cart-btn">See your cart</button>
         </div>
         <p></p>        
     {{else}}
