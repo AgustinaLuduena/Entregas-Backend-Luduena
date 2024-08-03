@@ -1,50 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Ticket de Compra</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .ticket {
-      border: 1px solid #ccc;
-      padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    h1, h2 {
-      color: #333;
-    }
-    p, ul {
-      color: #555;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket de Compra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .ticket {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 {
+            color: #333;
+            text-align: center;
+        }
+
+        p, ul {
+            color: #555;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        a {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-  <div class="ticket">
-    <h1>Ticket de Compra</h1>
-    <p><strong>Código del Ticket:</strong> {{ticket.code}}</p>
-    <p><strong>Fecha de Compra:</strong> {{ticket.purchase_datetime}}</p>
-    <p><strong>Comprador:</strong> {{ticket.purchaserDetails.name}} ({{ticket.purchaserDetails.email}})</p>
-    <p><strong>Total de la Compra:</strong> ${{ticket.amount}}</p>
+    <div class="ticket">
+        <h1>Ticket de Compra</h1>
+        <p><strong>Código del Ticket:</strong> {{ticket.code}}</p>
+        <p><strong>Fecha de Compra:</strong> {{ticket.purchase_datetime}}</p>
+        <p><strong>Comprador:</strong> {{ticket.purchaserDetails.name}} ({{ticket.purchaserDetails.email}})</p>
+        <p><strong>Total de la Compra:</strong> ${{ticket.amount}}</p>
 
-    <h2>Productos Comprados</h2>
-    <ul>
-      {{#each ticket.products}}
-      <li>
-        <p><strong>Producto:</strong> {{this.product}}</p>
-        <p><strong>Cantidad:</strong> {{this.productQuantity}}</p>
-        <p><strong>Total:</strong> ${{this.productTotal}}</p>
-      </li>
-      {{/each}}
-    </ul>
-    <h3>¡Muchas gracias por su compra!</h3>
-    <p>Contáctese con el vendedor para coordinar el pago y la entrega de su compra.</p>
-
-    <h4>¡Hasta la próxima!</h4>
-    <br>
-    <a href="https://entregas-backend-luduena-production.up.railway.app/products">Volver a inicio</a>
-  </div>
+        <h2>Productos Comprados</h2>
+        <ul>
+            {{#each ticket.products}}
+            <li>
+                <p><strong>Producto:</strong> {{this.product}}</p>
+                <p><strong>Cantidad:</strong> {{this.productQuantity}}</p>
+                <p><strong>Total:</strong> ${{this.productTotal}}</p>
+            </li>
+            {{/each}}
+        </ul>
+        <h3>¡Muchas gracias por su compra!</h3>
+        <p>Contáctese con el vendedor para coordinar el pago y la entrega de su compra.</p>
+        <h4>¡Hasta la próxima!</h4>
+        <a href="https://entregas-backend-luduena-production.up.railway.app/products">Volver a inicio</a>
+    </div>
 </body>
 </html>

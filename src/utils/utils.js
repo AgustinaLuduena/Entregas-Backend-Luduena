@@ -53,19 +53,17 @@ export const verifyRestorePassToken = (token) => {
 };
 
 export const verifyTokenExpiration = (req, res, next) => {
-  const { token } = req.query; // o req.body.token dependiendo de cómo esté enviado
+  const { token } = req.query;
 
   if (!token) {
-      return res.redirect('/forgottenPass'); // Redirige si no hay token
+      return res.redirect('/forgottenPass');
   }
   const JWT_SECRET = config.token;
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
-          return res.redirect('/forgottenPass'); // Redirige si el token ha expirado o es inválido
+          return res.redirect('/forgottenPass');
       }
-
-      //req.email = decoded.email; // Pasa el email decodificado si es necesario en la lógica posterior
-      next(); // Continúa con la siguiente función de middleware o controlador
+      next(); 
   });
 };
 

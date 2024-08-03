@@ -1,9 +1,10 @@
 import userModel from '../dao/models/users.js';
+//ErrorHandler
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
 import { dataError, notFound } from "../errorsHandlers/productsError.js";
+//Utils
 import { createHash } from "../utils/utils.js";
-import logger from '../utils/logger-env.js';
 
 export default class UserRepository {
     async getAllUsers() {
@@ -112,7 +113,6 @@ export default class UserRepository {
             return result;
 
         } catch (error) {
-            //throw new Error(`Error deleting inactive users: ${error.message}`);
             throw CustomError.CustomError(
                 "Error", `Error deleting user with id ${id}.`,
                 errorTypes.ERROR_DATA,

@@ -8,11 +8,10 @@ import userRouter from "./userRouter.js";
 import mockingRouter from "./mockingRoter.js"
 //Logger Testing
 import logger from "../utils/logger-env.js";
-//import { mailTranstport } from "../controllers/mail.controller.js";
-import MailingService from "../services/mailing.js";
-import config from "../config/config.js";
+//Mailing Service
+// import MailingService from "../services/mailing.js";
 
-const service = new MailingService()
+// const service = new MailingService()
 
 const router = (app) => {
     app.use(viewsRouter);

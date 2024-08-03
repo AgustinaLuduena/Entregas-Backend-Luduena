@@ -1,4 +1,5 @@
 import CategoryRepository from "../../repositories/categoryRepository.js";
+//Logger
 import logger from "../../utils/logger-env.js";
 
 export default class CategoryManager {

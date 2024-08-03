@@ -1,8 +1,12 @@
+//Models
 import userModel from "../dao/models/users.js";
+//Utils
 import { isValidPassword, generateToken } from "../utils/utils.js";
+//ErrorHandler
 import { CustomError } from '../errorsHandlers/customError.js';
 import { errorTypes } from '../errorsHandlers/errorTypes.js';
 import { userNotFound, authError } from "../errorsHandlers/productsError.js";
+//Logger
 import logger from "../utils/logger-env.js";
 
 export default class AuthRepository {

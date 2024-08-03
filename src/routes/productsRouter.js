@@ -1,7 +1,9 @@
 import { Router } from 'express';
-import validateUpdateFields from '../middlewares/validateUpdateFields.js';
+//Controller
 import {getProducts, getAllProductsWithCategories, getProductByID, addProduct, updateProduct, deleteProduct,} from "../controllers/products.controller.js"
-import { verifyToken, checkAdminRole, isPremiumOrAdmin } from '../middlewares/auth.js';
+//Middlewares
+import validateUpdateFields from '../middlewares/validateUpdateFields.js';
+import { verifyToken, isPremiumOrAdmin } from '../middlewares/auth.js';
 
 //instanciación
 const productsRouter = Router()

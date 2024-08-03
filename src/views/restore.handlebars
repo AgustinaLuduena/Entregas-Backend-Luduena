@@ -1,17 +1,107 @@
-<div>
-    <h1>Restaura la contraseña del usuario</h1>
-    <form id="restoreForm">
-        <input type="hidden" name="token" value="{{ token }}"> 
-        <label>Correo electrónico del usuario</label>
-        <input name="email">
-        <label>Nueva contraseña</label>
-        <input type="password" name="password">
-        <input type="submit">
-    </form>
-    <div id="restoreSuccess"></div>
-    <hr>
-    <div>
-        <a href="/login">Volver al inicio.</a>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurar Contraseña</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        .success-message {
+            color: #2ecc71;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Restaura la Contraseña del Usuario</h1>
+        <form id="restoreForm">
+            <input type="hidden" name="token" value="{{ token }}">
+            
+            <label for="email">Correo Electrónico del Usuario</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Nueva Contraseña</label>
+            <input type="password" id="password" name="password" required>
+
+            <input type="submit" value="Restaurar Contraseña">
+        </form>
+
+        <div id="restoreSuccess" class="success-message"></div>
+
+        <hr>
+        <div class="link">
+            <p><a href="/login">Volver al inicio.</a></p>
+        </div>
     </div>
-</div>
-<script src="./js/restore.js"></script>
+    <script src="./js/restore.js"></script>
+</body>
+</html>

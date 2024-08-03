@@ -19,5 +19,8 @@ mailing: {
     mail_pass: process.env.MAIL_PASSWORD,
     mail_service: process.env.MAIL_SERVICE,
     mail_port: process.env.MAIL_PORT,
-}
+},
+client_id: process.env.CLIENT_ID,
+client_secret: process.env.CLIENT_SECRET,
+callback_url: process.env.CALLBACK_URL
 };

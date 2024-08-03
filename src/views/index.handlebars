@@ -1,8 +1,63 @@
-<div>
-    <h1>Home</h1>
-    <hr>
-    <p></p>
-    <div>
-            <a href="https://entregas-backend-luduena-production.up.railway.app/login">Iniciar sesión /</a> <a href="https://entregas-backend-luduena-production.up.railway.app/register">Registrarse</a>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .links {
+            display: inline-block;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .links a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .links a:first-of-type::after {
+            content: " /";
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Home</h1>
+        <hr>
+        <div class="links">
+            <a href="https://entregas-backend-luduena-production.up.railway.app/login">Iniciar sesión</a>
+            <a href="https://entregas-backend-luduena-production.up.railway.app/register">Registrarse</a>
+        </div>
     </div>
-</div>
+</body>
+</html>

@@ -1,8 +1,10 @@
 import CartRepository from "../../repositories/cartRepository.js";
 import productRepository from "../../repositories/productRepository.js";
+//ErrorHandler
 import { CustomError } from '../../errorsHandlers/customError.js';
 import { errorTypes } from '../../errorsHandlers/errorTypes.js';
 import { notFound, updateError } from "../../errorsHandlers/productsError.js";
+//Logger
 import logger from "../../utils/logger-env.js";
 
 const cartRepository = new CartRepository();

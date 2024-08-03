@@ -1,34 +1,114 @@
-<div>
-    <h1>Registro</h1>
-    <form id="registerForm">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
 
-        <label>Nombre</label>
-        <input name="first_name">
-        <br/>
-        <label>Apellido</label>
-        <input name="last_name">
-        <br/>
-        <label>Email</label>
-        <input name="email">
-        <br/>
-        <label>Edad</label>
-        <input name="age">
-        <br/>
-        <label>Contraseña</label>
-        <input type="password" name="password">
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
 
-        <input type="submit">
-    </form>
-    {{!-- <div style="color: rgb(154, 18, 18);">
-        <p>El formulario no funciona correctamente por el momento.</p>
-        <p>Por favor, registrarse por medio de Postman utilizando el modelo dado. </p>
-        <p>Disculpe las molestias!</p>
-    </div> --}}
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
-    <hr>
-    <p></p>
-    <div id="mensaje" style="color: rgb(154, 18, 18);"></div>
-    <p></p>
-    <p>¿Ya tienes una cuenta? <a href="/login">Ingresa aquí</a></p>
-</div>
-<script src="/js/register.js"></script>
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        .error-message {
+            color: rgb(154, 18, 18);
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registro</h1>
+        <form id="registerForm">
+            <label for="first_name">Nombre</label>
+            <input type="text" id="first_name" name="first_name" required>
+
+            <label for="last_name">Apellido</label>
+            <input type="text" id="last_name" name="last_name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="age">Edad</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" required>
+
+            <input type="submit" value="Registrar">
+        </form>
+
+        <div id="mensaje" class="error-message"></div>
+
+        <div class="link">
+            <p>¿Ya tienes una cuenta? <a href="/login">Ingresa aquí</a></p>
+        </div>
+    </div>
+    <script src="/js/register.js"></script>
+</body>
+</html>

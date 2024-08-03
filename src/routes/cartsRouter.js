@@ -1,5 +1,7 @@
 import { Router } from 'express'
+//Controller
 import {getAllCarts, createCart, getCartById, addProduct, deleteProduct, deleteAllProducts, updateCart, updateProductQuantity, purchase,} from "../controllers/carts.controller.js"
+//Middlewares
 import {verifyToken, checkAdminRole, checkUserRole} from "../middlewares/auth.js"
 
 //instanciación

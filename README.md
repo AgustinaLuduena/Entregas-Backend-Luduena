@@ -1,14 +1,15 @@
-<h1 align="center">Práctica de Integración - Programación Backend</h1>
+<h1 align="center">Entrega Final - Programación Backend</h1>
 <h2 align="center">Agustina Ludueña</h2>
 <p align="center">Cursada 2024</p>
 
 <h3 align="left">Languages and Tools:</h3>
 <p align="left"> <a href="https://expressjs.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original-wordmark.svg" alt="express" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> </p>
 
-<h3 align="left">Routes of the project:</h3>
-<h2 align="left">Puerto: 8081</h2>
+<!-- <h3 align="left">Routes of the project:</h3>
+<h2 align="left">Puerto: 8081</h2> -->
+<h2 align="left">README PENDIENTE DE ACTUALIZACIÓN</h2>
 
-<h3>MONGO DB</h3>
+<!-- <h3>MONGO DB</h3>
 
 <h4>app.use(viewsRouter) - Desestimar por ahora. No funcionan bien.</h4>
 <p>GET "/" : Show the index page. Choose "log in" o "register".</p>
@@ -60,9 +61,4 @@
 <h4>app.use("/api", mockingRouter);</h4>
 <p>GET "/mockingproducts" : List of 100 products created with Faker.</p>
 
-<h3>SOCKET IO</h3>
-<p>app.use(viewsRouter);</p>
-<p>GET "/api/products/realTimeProducts" : Shows the list of products from JSON file (no MONGODB) and the form to add a new one to the file - The view is not working correctrly because of some problems with Socket.io</p>
-<p>GET "/api/messages/" : Show the form to send a new message that will be added to the data base with MongoDB - The view is not working correctrly because of some problems with Socket.io, but you can use the form correctly to use the MongoDB.</p>
-
-
+ -->

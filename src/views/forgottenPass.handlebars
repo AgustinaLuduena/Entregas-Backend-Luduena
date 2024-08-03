@@ -15,3 +15,128 @@
     </div>
 </div>
 <script src="./js/forgottenPass.js"></script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olvidó su contraseña</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        h3 {
+            color: #555;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        #forgottenPass {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="email"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: calc(100% - 22px); /* Account for padding */
+        }
+
+        input[type="submit"] {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            align-self: center;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        #mailSuccess {
+            margin-top: 20px;
+            color: green;
+            text-align: center;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .buttons a {
+            display: inline-block;
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .buttons a:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>¿Olvidó su contraseña?</h1>
+        <div id="forgottenPass">
+            <div>
+                <h3>Ingrese el correo electrónico al que desee recibir el link para restablecer su contraseña:</h3>
+            </div>
+            <form id="mailForm">
+                <label>Correo electrónico</label>
+                <input name="email" type="email" required>
+                <input type="submit" value="Enviar">
+            </form>
+            <div id="mailSuccess"></div>
+            <hr>
+            <div class="buttons">
+                <a href="/">Volver al inicio</a>
+            </div>
+        </div>
+    </div>
+    <script src="./js/forgottenPass.js"></script>
+</body>
+</html>

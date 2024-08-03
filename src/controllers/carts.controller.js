@@ -73,18 +73,6 @@ export const addProduct = async (req, res) => {
 }
 
 //Delete the chosen product from the chosen cart (Object [productId:id + quantity])
-
-// export const deleteProduct = async (req, res) => {
-//     try {
-//         let cid =  req.params.cid
-//         let pid =  req.params.pid
-//         const cart = await cartManager.deleteProduct(cid, pid);
-//         res.status(200).json(`Product Id number ${pid} was succesfully deleted from cart Id number ${cid}.`);
-
-//       } catch (error) {
-//         return res.status(500).json({ status: 'Internal Server Error', massage: error.message });
-//       }
-// }
 export const deleteProduct = async (req, res) => {
   try {
       const cid = req.params.cid;
@@ -133,22 +121,11 @@ export const deleteAllProducts = async (req, res) => {
     }
 }
 
-//deberá actualizar el carrito con un arreglo de productos con el mismo formato(Object [productId:id + quantity])
+//Update the cart using an array of products with the format: (Object [productId:id + quantity])
 export const updateCart = async (req, res) => {
     try{
         let cid =  req.params.cid;
         let updateData = req.body;
-    
-      /* Modelo para req.body
-    
-        [
-          {
-            "product": "", //cargar el id de un producto
-            "quantity": 10 //cargar catidad deseada
-          }
-        ]
-    
-      */
     
         const updateSuccessfully = await cartManager.updateCart(cid, updateData)
     
@@ -172,12 +149,6 @@ export const updateProductQuantity = async (req, res) => {
         const cid = req.params.cid;
         const pid = req.params.pid;
         const { quantity } = req.body;
-    
-      /* Modelo para req.body
-          {
-            "quantity": 10 //cargar catidad deseada
-          }
-      */
     
         if (isNaN(quantity) || quantity <= 0) {
             return res.status(400).json({ error: 'La cantidad debe ser un número válido mayor que cero.' });

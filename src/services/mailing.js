@@ -12,7 +12,6 @@ export default class MailingService {
             auth: {
                 user: "agusluduena4@gmail.com",
                 pass: "gyit reen larc zyxl",
-                //No permite utilizar variables de entorno aquí? Me da error.
             }
         })
     }
@@ -34,24 +33,4 @@ export default class MailingService {
             throw error;
         }
     }
-
-
-//     restoreMail = async ({ to, subject, html, attachments=[]}) => {
-//         try {
-//             let result = await this.client.sendMail({
-//                 from: `API Mail <${config.mailing.mail_host}>`,
-//                 to,
-//                 subject,
-//                 html,
-//                 attachments,
-//             })
-    
-//             logger.info(result);
-//             return result;
-//         } catch (error) {
-//             logger.error("Error al enviar el correo:", error);
-//             throw error;
-//         }
-//     }
-
 }

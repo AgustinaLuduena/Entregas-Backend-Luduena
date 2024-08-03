@@ -1,5 +1,7 @@
 import { Router } from "express";
+//Controller
 import {getAll, getById, createCategory, updateCategory, deleteCategory,} from "../controllers/category.controller.js"
+//Middlewares
 import { verifyToken, checkAdminRole } from "../middlewares/auth.js"
 
 //instanciación

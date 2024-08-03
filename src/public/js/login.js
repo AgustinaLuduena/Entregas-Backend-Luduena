@@ -33,6 +33,7 @@ form.addEventListener("submit", (e) => {
 })
 })
 
+//Revisar
 //           .then(data => {
 //               // Extraer el token de la respuesta JSON
 //               // Almacenar el token en el almacenamiento local

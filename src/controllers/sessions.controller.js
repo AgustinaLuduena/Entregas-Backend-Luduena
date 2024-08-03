@@ -139,7 +139,6 @@ export const logoutJWT = async (req, res) => {
       await updateUserLastConnection(user._id);
 
       authManager.clearCookie(res, config.token);
-      //res.redirect('http://localhost:8081/');
       res.redirect(`https://entregas-backend-luduena-production.up.railway.app/`);
 
       logger.info("Sesión cerrada correctamente.");

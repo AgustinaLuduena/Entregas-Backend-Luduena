@@ -40,13 +40,6 @@ export const createCategory = async (req, res) => {
       }
 }
 
-/*Modelo de categoría para Postman 
-{
-    "name": "Ejemplo category",
-    "description": "Descripción de la categoría"
-}
-*/
-
 export const updateCategory = async (req, res) => {
     try {
         const categoryId = req.params.id;

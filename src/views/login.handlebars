@@ -1,26 +1,137 @@
-<div>
-    <h1>Login</h1>
-    <form id="loginForm">
-        <label>Email</label>
-        <input name="email">
-        <br/>
-        <label>Contraseña</label>
-        <input type="password" name="password">
-        <input type="submit">
-    </form>
-    {{!-- Inicio de sesión Github --}}
-    <div>
-        <hr>
-        <a href="/api/sessions/github"><button>Inicia sesión con Github</button></a>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        .github-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .github-login a {
+            text-decoration: none;
+        }
+
+        .github-login button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .github-login button:hover {
+            background-color: #555;
+        }
+
+        .login-msg {
+            color: rgb(154, 18, 18);
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link,
+        .forgot-password-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a,
+        .forgot-password-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .register-link a:hover,
+        .forgot-password-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <label>Email</label>
+            <input name="email" type="email" required>
+            <label>Contraseña</label>
+            <input type="password" name="password" required>
+            <input type="submit" value="Iniciar sesión">
+        </form>
+        <!-- Inicio de sesión Github -->
+        <div class="github-login">
+            <hr>
+            <a href="/api/sessions/github"><button>Inicia sesión con Github</button></a>
+        </div>
+        <!-- Fin Inicio de sesión Github -->
+        <div id="loginMsg" class="login-msg"></div>
+        <div class="register-link">
+            <p>¿No estás registrado? <a href="/register">Regístrate aquí</a></p>
+        </div>
+        <div class="forgot-password-link">
+            <p><a href="/forgottenPass">¿Olvidó su contraseña?</a></p>
+        </div>
     </div>
-    {{!-- Fin Inicio de sesión Github --}}
-    <hr>
-    <p></p>
-    <div id="loginMsg" style="color: rgb(154, 18, 18);"></div>
-    <p></p>
-
-    <p>¿No estás registrado? <a href="/register">Regístrate aquí</a></p>
-    <p><a href="/forgottenPass">¿Olvidó su contraseña?</a></p>
-</div>
-<script src="/js/login.js"></script>
-
+    <script src="/js/login.js"></script>
+</body>
+</html>

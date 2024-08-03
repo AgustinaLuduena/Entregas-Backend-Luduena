@@ -1,33 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload Files</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargar Archivos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
-  <h1>Upload Files</h1>
-  {{!-- <form action="/api/users/:uid/documents" method="POST" enctype="multipart/form-data"> --}}
-  <form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
-    <label for="profile">Profile Image:</label>
-    <input type="file" name="profile" id="profile">
-    <br>
-    <label for="product">Product Image:</label>
-    <input type="file" name="product" id="product">
-    <br>
-    <label for="id">Identification:</label>
-    <input type="file" name="id" id="id">
-    <br>
-    <label for="adress">Proof of Address:</label>
-    <input type="file" name="adress" id="adress">
-    <br>
-    <label for="acount">Bank Account Statement:</label>
-    <input type="file" name="acount" id="acount" multiple>
-    <br>
-    <label for="document">Other Documents:</label>
-    <input type="file" name="document" id="document" multiple>
-    <br>
-    <button type="submit">Upload</button>
-  </form>
+    <div class="container">
+        <h1>Cargar Archivos</h1>
+        <form action="/api/users/{{userId}}/documents" method="POST" enctype="multipart/form-data">
+            <label for="profile">Imagen de Perfil:</label>
+            <input type="file" name="profile" id="profile">
+            
+            <label for="product">Imagen del Producto:</label>
+            <input type="file" name="product" id="product">
+            
+            <label for="id">Identificación:</label>
+            <input type="file" name="id" id="id">
+            
+            <label for="adress">Comprobante de Domicilio:</label>
+            <input type="file" name="adress" id="adress">
+            
+            <label for="acount">Estado de Cuenta Bancario:</label>
+            <input type="file" name="acount" id="acount" multiple>
+            
+            <label for="document">Otros Documentos:</label>
+            <input type="file" name="document" id="document" multiple>
+            
+            <button type="submit">Subir Archivos</button>
+        </form>
+    </div>
 </body>
 </html>

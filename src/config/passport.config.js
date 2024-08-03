@@ -1,8 +1,11 @@
 import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from "passport-github2";
+//Models
 import userModel from "../dao/models/users.js";
+//Utils
 import { createHash, isValidPassword } from "../utils/utils.js";
+import config from "./config.js";
 //Logger
 import logger from "../utils/logger-env.js";
 
@@ -83,10 +86,14 @@ const initializePassport = () => {
     "github",
     new GitHubStrategy(
       {
-        clientID: "Iv1.1b46ec129c1199cd",
-        clientSecret: "acbee1924d4ac0657b0c003e2b725385ed344d19",
-        //callbackURL: "http://localhost:8081/api/sessions/githubcallback",
-        callbackURL: "https://entregas-backend-luduena-production.up.railway.app/api/sessions/githubcallback",
+        clientID: config.client_id,
+        clientSecret: config.client_secret,
+        callbackURL: config.callback_url,
+
+        // clientID: "Iv1.1b46ec129c1199cd",
+        // clientSecret: "acbee1924d4ac0657b0c003e2b725385ed344d19",
+        // //callbackURL: "http://localhost:8081/api/sessions/githubcallback",
+        // callbackURL: "https://entregas-backend-luduena-production.up.railway.app/api/sessions/githubcallback",
       },
       async (accessToken, refreshToken, profile, done) => {
         try {

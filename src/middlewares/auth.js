@@ -17,29 +17,6 @@ import { userManager } from '../dao/factory.js';
 //     next();
 //   }
 
-
-//Middleware para verificar que el usuario haya iniciado sesión correctamente.
-// export const verifyToken = (req, res, next) => {
-//     const token = req.cookies[config.token];
-//     if (!token) {
-//       throw CustomError.CustomError(
-//         "Error", `Plese, login to continue.`, 
-//         errorTypes.ERROR_AUTHENTICATION, 
-//         loginError())
-//     }
-
-//     try {
-//         const decoded = jwt.verify(token, config.token);
-//         req.user = decoded;
-//         next();
-//     } catch (error) {
-//         throw CustomError.CustomError(
-//           "Error", `Invalid Token.`, 
-//           errorTypes.ERROR_UNAUTHORIZED, 
-//           authError())
-//     }
-// };
-
 export const verifyHeaderToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -60,7 +37,7 @@ export const verifyHeaderToken = (req, res, next) => {
     });
 };
 
-
+//Verify for active login
 export const verifyToken = (req, res, next) => {
   const token = req.cookies[config.token];
   if (!token) {
@@ -80,7 +57,7 @@ export const verifyToken = (req, res, next) => {
   }
 };
 
-//Middleware para verificar si es un usuario.
+//Verify if it is a register user or a guest
 export const verifyUser = (req, res, next) => {
     const token = req.cookies[config.token];
 
@@ -99,7 +76,7 @@ export const verifyUser = (req, res, next) => {
     });
 };
 
-// Middleware de autenticación ADMIN
+//Verify admin auth
   export const checkAdminRole = (req, res, next) => {
     const token = req.cookies[config.token];
     if (!token) {
@@ -128,7 +105,7 @@ export const verifyUser = (req, res, next) => {
     }
 };
 
-// Middleware de autenticación USER
+////Verify user auth
   export const checkUserRole = async (req, res, next) => {
     const token = req.cookies[config.token];
     if (!token) {
@@ -159,7 +136,7 @@ export const verifyUser = (req, res, next) => {
     }
 };
 
-  // Middleware de autenticación USER PREMIUM
+  //Verify user "premium" auth
   export const checkPremiumRole = (req, res, next) => {
     const token = req.cookies[config.token];
     if (!token) {
@@ -188,6 +165,7 @@ export const verifyUser = (req, res, next) => {
     }
 };
 
+//Verify if it is USER or PREMIUM
 export const isUserOrPremium = async (req, res, next) => {
     let user = req.user.user
     if(!user) {return res.status(404).json({ error: 'Usuario no encontrado' });}
@@ -202,6 +180,7 @@ export const isUserOrPremium = async (req, res, next) => {
     }
 }
 
+//Verify if it is PREMIUM or ADMIN
 export const isPremiumOrAdmin = async (req, res, next) => {
   let user = req.user.user
   if(!user) {return res.status(404).json({ error: 'Usuario no encontrado' });}

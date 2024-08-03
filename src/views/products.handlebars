@@ -1,65 +1,173 @@
-{{#if user}}
-    <h1>Bienvenido/a {{user.first_name}}</h1>
-    {{#if admin}} 
-        <p>Tu email: {{user.email}}</p>
-        <p>Tu rol: {{user.role}}</p>
-    {{/if}}
-    {{#if user}}
-        <p>Tu email: {{user.email}}</p>
-        <p>Tu edad: {{user.age}}</p>
-        <p>Tu rol: {{user.role}}</p>
-        <input type="hidden" id="cart-id" value="{{user.cart}}" />
-    {{/if}}
-    <div>
-        <button id="profile-btn">Ver perfil</button>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Productos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .product-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .add-btn {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .add-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .buttons button:hover {
+            background-color: #2980b9;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            color: #3498db;
+            margin: 0 10px;
+        }
+
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+
+        .welcome {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {{#if user}}
+            <div class="welcome">
+                <h1>Bienvenido/a {{user.first_name}}</h1>
+                {{#if admin}} 
+                    <p>Tu email: {{user.email}}</p>
+                    <p>Tu rol: {{user.role}}</p>
+                {{/if}}
+                {{#if user}}
+                    <p>Tu email: {{user.email}}</p>
+                    <p>Tu edad: {{user.age}}</p>
+                    <p>Tu rol: {{user.role}}</p>
+                    <input type="hidden" id="cart-id" value="{{user.cart}}" />
+                {{/if}}
+                <div class="buttons">
+                    <button id="profile-btn">Ver perfil</button>
+                </div>
+            </div>
+        {{else}}
+            <div class="welcome">
+                <h1>Hola invitado</h1>
+                <div class="buttons">
+                    <button id="profile-btn">Ver perfil</button>
+                </div>
+            </div>
+        {{/if}}
+
+        <h3>Listado de Productos</h3>
+        <hr>
+        {{#if products.length}}
+            <ul class="product-list">
+                {{#each products}}
+                    <li class="product-item">
+                        <div class="product-info">
+                            <p><strong>Producto ID:</strong> {{this.id}}</p>
+                            <p><strong>Título:</strong> {{this.title}}</p>
+                            <p><strong>Descripción:</strong> {{this.description}}</p>
+                            <p><strong>Código:</strong> {{this.code}}</p>
+                            <p><strong>Precio:</strong> ${{this.price}}</p>
+                            {{!-- <p> <strong> Status:</strong> {{this.status}}</p> --}}
+                            <p><strong>Stock:</strong> {{this.stock}}</p>
+                            <p><strong>Categoría:</strong> {{this.category}}</p>
+                            {{!-- <p>Imagen:</strong> {{this.thumbnail}}</p> --}}
+                            {{!-- <button id="add-btn">Agregar al carrito</button> --}}
+                            <button class="add-btn" data-product-id="{{this._id}}">Agregar al carrito</button>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>  
+            <div class="pagination">
+                {{#if hasPrevPage}}
+                    <a href={{this.prevLink}}>&lt;&lt; Anterior</a>
+                {{/if}}
+                {{this.page}}
+                {{#if hasNextPage}}
+                    <a href={{this.nextLink}}>Siguiente &gt;&gt;</a>
+                {{/if}}
+            </div>
+        {{else}}
+            <p>No hay productos en el listado todavía.</p>
+        {{/if}}
     </div>
-{{else}}
-    <h1>Hola invitado</h1>
-        <div>
-        <button id="profile-btn">Ver perfil</button>
-    </div>
-{{/if}}
 
-<h3>Listado de Productos</h3>
-<hr>
-{{#if products.length}}
-<div>
-    <ul>
-        {{#each products}}
-            <li>
-                <p> <strong> Producto ID:</strong> {{this.id}}</p>
-                <p> <strong> Título:</strong> {{this.title}}</p>
-                <p> <strong> Descripción:</strong> {{this.description}}</p>
-                <p> <strong> Código:</strong> {{this.code}}</p>
-                <p> <strong> Precio:</strong> ${{this.price}}</p>
-                {{!-- <p> <strong> Status:</strong> {{this.status}}</p> --}}
-                <p> <strong> Stock:</strong> {{this.stock}}</p>
-                <p> <strong> Categoría:</strong> {{this.category}}</p>
-                {{!-- <p>Imagen:</strong> {{this.thumbnail}}</p> --}}
-                {{!-- <button id="add-btn">Agregar al carrito</button> --}}
-                    <button class="add-btn" data-product-id="{{this._id}}">Agregar al carrito</button>
-            </li>
-        {{/each}}
-    </ul>  
-</div> 
-<br/>
-<hr>
-<div>
-    {{#if hasPrevPage}}
-        <a href={{this.prevLink}}>  << Anterior</a>
-    {{/if}}
-    &nbsp;
-    {{this.page}}
-    &nbsp;
-    {{#if hasNextPage}}
-        <a href={{this.nextLink}}>Siguiente >></a>
-    {{/if}}
-</div>
-{{else}}
-    <p>No hay productos en listado todavía.</p>
-{{/if}}
-
-
-</div>
-
-<script src="/js/products.js"></script>
+    <script src="/js/products.js"></script>
+</body>
+</html>

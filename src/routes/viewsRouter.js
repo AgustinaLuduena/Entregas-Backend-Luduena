@@ -1,21 +1,15 @@
 import { Router } from "express";
-//ChatManager - without controller
-import DBChatManager from "../dao/classes/DBChatManager.js";
 //Views controller
 import {index, register, login, profile, realTimeProducts, getProducts, getCartById, restore, forgottenPass, upload, getUsersView, updateUserRole, deleteUser, purchase} from "../controllers/views.controller.js"
 //Middlewares
-//import { auth, verifyUser } from "../middlewares/auth.js";
-import { verifyUser } from "../middlewares/auth.js";
-import { active } from "../middlewares/activeSession.js";
 import { verifyTokenExpiration } from "../utils/utils.js";
-import { isUserOrPremium, checkAdminRole } from "../middlewares/auth.js";
-//import { purchase } from "../controllers/carts.controller.js";
+import { verifyUser, isUserOrPremium, checkAdminRole } from "../middlewares/auth.js";
 
 //instanciación
 const viewsRouter = Router();
 
 //INDEX
-viewsRouter.get('/', active, index);
+viewsRouter.get('/', index);
 
 //SESSION and PROFILE
 viewsRouter.get("/register", register);
@@ -29,9 +23,11 @@ viewsRouter.get('/users/documents', verifyUser, upload);
 viewsRouter.get('/products', verifyUser, getProducts);
 // CART VIEW Route
 viewsRouter.get("/carts/:cid", verifyUser, isUserOrPremium, getCartById);
-//viewsRouter.get("/carts/:cid/", auth, getCartById);
-
+// PURCHASE VIEW Route
 viewsRouter.get("/carts/:cid/purchase", verifyUser, isUserOrPremium, purchase);
+
+
+//REVISAR!!!1
 
 // Ruta para la vista de administración de usuarios
 viewsRouter.get('/admin/users', verifyUser, checkAdminRole, getUsersView);
@@ -41,17 +37,6 @@ viewsRouter.post('/admin/users/:id/role', verifyUser, checkAdminRole, updateUser
 
 // Ruta para eliminar usuario
 viewsRouter.delete('/admin/users/:id', verifyUser, checkAdminRole, deleteUser);
-
-
-// REAL TIME PRODUCTS (FS) - Not working
-viewsRouter.get("/api/products/realTimeProducts", realTimeProducts);
-
-// CHAT Routes - Not working
-viewsRouter.get("/api/messages/", DBChatManager.getMessages);
-viewsRouter.post("/api/messages/addMessage", DBChatManager.addMessage);
-
-
-
 
 
 export default viewsRouter;

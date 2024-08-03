@@ -1,4 +1,5 @@
 import { Router } from "express";
+//Controller
 import { getMock } from "../controllers/mocking.controller.js";
 
 //instanciación

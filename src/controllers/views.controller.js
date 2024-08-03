@@ -45,9 +45,6 @@ export const login = async (req, res) => {
 
 export const profile = async (req, res) => {
     try{
-        // let user = req.user ? req.user : null;
-        // res.render("profile", {title: "Profile"}, { user: user });
-
         if(req.user) {
             let user = req.user.user
             res.render("profile", { user: user });
@@ -130,7 +127,6 @@ export const getProducts = async (req, res) => {
                 });
             }
 
-            //Console response
             const status = result.isValid ? "success" : "error";
             const totalPages = result.totalPages;
             const hasNextPage = result.hasNextPage;
@@ -160,9 +156,6 @@ export const getProducts = async (req, res) => {
     }
 }
 export const getCartById = async (req, res) => {
-    //List of products inside the cart chosen by Id
-    //Example cart id: 661404ba661a8432389a150f
-
     try {
         if(req.user){
             let user = req.user.user
@@ -186,13 +179,12 @@ export const getCartById = async (req, res) => {
                 price: product.price
             }));
 
-            // Calcular el total del carrito
             let total = cartData.products.reduce((sum, product) => sum + product.price, 0);
 
             let cart = {
                 cid: cartData._id,
                 products: products,
-                total: total // Agregar el total al objeto cart
+                total: total
             };
 
             if (req.accepts("html")) {
@@ -279,7 +271,6 @@ export const deleteUser = async (req, res) => {
 export const purchase = async (req, res) => {
     try {
         const user = req.user.user;
-        //let cid = req.params.cid;ç
         let cid = user.cart
         const cart = await cartManager.getCartById(cid);
     

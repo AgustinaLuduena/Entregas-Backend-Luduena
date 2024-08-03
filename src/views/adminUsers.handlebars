@@ -2,7 +2,84 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrar Usuarios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #ddd;
+        }
+
+        form {
+            display: inline-block;
+            margin: 0;
+        }
+
+        select {
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+    </style>
 </head>
 <body>
     <h1>Administrar Usuarios</h1>
@@ -30,10 +107,10 @@
                             <button type="submit">Actualizar</button>
                         </form>
                     </td>
-                    <td>
+                    <td class="actions">
                         <form action="/admin/users/{{this._id}}" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit">Eliminar</button>
+                            <button type="submit" class="delete-btn">Eliminar</button>
                         </form>
                     </td>
                 </tr>

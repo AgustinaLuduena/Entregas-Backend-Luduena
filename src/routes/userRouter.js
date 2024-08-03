@@ -1,5 +1,7 @@
 import { Router } from "express";
+//Controller
 import {getUsers, getUserById, createUser, updateUser, deleteUser, changeUserRole, uploadDocuments, deleteInactiveUsers} from "../controllers/users.controller.js"
+//Middlewares
 import { verifyToken, checkAdminRole, isUserOrPremium } from "../middlewares/auth.js";
 
 //instanciación
