@@ -1,24 +1,6 @@
 //Profile buttons
-const cartBtn = document.getElementById("cart-btn");
 const logoutBtn = document.getElementById("logout-btn");
 const homeBtn = document.getElementById("home-btn");
-
-cartBtn.addEventListener('click', async (e) => {
-  e.preventDefault();
-
-  const cartId = document.getElementById("cart-id").value;
-  
-  if (cartId) {
-    try {
-      window.location.replace(`https://entregas-backend-luduena-production.up.railway.app/carts/${cartId}`);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  } else {
-    console.log("Error. Cart was not found.");
-  }
-});
-
 
 logoutBtn.addEventListener('click', (e) => {
   e.preventDefault();
@@ -42,4 +24,24 @@ if (adminBtn) {
   adminBtn.addEventListener('click', () => {
     window.location.replace("https://entregas-backend-luduena-production.up.railway.app/admin/users");
   });
+}
+
+//Cart
+const cartBtn = document.getElementById("cart-btn");
+if(cartBtn) {
+  cartBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+  
+    const cartId = document.getElementById("cart-id").value;
+    
+    if (cartId) {
+      try {
+        window.location.replace(`https://entregas-backend-luduena-production.up.railway.app/carts/${cartId}`);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    } else {
+      console.log("Error. Cart was not found.");
+    }
+  });  
 }
