@@ -1,0 +1,33 @@
+paths:
+#Logger Test Router
+  /loggerTest:
+    get:
+      summary: Test logger endpoint
+      tags:
+        - Logger Test
+      description: Endpoint used to test logging functionality
+      responses:
+        '200':
+          description: Successful response indicating the logging test was successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Confirmation message from the logger
+                required:
+                  - message
+        '500':
+          description: Internal server error if something goes wrong
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message detailing what went wrong
+                required:
+                  - error

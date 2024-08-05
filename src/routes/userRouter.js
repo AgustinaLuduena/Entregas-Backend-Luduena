@@ -12,7 +12,6 @@ userRouter.get("/user/:id", getUserById);
 userRouter.post("/user", createUser);
 userRouter.put("/user/:id", updateUser);
 userRouter.delete("/user/:id", deleteUser);
-//Debería ser solo admin
 userRouter.delete("/users", verifyToken, checkAdminRole, deleteInactiveUsers);
 userRouter.get("/users/premium/:id",  verifyToken, isUserOrPremium, changeUserRole);
 userRouter.post("/users/:uid/documents", verifyToken, uploadDocuments);

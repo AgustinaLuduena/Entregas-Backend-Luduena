@@ -164,10 +164,3 @@ components:
         last_name: Apellido
         email: example@mail.com
         age: 30
-
-  #Seguridad y autenticación del usuario
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT

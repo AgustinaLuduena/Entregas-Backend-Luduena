@@ -72,3 +72,42 @@ paths:
           description: Acceso denegado. Intente utilizar las credenciales correctas.
         "500":
           description: Error del servidor.
+
+    /users/documents:
+      get:
+        summary: Documents Upload Page
+        tags:
+          - Views
+        responses:
+          '200':
+            description: Documents upload page view
+          "403":
+            description: Acceso denegado. Intente utilizar las credenciales correctas.
+          "500":
+            description: Error del servidor.
+
+    /cart:
+      get:
+        summary: Cart Page
+        tags:
+        - Views
+        responses:
+          '200':
+            description: Cart page view
+          "403":
+            description: Acceso denegado. Intente utilizar las credenciales correctas.
+          "500":
+            description: Error del servidor.
+
+    /admin/users:
+      get:
+        summary: Admin Users Page
+        tags:
+        - Views
+        responses:
+          '200':
+            description: Admin users page view
+          "403":
+          description: Acceso denegado. Intente utilizar las credenciales correctas.
+          "500":
+            description: Error del servidor.

@@ -31,7 +31,7 @@ viewsRouter.get("/carts/:cid/purchase", verifyToken, isUserOrPremium, purchase);
 viewsRouter.get('/admin/users', verifyToken, checkAdminRole, getUsersView);
 //UPDATE USERS ROLE Route
 viewsRouter.post('/admin/users/:id/role', verifyToken, checkAdminRole, updateUserRole);
-//DELETE USERs Route
+//DELETE USERS Route
 viewsRouter.delete('/admin/users/:id', verifyToken, checkAdminRole, deleteUser);
 
 

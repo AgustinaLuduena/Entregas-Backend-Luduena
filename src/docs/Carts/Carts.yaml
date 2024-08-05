@@ -20,8 +20,6 @@ paths:
  #Ruta para obtener el listado de carritos (Solo Admin)
   /api/carts/list:
     get:
-      security:
-        - bearerAuth: []
       summary: List of carts (admin only)
       tags:
         - Carts
@@ -66,8 +64,6 @@ paths:
           description: Error del servidor.
 #Ruta para eliminar todos los productos del carrito (Sólo User)
     delete:
-      security:
-        - bearerAuth: []
       summary: Delete all products from the cart (user only)
       tags:
         - Carts
@@ -88,8 +84,6 @@ paths:
           description: Error del servidor.
 #Ruta para actualizar el carrito con un producto (Sólo User)
     put:
-      security:
-        - bearerAuth: []
       summary: Update with a product (user only)
       tags:
         - Carts
@@ -121,8 +115,6 @@ paths:
 #Ruta para agregar un producto al carrito (Sólo User)
   /api/carts/{cid}/product/{pid}:
     post:
-      security:
-        - bearerAuth: []
       summary: Add the chosen product to chosen the cart (user only)
       tags:
         - Carts
@@ -153,8 +145,6 @@ paths:
           description: Respuesta exitosa
 #Ruta para eliminar todos un producto del carrito (Sólo User)
     delete:
-      security:
-        - bearerAuth: []
       summary: Delete the chosen product to chosen the cart (user only)
       tags:
         - Carts
@@ -176,8 +166,6 @@ paths:
           description: Respuesta exitosa
 #Ruta para actualizar la cantidad de un producto (Sólo User)   
     put:
-      security:
-        - bearerAuth: []
       summary: Update quantity of a product (user only)
       tags:
         - Carts
@@ -209,8 +197,6 @@ paths:
 #Ruta para finalizar una compra y generar el ticket (Sólo User)
   /api/carts/{cid}/purchase:
     get:
-      security:
-        - bearerAuth: []
       summary: Purchase and ticket (user only)
       tags:
         - Carts
@@ -298,9 +284,3 @@ components:
         products:
           type: array
           example: [ ]
-  #Seguridad y autenticación del usuario
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT

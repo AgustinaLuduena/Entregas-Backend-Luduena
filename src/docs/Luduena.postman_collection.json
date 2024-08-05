@@ -122,6 +122,66 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "documents upload view",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/users/documents",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"users",
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cart view",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/users/documents",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"users",
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "admin users view",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/users/documents",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"users",
+								"documents"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -507,7 +567,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"Remera testing\",\n    \"description\": \"Necesita una descripción\", \n    \"code\" : 130,\n    \"price\": 4500,\n    \"status\" : true,\n    \"stock\": 10,\n    \"category\": \"66314a18b4275625c52199ee\",\n    \"colors\": [\"amarillo\", \"rojo\"],\n    \"sizes\": [\"S\", \"M\"]\n}",
+							"raw": "{\n    \"title\": \"Remera testing v1\",\n    \"description\": \"Necesita una descripción\", \n    \"code\" : 131,\n    \"price\": 4500,\n    \"status\" : true,\n    \"stock\": 10,\n    \"category\": \"66314a18b4275625c52199ee\",\n    \"colors\": [\"amarillo\", \"rojo\"],\n    \"sizes\": [\"S\", \"M\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -537,7 +597,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "//ID del primer producto de la lista: \"Calza Nike\"\n{\n    \"price\": 10000,\n    \"stock\": 15,\n    \"colors\": [\"verde\", \"negro\"],\n    \"sizes\": [\"L\", \"M\"]\n}",
+							"raw": "//ID del primer producto de la lista: \"Calza Nike\"\n{\n    \"price\": 2000,\n    \"stock\": 15,\n    \"colors\": [\"verde\", \"negro\"],\n    \"sizes\": [\"L\", \"M\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -545,7 +605,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/api/products/667c31366bcf86ffb943a47b",
+							"raw": "http://localhost:8081/api/products/66314df6acb3b7caac87f631",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -554,7 +614,7 @@
 							"path": [
 								"api",
 								"products",
-								"667c31366bcf86ffb943a47b"
+								"66314df6acb3b7caac87f631"
 							]
 						}
 					},
@@ -566,7 +626,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/api/products/667c3d7b5860b22d18c38289",
+							"raw": "http://localhost:8081/api/products/66a171faf9d0e51d6380b5b4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -575,7 +635,7 @@
 							"path": [
 								"api",
 								"products",
-								"667c3d7b5860b22d18c38289"
+								"66a171faf9d0e51d6380b5b4"
 							]
 						}
 					},
@@ -607,12 +667,32 @@
 					"response": []
 				},
 				{
+					"name": "Delete inactive users (admin only)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "User by Id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/api/user/664d246a1e43939605b2d191",
+							"raw": "http://localhost:8081/api/user/66a169ec4cee4f2d418833c9",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -621,7 +701,7 @@
 							"path": [
 								"api",
 								"user",
-								"664d246a1e43939605b2d191"
+								"66a169ec4cee4f2d418833c9"
 							]
 						}
 					},
@@ -633,7 +713,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/api/users/premium/664d246a1e43939605b2d191",
+							"raw": "http://localhost:8081/api/users/premium/66a169ec4cee4f2d418833c9",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -643,7 +723,7 @@
 								"api",
 								"users",
 								"premium",
-								"664d246a1e43939605b2d191"
+								"66a169ec4cee4f2d418833c9"
 							]
 						}
 					},
@@ -656,7 +736,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"first_name\": \"Juan\",\n    \"last_name\": \"Perez\",\n    \"email\": \"juan@mail.com\",\n    \"password\" : \"123\",\n    \"age\": \"20\"\n}\n",
+							"raw": "{\n    \"first_name\": \"Agustina\",\n    \"last_name\": \"Ludueña\",\n    \"email\": \"agusluduena4@gmail.com\",\n    \"password\" : \"123\",\n    \"age\": \"22\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -737,6 +817,28 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Upload documents",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/users/664d246a1e43939605b2d191/documents",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"users",
+								"664d246a1e43939605b2d191",
+								"documents"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -750,7 +852,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "//Existing user in the DB.\n{\n    \"email\": \"may@mail.com\",\n    \"password\" : \"123\"\n}",
+							"raw": "//Existing user in the DB.\n{\n    \"email\": \"agusluduena4@gmail.com\",\n    \"password\" : \"123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -852,7 +954,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "//La funcionalidad fue limitada en el 3er integrador para ser utilizado con mailing. No le dejará restablecer la contraseña sin el token necesario.\n//Deberá utilizar las vistas para probar esta funcionalidad.\n\n{\n    \"email\": \"may@mail.com\",\n    \"password\": \"123\"\n}",
+							"raw": "//La funcionalidad fue limitada para ser utilizado con mailing. No le dejará restablecer la contraseña sin el token necesario.\n//Deberá utilizar las vistas para probar esta funcionalidad.\n\n{\n    \"email\": \"may@mail.com\",\n    \"password\": \"123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1084,6 +1186,30 @@
 							"port": "8081",
 							"path": [
 								"loggerTest"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API Documentation",
+			"item": [
+				{
+					"name": "API Docs - Swagger",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api-docs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api-docs"
 							]
 						}
 					},

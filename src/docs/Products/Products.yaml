@@ -21,8 +21,6 @@ paths:
           description: Error del servidor.
 #Ruta para crear un nuevo producto
     post:
-      security:
-        - bearerAuth: []
       summary: Create a new product
       description: Only "admin" or "Premium" users have access to this function
       tags:
@@ -131,8 +129,6 @@ paths:
           description: Error del servidor.
 #Ruta para actualizar un producto por ID
     put:
-      security:
-        - bearerAuth: []
       summary: Update a product
       description: Only "admin" or "Premium" users have access to this function
       tags:
@@ -153,20 +149,12 @@ paths:
       responses:
         "200":
           description: Producto actualizado correctamente.
-          # content:
-          #   application/json:
-          #     schema:
-          #       type: array
-          #       items:
-          #         $ref: "#/components/schemas/Product"
         "403":
           description: Acceso denegado. Intente utilizar las credenciales correctas.
         "500":
           description: Error del servidor.
   #Ruta para eliminar un producto por ID
     delete:
-      security:
-        - bearerAuth: []
       summary: Delete a product
       description: Only "admin" or "Premium" users have access to this function
       tags:
@@ -232,7 +220,6 @@ components:
         owner:
           type: string
           example: "admin"
-      # example:
 
 
   requestBodies:
@@ -274,9 +261,3 @@ components:
             enum:
               - S
               - M
-#Seguridad y autenticación del usuario
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
