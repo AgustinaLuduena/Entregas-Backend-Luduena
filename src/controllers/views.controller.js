@@ -260,7 +260,8 @@ export const updateUserRole = async (req, res) => {
 export const deleteUser = async (req, res) => {
     try {
         const userId = req.params.id;
-        await userModel.findByIdAndDelete(userId)
+        //await userModel.findByIdAndDelete(userId)
+        await userManager.deleteUser(userId)
         res.redirect('/admin/users');
     } catch (error) {
         logger.error(`Error updating user: ${error}`);
