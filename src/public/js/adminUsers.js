@@ -5,6 +5,21 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.replace("https://entregas-backend-luduena-production.up.railway.app/profile"); 
   });
 
+  const deleteInactiveBtn = document.getElementById("delete-inactive-btn");
+  deleteInactiveBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+      try {
+        fetch(`https://entregas-backend-luduena-production.up.railway.app/api/users`, { method: 'DELETE' })
+        .then((response) => {
+          if (response.status === 200) {
+            window.location.replace("https://entregas-backend-luduena-production.up.railway.app/admin/users"); 
+          }
+        });
+      } catch (error) {
+        console.error('Error:', error);
+      }
+  });
+
   const deleteBtns = document.querySelectorAll(".delete-btn");
   deleteBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
