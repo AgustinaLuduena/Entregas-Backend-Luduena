@@ -36,7 +36,7 @@ viewsRouter.get('/admin/users', verifyUser, checkAdminRole, getUsersView);
 viewsRouter.post('/admin/users/:id/role', verifyUser, checkAdminRole, updateUserRole);
 
 // Ruta para eliminar usuario
-viewsRouter.delete('/admin/users/:id?', verifyUser, checkAdminRole, deleteUser);
+viewsRouter.delete('/admin/users/:id', verifyUser, checkAdminRole, deleteUser);
 
 
 export default viewsRouter;
