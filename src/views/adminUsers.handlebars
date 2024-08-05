@@ -87,6 +87,8 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Apellido</th>
+                <th>Nombre</th>
                 <th>Email</th>
                 <th>Rol</th>
                 <th>Acciones</th>
@@ -96,6 +98,8 @@
             {{#each users}}
                 <tr>
                     <td>{{this._id}}</td>
+                    <td>{{this.first_name}}</td>
+                    <td>{{this.last_name}}</td>
                     <td>{{this.email}}</td>
                     <td>
                         <form action="/admin/users/{{this._id}}/role" method="POST">
@@ -109,7 +113,7 @@
                     </td>
                     <td class="actions">
                         <form action="/admin/users/{{this._id}}" method="DELETE">
-                            <input type="hidden" name="_method" value="DELETE">
+                            {{!-- <input type="hidden" name="_method" value="DELETE"> --}}
                             <button type="submit" class="delete-btn">Eliminar</button>
                         </form>
                     </td>
