@@ -95,7 +95,7 @@
         <tbody>
             {{#each users}}
                 <tr>
-                    <td>{{this.name}}</td>
+                    <td>{{this._id}}</td>
                     <td>{{this.email}}</td>
                     <td>
                         <form action="/admin/users/{{this._id}}/role" method="POST">
@@ -108,7 +108,7 @@
                         </form>
                     </td>
                     <td class="actions">
-                        <form action="/admin/users/{{this._id}}" method="POST">
+                        <form action="/admin/users/{{this._id}}" method="DELETE">
                             <input type="hidden" name="_method" value="DELETE">
                             <button type="submit" class="delete-btn">Eliminar</button>
                         </form>
