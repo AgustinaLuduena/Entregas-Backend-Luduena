@@ -116,8 +116,7 @@
                         </form>
                     </td>
                     <td class="actions">
-                         <input type="hidden" id="user-id" value="{{this._id}}" />
-                        <button type="submit" id="delete-btn" class="delete-btn">Eliminar</button>
+                        <button type="button" class="delete-btn" data-id="{{this._id}}">Eliminar</button>
                     </td>
                 </tr>
             {{/each}}
