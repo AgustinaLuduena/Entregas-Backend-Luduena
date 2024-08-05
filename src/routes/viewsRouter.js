@@ -1,9 +1,9 @@
 import { Router } from "express";
 //Views controller
-import {index, register, login, profile, realTimeProducts, getProducts, getCartById, restore, forgottenPass, upload, getUsersView, updateUserRole, deleteUser, purchase} from "../controllers/views.controller.js"
+import {index, register, login, profile, getProducts, getCartById, restore, forgottenPass, upload, getUsersView, updateUserRole, deleteUser, purchase} from "../controllers/views.controller.js"
 //Middlewares
 import { verifyTokenExpiration } from "../utils/utils.js";
-import { verifyUser, isUserOrPremium, checkAdminRole } from "../middlewares/auth.js";
+import { verifyToken, verifyUser, isUserOrPremium, checkAdminRole } from "../middlewares/auth.js";
 
 //instanciación
 const viewsRouter = Router();
@@ -14,29 +14,25 @@ viewsRouter.get('/', index);
 //SESSION and PROFILE
 viewsRouter.get("/register", register);
 viewsRouter.get("/login", login);
-viewsRouter.get('/profile', verifyUser, profile);
+viewsRouter.get('/profile', verifyToken, profile);
 viewsRouter.get("/restore", verifyTokenExpiration, restore);
 viewsRouter.get("/forgottenPass", forgottenPass);
 // DOCUMENTS UPLOAD VIEW Route
-viewsRouter.get('/users/documents', verifyUser, upload);
+viewsRouter.get('/users/documents', verifyToken, upload);
 // PRODUCTS VIEW Route
 viewsRouter.get('/products', verifyUser, getProducts);
 // CART VIEW Route
-viewsRouter.get("/carts/:cid", verifyUser, isUserOrPremium, getCartById);
+viewsRouter.get("/carts/:cid", verifyToken, isUserOrPremium, getCartById);
 // PURCHASE VIEW Route
-viewsRouter.get("/carts/:cid/purchase", verifyUser, isUserOrPremium, purchase);
+viewsRouter.get("/carts/:cid/purchase", verifyToken, isUserOrPremium, purchase);
 
-
-//REVISAR!!!1
-
-// Ruta para la vista de administración de usuarios
-viewsRouter.get('/admin/users', verifyUser, checkAdminRole, getUsersView);
-
-// Ruta para actualizar rol de usuario
-viewsRouter.post('/admin/users/:id/role', verifyUser, checkAdminRole, updateUserRole);
-
-// Ruta para eliminar usuario
-viewsRouter.delete('/admin/users/:id', verifyUser, checkAdminRole, deleteUser);
+//Admin routes
+//LIST OF USERS Route
+viewsRouter.get('/admin/users', verifyToken, checkAdminRole, getUsersView);
+//UPDATE USERS ROLE Route
+viewsRouter.post('/admin/users/:id/role', verifyToken, checkAdminRole, updateUserRole);
+//DELETE USERs Route
+viewsRouter.delete('/admin/users/:id', verifyToken, checkAdminRole, deleteUser);
 
 
 export default viewsRouter;

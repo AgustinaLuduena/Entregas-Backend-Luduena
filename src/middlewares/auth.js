@@ -1,41 +1,9 @@
 import jwt from 'jsonwebtoken';
 import config from "../config/config.js";
-//ErrorHandler
-import { CustomError } from '../errorsHandlers/customError.js';
-import { errorTypes } from '../errorsHandlers/errorTypes.js';
-import { loginError, authError, authorizationError } from "../errorsHandlers/productsError.js";
 //Logger
 import logger from '../utils/logger-env.js';
 //Managers
 import { userManager } from '../dao/factory.js';
-
-//auth with session
-// export function auth (req, res, next) {
-//     if (!req.session || !req.session.user) {
-//       return res.redirect("/login");
-//     }
-//     next();
-//   }
-
-export const verifyHeaderToken = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-        req.user = null;
-        return next();
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    jwt.verify(token, config.token, (err, decoded) => {
-        if (err) {
-            req.user = null;
-        } else {
-            req.user = decoded;
-        }
-        next();
-    });
-};
 
 //Verify for active login
 export const verifyToken = (req, res, next) => {

@@ -147,9 +147,9 @@ export const deleteUser = async (req, res) => {
 export const deleteInactiveUsers = async (req, res) => {
     try {
         const inactiveLimitdate = new Date();
-        const limitTime = 1
-        //inactiveLimitdate.setDate(inactiveLimitdate.getDate() - 2);
-        inactiveLimitdate.setMinutes(inactiveLimitdate.getMinutes() - limitTime);
+        const limitTime = 2
+        inactiveLimitdate.setDate(inactiveLimitdate.getDate() - limitTime);
+        //inactiveLimitdate.setMinutes(inactiveLimitdate.getMinutes() - limitTime);
 
         const inactiveUsers = await userManager.getInactiveUsers(inactiveLimitdate)
 
@@ -225,7 +225,6 @@ export const uploadDocuments = (req, res, next) => {
                 );
             };
 
-            //Quizás el admin no debería poder subir archivos
             if (user.role === "admin") {
                 let { uid } = req.params;
                 const files = req.files;

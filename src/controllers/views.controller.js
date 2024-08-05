@@ -58,17 +58,6 @@ export const profile = async (req, res) => {
     }
 }
 
-export const realTimeProducts = async (req, res) => {
-    //Muestra el listado de productos del JSON y el formulario para agregar uno nuevo (NO MONGO DB). Ya no funciona porque no funciona socket.io
-    try{
-        res.render('realTimeProducts')
-
-    } catch (err) {
-        logger.error('Error:', err);
-        res.status(500).send('Internal Server Error');
-    }
-}
-
 // List of products, page, limit, query, and sort usando HANDLEBARS
 export const getProducts = async (req, res) => {
 

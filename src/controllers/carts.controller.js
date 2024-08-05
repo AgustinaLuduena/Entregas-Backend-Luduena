@@ -81,7 +81,6 @@ export const deleteProduct = async (req, res) => {
       const pid = req.params.pid;
       const result = await cartManager.deleteProduct(cid, pid);
 
-      // Verifica el resultado de la operación
       if (result) {
           res.status(200).json({
               success: true,
@@ -197,14 +196,12 @@ export const purchase = async (req, res) => {
             notFound(item.product))
         }
         if (product.stock >= item.quantity) {
-            // Enough stock, reduce stock and add to purchase
             product.stock -= item.quantity;
             await product.save();
 
             totalPurchaseAmount += product.price*item.quantity;
             productsToPurchase.push(item);
         } else {
-            // Insufficient stock, keep in cart
             productsToKeepInCart.push(item);
         }
       }
