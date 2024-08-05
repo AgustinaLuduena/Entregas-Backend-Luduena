@@ -36,3 +36,24 @@ homeBtn.addEventListener('click', (e) => {
   window.location.replace("https://entregas-backend-luduena-production.up.railway.app/products"); 
 });
 
+const adminBtn1 = document.getElementById("admin-btn1");
+const adminBtn2 = document.getElementById("admin-btn2");
+const adminBtn3 = document.getElementById("admin-btn3");
+
+if (adminBtn1) {
+  adminBtn1.addEventListener('click', () => {
+    window.location.replace("https://entregas-backend-luduena-production.up.railway.app/admin/users");
+  });
+}
+
+if (adminBtn2) {
+  adminBtn2.addEventListener('click', () => {
+    window.location.replace("https://entregas-backend-luduena-production.up.railway.app/admin/update-roles");
+  });
+}
+
+if (adminBtn3) {
+  adminBtn3.addEventListener('click', () => {
+    window.location.replace("https://entregas-backend-luduena-production.up.railway.app/admin/delete-user");
+  });
+}

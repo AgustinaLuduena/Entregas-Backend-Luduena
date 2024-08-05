@@ -173,7 +173,6 @@ export const deleteProduct = async (req, res) => {
             }
 
             const owner = await userManager.getById(product.owner);  
-            console.log(owner);          
             if (owner && owner.role === 'Premium') {
                 await deletedProductNotification(owner.email, product);
             }

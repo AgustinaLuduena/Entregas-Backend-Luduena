@@ -2,7 +2,7 @@ import { Router } from 'express'
 //Controller
 import {getAllCarts, createCart, getCartById, addProduct, deleteProduct, deleteAllProducts, updateCart, updateProductQuantity, purchase,} from "../controllers/carts.controller.js"
 //Middlewares
-import {verifyToken, checkAdminRole, checkUserRole} from "../middlewares/auth.js"
+import {verifyToken, checkAdminRole, checkUserRole, isUserOrPremium} from "../middlewares/auth.js"
 
 //instanciación
 const cartsRouter = Router()
@@ -11,7 +11,7 @@ const cartsRouter = Router()
 cartsRouter.get("/list", verifyToken, checkAdminRole, getAllCarts);
 cartsRouter.post("/", createCart);
 cartsRouter.get("/:cid/", getCartById);
-cartsRouter.post("/:cid/product/:pid/", verifyToken, checkUserRole, addProduct);  
+cartsRouter.post("/:cid/product/:pid/", verifyToken, isUserOrPremium, addProduct);  
 cartsRouter.delete("/:cid/product/:pid/", verifyToken, checkUserRole, deleteProduct);
 cartsRouter.delete("/:cid/", verifyToken, checkUserRole, deleteAllProducts);
 cartsRouter.put("/:cid/", verifyToken, checkUserRole, updateCart);

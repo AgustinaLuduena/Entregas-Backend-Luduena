@@ -1,9 +1,10 @@
+//Repositories
 import CartRepository from "../../repositories/cartRepository.js";
 import productRepository from "../../repositories/productRepository.js";
 //ErrorHandler
 import { CustomError } from '../../errorsHandlers/customError.js';
 import { errorTypes } from '../../errorsHandlers/errorTypes.js';
-import { notFound, updateError } from "../../errorsHandlers/productsError.js";
+import { notFound, updateError, authorizationError } from "../../errorsHandlers/productsError.js";
 //Logger
 import logger from "../../utils/logger-env.js";
 
@@ -42,7 +43,7 @@ export default class CartManager {
         return await cartRepository.create();
     }
 
-    async addProduct(cid, pid) {
+    async addProduct(cid, pid, user) {
         const cart = await cartRepository.getById(cid);
         if (!cart) {
             throw CustomError.CustomError(
@@ -52,13 +53,11 @@ export default class CartManager {
             );
         }
 
+        if (user.role === "User") {
         const selectedProduct = await productRepository.findById(pid)
-        console.log(selectedProduct);
         const product = cart.products.find((product) => product.product._id.toString() === pid);
-        console.log(product);
        
         if (product) {
-            console.log(product.quantity);
             product.quantity += 1;
             product.price = selectedProduct.price * product.quantity;
         } else {
@@ -67,6 +66,39 @@ export default class CartManager {
         
         await cart.save();
         return cart;
+
+        } else if (user.role === "Premium"){
+        const selectedProduct = await productRepository.findById(pid)
+        let ownerId = selectedProduct.owner
+            if ( ownerId === user._id) {
+                throw CustomError.CustomError(
+                    "Error", "Users cannot buy their own products.",
+                    errorTypes.ERROR_UNAUTHORIZED,
+                    authorizationError()
+                );
+            }
+
+            if (ownerId === "admin" || !ownerId ){
+                const product = cart.products.find((product) => product.product._id.toString() === pid);
+                if (product) {
+                    product.quantity += 1;
+                    product.price = selectedProduct.price * product.quantity;
+                } else {
+                    cart.products.push({ product: pid, quantity: 1, price: selectedProduct.price });
+                }
+                
+                await cart.save();
+                return cart;
+            }
+            
+        } else {
+            throw CustomError.CustomError(
+                "Error", `The product was not added to cart.`,
+                errorTypes.ERROR_NOT_FOUND,
+                authorizationError()
+            );
+        }
+        
     }
 
     

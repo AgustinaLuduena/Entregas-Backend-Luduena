@@ -169,6 +169,7 @@ export const verifyUser = (req, res, next) => {
 export const isUserOrPremium = async (req, res, next) => {
     let user = req.user.user
     if(!user) {return res.status(404).json({ error: 'Usuario no encontrado' });}
+    if(user.role === "admin") {return res.status(401).json({ error: 'Unauthorized user' });}
 
     let checkDB = await userManager.getById(user._id)
 

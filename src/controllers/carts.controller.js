@@ -64,7 +64,9 @@ export const addProduct = async (req, res) => {
     try {
         let cid =  req.params.cid
         let pid =  req.params.pid
-        const cart = await cartManager.addProduct(cid, pid);
+        let user = req.user.user
+
+        const cart = await cartManager.addProduct(cid, pid, user);
         res.status(200).json(`Product Id number ${pid} was succesfully add to cart Id number ${cid}.`);
 
       } catch (error) {
