@@ -72,28 +72,6 @@ export const restore = async (req, res) => {
   }
 };
 
-//Login using Github
-export const github = async (req, res) => {
-    res.status(201).json({ status: "success", message: "User successfully registered with GitHub!" });
-}
-
-//Revisar si el req.session funciona ok para github
-export const githubcallback = async (req, res) => {
-    if(!req.user)return res.status(400).send('error')
-
-    const githubUser = req.user
-    req.session.user = {
-        name: `${githubUser.first_name}`,
-        //email: `${githubUser.email}`,
-        email: "Data no disponible",
-        age: "Data no disponible",
-        role: "User",
-    };
-   
-    res.redirect("/products");
-}
-
-
 export const loginJWT = async (req, res) => {
   try {
       const { email, password } = req.body;
