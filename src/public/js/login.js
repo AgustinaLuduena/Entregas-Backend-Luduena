@@ -1,5 +1,4 @@
 //LOGIN LOGIC
-
 const form = document.getElementById("loginForm");
 
 form.addEventListener("submit", (e) => {
@@ -22,43 +21,13 @@ form.addEventListener("submit", (e) => {
     throw new Error('Failed to login');
   } 
 
-  return response.json(); // Obtener el cuerpo de la respuesta en formato JSON
+  return response.json();
 })
 .then(data => {
-  localStorage.setItem("proyecto_backend", data.token); // Guardar el token en localStorage
+  localStorage.setItem("proyecto_backend", data.token);
   window.location.replace("https://entregas-backend-luduena-production.up.railway.app/products");
 })
 .catch(error => {
   console.error(error);
 })
 })
-
-//Revisar
-//           .then(data => {
-//               // Extraer el token de la respuesta JSON
-//               // Almacenar el token en el almacenamiento local
-//               const token = data.access_token;
-//               const userId = data.userId;
-//               const userRole = data.userRole;
-
-//               localStorage.setItem('token', token);
-//               localStorage.setItem('userId', userId);
-//               localStorage.setItem('userRole', userRole);
-//               console.log("Token:", token);
-//               console.log("userId:", userId);
-//               console.log("user rol:", userRole);
-//               console.log("Inicio de sesión exitoso!");
-
-//               if (userRole === 'admin') {
-//                   window.location.href = `https://backend-final-production-8834.up.railway.app/api/sessions/dashboard/${userId}`;
-//               }
-//               else {
-//                   window.location.href = "https://backend-final-production-8834.up.railway.app/api/products";
-//               }
-//           })
-//           .catch(error => {
-//               console.error('Error en el inicio de sesión:', error);
-//           });
-//       });
-//   }
-// });

@@ -18,7 +18,6 @@ form.addEventListener("submit", (e) => {
   }).then((response) => {
     if (response.status === 200) {
       console.log('Successful password restore.');
-      //Try sweet alert.
       successMsg.innerHTML = `<p>Contraseña actualizada con éxito.</p>`;
       responseSuccess.appendChild(successMsg)
     } else {

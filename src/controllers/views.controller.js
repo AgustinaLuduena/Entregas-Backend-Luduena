@@ -148,11 +148,9 @@ export const getCartById = async (req, res) => {
     try {
         if(req.user){
             let user = req.user.user
-            console.log(user)
 
             let cid = user.cart
             const cartData = await cartManager.getCartById(cid);
-            console.log(cartData)
 
             if(!cartData){
                 throw CustomError.CustomError(

@@ -133,7 +133,6 @@ const updateUserLastConnection = async (userId) => {
 
     const currentDate = new Date()
     const updateResult = await userManager.updateUser(userId, { lastConnection: currentDate });
-    console.log(updateResult);
     if (!updateResult) {
       logger.error(`Error trying to update last connection for user ${userId}.`);
       throw new Error(`User was not found.`);
