@@ -1,11 +1,9 @@
 import passport from "passport";
 import local from "passport-local";
-import GitHubStrategy from "passport-github2";
 //Models
 import userModel from "../dao/models/users.js";
 //Utils
 import { createHash, isValidPassword } from "../utils/utils.js";
-import config from "./config.js";
 //Logger
 import logger from "../utils/logger-env.js";
 
@@ -81,48 +79,6 @@ const initializePassport = () => {
   );
   
 
-  //Github strategy to log in
-  passport.use(
-    "github",
-    new GitHubStrategy(
-      {
-        clientID: config.client_id,
-        clientSecret: config.client_secret,
-        callbackURL: config.callback_url,
-
-        // clientID: "Iv1.1b46ec129c1199cd",
-        // clientSecret: "acbee1924d4ac0657b0c003e2b725385ed344d19",
-        // //callbackURL: "http://localhost:8081/api/sessions/githubcallback",
-        // callbackURL: "https://entregas-backend-luduena-production.up.railway.app/api/sessions/githubcallback",
-      },
-      async (accessToken, refreshToken, profile, done) => {
-        try {
-          //get the object of the Github profile
-          const user = await userModel.findOne({
-            email: profile._json.email,
-          });
-          
-          if (!user) {
-            //Build a new object following the model (those which do not match the model, are set by default)
-            const newUser = {
-              first_name: profile._json.login,
-              last_name: "",
-              age: "",
-              email: profile._json.email,
-              password: "",
-            };
-            
-            let createdUser = await userModel.create(newUser);
-            done(null, createdUser);
-          } else {
-            done(null, user);
-          }
-        } catch (error) {
-          return done(error);
-        }
-      }
-    )
-  );
 
   //Serializer and deserializer user
   passport.serializeUser((user, done) => {
